@@ -1257,3 +1257,42 @@ html {
   scrollbar-width: thin;
   scrollbar-color: var(--sl-color-gray-5) transparent;
 }
+
+/* ==========================================================================
+   WORLD-CLASS FIXES — Round 2
+   ========================================================================== */
+
+/* Fix dead zone between hero and content — tighten splash page spacing */
+[data-page-type='splash'] .hero {
+	padding-bottom: 1rem;
+}
+[data-page-type='splash'] .sl-markdown-content > hr:first-child,
+[data-page-type='splash'] .sl-markdown-content > hr {
+	display: none;
+}
+
+/* Hero architecture image — constrain and polish */
+[data-page-type='splash'] .hero img {
+	border-radius: 12px;
+	box-shadow: 0 4px 24px rgba(0, 53, 81, 0.3);
+	max-width: 420px;
+}
+
+/* Sidebar section spacing — more gap between groups */
+nav.sidebar .top-level > li {
+	margin-bottom: 0.5rem;
+}
+nav.sidebar .top-level > li + li {
+	padding-top: 0.5rem;
+	border-top: 1px solid var(--sl-color-gray-6);
+}
+
+/* Sidebar left padding */
+nav.sidebar {
+	padding-left: 0.5rem;
+}
+
+/* Light mode hero — subtle gradient background */
+:root[data-theme='light'] [data-page-type='splash'] .hero {
+	background: linear-gradient(180deg, rgba(0, 94, 184, 0.03) 0%, transparent 100%);
+}
