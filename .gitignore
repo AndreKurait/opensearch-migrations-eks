@@ -13,4 +13,3 @@ node_modules/
 
 # macOS
 .DS_Store
-package-lock.json
