@@ -1,0 +1,151 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 520" fill="none">
+  <style>
+    text { font-family: 'Inter', system-ui, sans-serif; }
+    .label { font-size: 13px; fill: #e2e8f0; font-weight: 600; }
+    .sublabel { font-size: 10px; fill: #94a3b8; }
+    .group-label { font-size: 11px; fill: #64748b; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+    .step-num { font-size: 11px; fill: #fff; font-weight: 700; }
+    .arrow { stroke: #475569; stroke-width: 1.5; fill: none; marker-end: url(#arrowhead); }
+    .arrow-data { stroke: #005eb8; stroke-width: 2; fill: none; stroke-dasharray: 6 3; marker-end: url(#arrowblue); }
+  </style>
+  <defs>
+    <marker id="arrowhead" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6" fill="#475569"/>
+    </marker>
+    <marker id="arrowblue" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6" fill="#005eb8"/>
+    </marker>
+    <linearGradient id="blue-grad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#005eb8"/>
+      <stop offset="100%" stop-color="#0085b8"/>
+    </linearGradient>
+    <filter id="shadow" x="-4%" y="-4%" width="108%" height="112%">
+      <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#000" flood-opacity="0.25"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="900" height="520" rx="16" fill="#0f1724"/>
+
+  <!-- Kubernetes Cluster boundary -->
+  <rect x="180" y="30" width="540" height="340" rx="12" fill="none" stroke="#1e3a5f" stroke-width="1.5" stroke-dasharray="8 4"/>
+  <text x="200" y="52" class="group-label">Kubernetes Cluster · namespace: ma</text>
+
+  <!-- Migration Console -->
+  <rect x="210" y="70" width="150" height="56" rx="10" fill="#1a2744" filter="url(#shadow)"/>
+  <rect x="210" y="70" width="150" height="56" rx="10" fill="none" stroke="#2d4a6f" stroke-width="1"/>
+  <text x="285" y="95" class="label" text-anchor="middle">Migration Console</text>
+  <text x="285" y="112" class="sublabel" text-anchor="middle">StatefulSet · CLI</text>
+
+  <!-- Argo Workflows -->
+  <rect x="400" y="70" width="150" height="56" rx="10" fill="#1a2744" filter="url(#shadow)"/>
+  <rect x="400" y="70" width="150" height="56" rx="10" fill="none" stroke="#2d4a6f" stroke-width="1"/>
+  <text x="475" y="95" class="label" text-anchor="middle">Argo Workflows</text>
+  <text x="475" y="112" class="sublabel" text-anchor="middle">Server + Controller</text>
+
+  <!-- Monitoring -->
+  <rect x="590" y="70" width="110" height="56" rx="10" fill="#1a2744" filter="url(#shadow)"/>
+  <rect x="590" y="70" width="110" height="56" rx="10" fill="none" stroke="#2d4a6f" stroke-width="1"/>
+  <text x="645" y="95" class="label" text-anchor="middle">Monitoring</text>
+  <text x="645" y="112" class="sublabel" text-anchor="middle">OTel · Grafana</text>
+
+  <!-- Managed by Argo label -->
+  <rect x="210" y="150" width="490" height="200" rx="10" fill="rgba(0,94,184,0.06)" stroke="#1e3a5f" stroke-width="1" stroke-dasharray="4 3"/>
+  <text x="230" y="170" class="group-label">Managed by Argo Workflows</text>
+
+  <!-- RFS Workers -->
+  <rect x="230" y="190" width="130" height="64" rx="10" fill="#0d2847" filter="url(#shadow)"/>
+  <rect x="230" y="190" width="130" height="64" rx="10" fill="none" stroke="url(#blue-grad)" stroke-width="1.5"/>
+  <text x="295" y="216" class="label" text-anchor="middle">RFS Workers</text>
+  <text x="295" y="234" class="sublabel" text-anchor="middle">Jobs · 1 per shard</text>
+
+  <!-- Capture Proxy -->
+  <rect x="390" y="190" width="130" height="64" rx="10" fill="#0d2847" filter="url(#shadow)"/>
+  <rect x="390" y="190" width="130" height="64" rx="10" fill="none" stroke="url(#blue-grad)" stroke-width="1.5"/>
+  <text x="455" y="216" class="label" text-anchor="middle">Capture Proxy</text>
+  <text x="455" y="234" class="sublabel" text-anchor="middle">Deployment + Svc</text>
+
+  <!-- Traffic Replayer -->
+  <rect x="550" y="190" width="130" height="64" rx="10" fill="#0d2847" filter="url(#shadow)"/>
+  <rect x="550" y="190" width="130" height="64" rx="10" fill="none" stroke="url(#blue-grad)" stroke-width="1.5"/>
+  <text x="615" y="216" class="label" text-anchor="middle">Traffic Replayer</text>
+  <text x="615" y="234" class="sublabel" text-anchor="middle">Deployment</text>
+
+  <!-- Kafka -->
+  <rect x="390" y="280" width="130" height="52" rx="10" fill="#1a2744" filter="url(#shadow)"/>
+  <rect x="390" y="280" width="130" height="52" rx="10" fill="none" stroke="#2d4a6f" stroke-width="1"/>
+  <text x="455" y="303" class="label" text-anchor="middle">Kafka</text>
+  <text x="455" y="319" class="sublabel" text-anchor="middle">Strimzi / external</text>
+
+  <!-- External: Source Cluster -->
+  <rect x="30" y="200" width="120" height="70" rx="12" fill="#1c1c2e" filter="url(#shadow)"/>
+  <rect x="30" y="200" width="120" height="70" rx="12" fill="none" stroke="#475569" stroke-width="1.5"/>
+  <text x="90" y="230" class="label" text-anchor="middle">Source</text>
+  <text x="90" y="248" class="sublabel" text-anchor="middle">ES / OpenSearch</text>
+
+  <!-- External: Object Storage -->
+  <rect x="30" y="400" width="120" height="70" rx="12" fill="#1c1c2e" filter="url(#shadow)"/>
+  <rect x="30" y="400" width="120" height="70" rx="12" fill="none" stroke="#475569" stroke-width="1.5"/>
+  <text x="90" y="430" class="label" text-anchor="middle">Object Storage</text>
+  <text x="90" y="448" class="sublabel" text-anchor="middle">S3 / GCS / MinIO</text>
+
+  <!-- External: Target Cluster -->
+  <rect x="750" y="200" width="120" height="70" rx="12" fill="#0d2847" filter="url(#shadow)"/>
+  <rect x="750" y="200" width="120" height="70" rx="12" fill="none" stroke="url(#blue-grad)" stroke-width="2"/>
+  <text x="810" y="230" class="label" text-anchor="middle">Target</text>
+  <text x="810" y="248" class="sublabel" text-anchor="middle">OpenSearch</text>
+
+  <!-- External: Clients -->
+  <rect x="30" y="60" width="120" height="50" rx="12" fill="#1c1c2e" filter="url(#shadow)"/>
+  <rect x="30" y="60" width="120" height="50" rx="12" fill="none" stroke="#475569" stroke-width="1.5"/>
+  <text x="90" y="91" class="label" text-anchor="middle">Clients</text>
+
+  <!-- Arrows: Clients → Capture Proxy → Source -->
+  <path d="M150,85 L390,85 L390,190" class="arrow"/>
+  <path d="M390,222 L150,222 L150,200" class="arrow"/>
+
+  <!-- Arrow: Capture Proxy → Kafka -->
+  <path d="M455,254 L455,280" class="arrow"/>
+
+  <!-- Arrow: Kafka → Replayer -->
+  <path d="M520,306 L615,306 L615,254" class="arrow"/>
+
+  <!-- Arrow: Replayer → Target -->
+  <path d="M680,222 L750,222" class="arrow"/>
+
+  <!-- Arrow: Source → Snapshot (Object Storage) -->
+  <path d="M90,270 L90,400" class="arrow-data"/>
+  <text x="100" y="340" class="sublabel">snapshot</text>
+
+  <!-- Arrow: Object Storage → RFS Workers -->
+  <path d="M150,435 L295,435 L295,254" class="arrow-data"/>
+  <text x="200" y="425" class="sublabel">Lucene files</text>
+
+  <!-- Arrow: RFS → Target -->
+  <path d="M360,222 L390,222" class="arrow" style="marker-end: none"/>
+  <path d="M295,190 L295,160 L810,160 L810,200" class="arrow-data"/>
+  <text x="550" y="152" class="sublabel">bulk index</text>
+
+  <!-- Step numbers -->
+  <circle cx="90" cy="340" r="11" fill="url(#blue-grad)"/>
+  <text x="90" y="344" class="step-num" text-anchor="middle">1</text>
+
+  <circle cx="295" cy="160" r="11" fill="url(#blue-grad)"/>
+  <text x="295" y="164" class="step-num" text-anchor="middle">2</text>
+
+  <circle cx="455" cy="160" r="11" fill="url(#blue-grad)"/>
+  <text x="455" y="164" class="step-num" text-anchor="middle">3</text>
+
+  <circle cx="810" cy="160" r="11" fill="url(#blue-grad)"/>
+  <text x="810" y="164" class="step-num" text-anchor="middle">4</text>
+
+  <!-- Legend -->
+  <line x1="750" y1="430" x2="780" y2="430" stroke="#005eb8" stroke-width="2" stroke-dasharray="6 3"/>
+  <text x="790" y="434" class="sublabel">Data flow</text>
+  <line x1="750" y1="450" x2="780" y2="450" stroke="#475569" stroke-width="1.5"/>
+  <text x="790" y="454" class="sublabel">Control flow</text>
+
+  <!-- Step legend -->
+  <text x="750" y="480" class="sublabel">① Snapshot  ② Metadata + Backfill</text>
+  <text x="750" y="496" class="sublabel">③ Capture + Replay  ④ Bulk index</text>
+</svg>

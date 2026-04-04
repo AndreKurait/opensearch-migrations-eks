@@ -7,39 +7,7 @@ Migration Assistant runs on Kubernetes and uses Argo Workflows for orchestration
 
 ## Architecture Overview
 
-```
-┌─────────────────────────────────────────────────────────────────────┐
-│                        Kubernetes Cluster                           │
-│  ┌───────────────────────────────────────────────────────────────┐  │
-│  │                    Namespace: ma                               │  │
-│  │                                                               │  │
-│  │  ┌─────────────────┐  ┌──────────────────┐  ┌─────────────┐  │  │
-│  │  │ Migration Console│  │  Argo Workflows  │  │  Monitoring │  │  │
-│  │  │  (StatefulSet)   │  │ Server+Controller│  │ OTel+Grafana│  │  │
-│  │  └────────┬─────────┘  └────────┬─────────┘  └─────────────┘  │  │
-│  │           │                     │                              │  │
-│  │  ┌────────┴─────────────────────┴──────────────────────────┐  │  │
-│  │  │              Managed by Argo Workflows                   │  │  │
-│  │  │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  │  │  │
-│  │  │  │  RFS Workers │  │Capture Proxy │  │   Traffic    │  │  │  │
-│  │  │  │   (Jobs)     │  │ (Deployment) │  │  Replayer    │  │  │  │
-│  │  │  │  1 per shard │  │  + Service   │  │ (Deployment) │  │  │  │
-│  │  │  └──────┬───────┘  └──────┬───────┘  └──────┬───────┘  │  │  │
-│  │  └─────────┼─────────────────┼─────────────────┼───────────┘  │  │
-│  └────────────┼─────────────────┼─────────────────┼──────────────┘  │
-└───────────────┼─────────────────┼─────────────────┼─────────────────┘
-                │                 │                 │
-        ┌───────┴───────┐  ┌─────┴─────┐  ┌───────┴───────┐
-        │  Object Store │  │   Kafka    │  │ Target Cluster│
-        │  (S3 / GCS /  │  │ (Strimzi / │  │  (OpenSearch) │
-        │   MinIO)      │  │  external) │  │               │
-        └───────┬───────┘  └─────┬─────┘  └───────────────┘
-                │                │
-        ┌───────┴───────┐  ┌────┴────────────┐
-        │    Snapshot    │  │  Source Cluster  │
-        │  (from source)│  │ (ES / OpenSearch)│
-        └───────────────┘  └─────────────────┘
-```
+![Migration Assistant Architecture](/opensearch-migrations-eks/images/architecture.svg)
 
 ## Data Flow
 
