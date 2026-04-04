@@ -3,7 +3,7 @@ title: OpenSearch Migration Assistant — EKS Release
 description: Deploy and operate OpenSearch migrations on Amazon EKS. Kubernetes-native workflow orchestration for Elasticsearch to OpenSearch migrations.
 template: splash
 hero:
-  tagline: Kubernetes-native, workflow-driven migration from Elasticsearch and OpenSearch to OpenSearch — deployed on Amazon EKS.
+  tagline: "Migrate from Elasticsearch or OpenSearch to OpenSearch — without loading your source cluster, without intermediate upgrades, and without downtime."
   actions:
     - text: Get Started
       link: /opensearch-migrations-eks/deployment/deploying-to-eks/
@@ -15,44 +15,65 @@ hero:
       variant: minimal
 ---
 
-import { Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
+import { Card, CardGrid, LinkCard, Aside } from '@astrojs/starlight/components';
+
+<Aside type="caution">
+The configuration schema changes between Migration Assistant versions. Do not copy YAML examples from documentation verbatim. After deploying, run `workflow configure sample` on the Migration Console to get the accurate schema for your installed version.
+</Aside>
+
+## Why Migration Assistant?
+
+Native snapshot/restore only works within one major version gap and requires downtime. The `_reindex` API reads every document through the source cluster's HTTP layer — slow, fragile, and puts heavy load on production. **Reindex-from-Snapshot (RFS)** takes a fundamentally different approach:
+
+<CardGrid>
+  <Card title="Zero Source Load" icon="approve-check-circle">
+    Takes a one-time snapshot, then reads raw Lucene segment files directly from S3. After the snapshot, the source cluster is never touched again.
+  </Card>
+  <Card title="Any Version Gap" icon="random">
+    Works across any supported version gap (e.g., ES 1.x → OS 3.x) — no intermediate upgrades required.
+  </Card>
+  <Card title="Massive Parallelism" icon="up-caret">
+    One worker per shard, all reading from S3 independently. Peak throughput: 590K docs/min per 2 vCPU worker.
+  </Card>
+  <Card title="Full Resumability" icon="rocket">
+    Failed shards are automatically retried. Completed shards are never reprocessed. Work is never lost.
+  </Card>
+</CardGrid>
+
+## What's Included
+
+| Component | Supported |
+|-----------|-----------|
+| Index templates (legacy + composable) | ✓ |
+| Component templates | ✓ |
+| Index settings & mappings | ✓ |
+| Aliases | ✓ |
+| Documents | ✓ |
+| ISM / ILM policies | ✗ — recreate manually |
+| Security configuration | ✗ — configure separately |
+| Kibana / Dashboards objects | ✗ — export/import via UI |
+| Ingest pipelines | ✗ — recreate manually |
+| Data streams | ✗ — recreate manually |
 
 ## Migration Scenarios
 
 <CardGrid>
   <Card title="Backfill Only" icon="open-book">
-    Migrate existing data using Reindex-from-Snapshot (RFS). Reads raw Lucene segment files directly from S3 — zero load on the source cluster.
+    Snapshot → Metadata → RFS backfill → Verify → Switch traffic. Best when you can tolerate a brief write pause.
   </Card>
-  <Card title="Live Capture & Replay" icon="random">
-    Capture live traffic via a proxy fleet, buffer in Kafka, and replay against the target for zero-downtime migration validation.
+  <Card title="Capture & Replay" icon="random">
+    Deploy proxy fleet → Record to Kafka → Replay on target. Validates target behavior with real production traffic.
   </Card>
-  <Card title="Combined Migration" icon="rocket">
-    Run backfill and live capture together for a complete migration with historical data and real-time traffic continuity.
-  </Card>
-</CardGrid>
-
-## Why EKS?
-
-<CardGrid stagger>
-  <Card title="Workflow Orchestration" icon="puzzle">
-    Argo Workflows provides parallel execution, retry logic, progress tracking, and approval gates for safe migration operations.
-  </Card>
-  <Card title="Declarative Configuration" icon="list-format">
-    Define your entire migration as YAML. Submit, monitor, and manage workflows from the Migration Console CLI.
-  </Card>
-  <Card title="Scalable Workers" icon="up-caret">
-    RFS workers read from S3 — scaling up has zero impact on the source cluster. Peak throughput: 590K docs/min per 2 vCPU worker.
-  </Card>
-  <Card title="Broad Compatibility" icon="approve-check-circle">
-    Migrate from Elasticsearch 1.x–8.x or OpenSearch 1.x–2.x to OpenSearch 1.x, 2.x, or 3.x.
+  <Card title="Combined (Zero-Downtime)" icon="star">
+    Start capture first → Snapshot → Metadata → Backfill → Replay catches up → Verify → Switch. The complete path.
   </Card>
 </CardGrid>
 
 ## Quick Links
 
 <CardGrid>
-  <LinkCard title="Architecture" description="EKS components, Argo Workflows, and data flow" href="/opensearch-migrations-eks/overview/architecture/" />
-  <LinkCard title="Migration Paths" description="Version compatibility and platform support" href="/opensearch-migrations-eks/overview/migration-paths/" />
-  <LinkCard title="Workflow CLI" description="Declarative YAML config and CLI reference" href="/opensearch-migrations-eks/workflow-cli/overview/" />
-  <LinkCard title="Troubleshooting" description="Common issues and debugging commands" href="/opensearch-migrations-eks/reference/troubleshooting/" />
+  <LinkCard title="What Is a Migration" description="RFS internals, why not reindex API, choosing your scenario" href="/opensearch-migrations-eks/overview/what-is-a-migration/" />
+  <LinkCard title="Migration Paths" description="Version matrix, platform support, pre-migration checklist" href="/opensearch-migrations-eks/overview/migration-paths/" />
+  <LinkCard title="Workflow CLI" description="Declarative YAML config, Argo orchestration, approval gates" href="/opensearch-migrations-eks/workflow-cli/overview/" />
+  <LinkCard title="Troubleshooting" description="Connectivity, auth, workflow failures, performance tuning" href="/opensearch-migrations-eks/reference/troubleshooting/" />
 </CardGrid>
