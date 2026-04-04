@@ -37,16 +37,25 @@ import { Card, CardGrid, LinkCard, Aside, Steps } from '@astrojs/starlight/compo
   </Card>
 </CardGrid>
 
+## Before You Start
+
+:::note[Prerequisites]
+- **AWS account** with permissions to create EKS clusters, S3 buckets, and IAM roles
+- **kubectl** and **Helm 3** installed locally
+- **Source cluster** accessible from your VPC (Elasticsearch 1.x–8.x or OpenSearch 1.x–2.x)
+- A **snapshot** in S3 — or the ability to create one
+:::
+
 ## How It Works
 
 <Steps>
-1. **Deploy** — Run the bootstrap script to create an EKS cluster with Migration Assistant in minutes
+1. **Deploy** (~10 min) — Run the bootstrap script to create an EKS cluster with Migration Assistant
 
-2. **Configure** — Define source, target, and migration options in YAML from the Migration Console
+2. **Configure** (~5 min) — Define source, target, and migration options in YAML from the Migration Console
 
-3. **Migrate** — Submit the workflow. It snapshots, migrates metadata, backfills documents, and pauses for your approval at each stage
+3. **Migrate** (varies by data size) — Submit the workflow. It snapshots, migrates metadata, backfills documents, and pauses for your approval at each stage
 
-4. **Validate & Switch** — Verify document counts and query results, then redirect traffic to the target
+4. **Validate & Switch** (~15 min) — Verify document counts and query results, then redirect traffic to the target
 </Steps>
 
 ## Choose Your Path

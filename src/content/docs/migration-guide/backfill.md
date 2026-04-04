@@ -84,5 +84,13 @@ Peak throughput: **590,000 docs/min** per 2 vCPU worker.
 
 ## Next Steps
 
-- [Capture & Replay](/opensearch-migrations-eks/migration-guide/capture-and-replay/) — for live traffic validation
-- [Traffic Routing](/opensearch-migrations-eks/migration-guide/traffic-routing/) — to cut over to the target
+Before moving on, confirm your backfill is healthy:
+
+1. **Document counts match** — run `console clusters cat-indices --source` and `console clusters cat-indices --target` and compare totals
+2. **No failed shards** — check `console backfill status` shows all shards completed
+3. **Spot-check queries** — run 3–5 representative queries against both clusters and compare results
+
+Then continue:
+
+- [Capture & Replay](/opensearch-migrations-eks/migration-guide/capture-and-replay/) — replay live traffic against the target to validate query compatibility
+- [Traffic Routing](/opensearch-migrations-eks/migration-guide/traffic-routing/) — shift production traffic to the target cluster
