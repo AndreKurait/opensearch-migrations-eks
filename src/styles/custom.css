@@ -49,6 +49,23 @@
 	}
 }
 
+/* R3: Aside breathing room */
+.sl-markdown-content .starlight-aside {
+	margin-block-start: 2rem;
+}
+
+/* R3: Table column divider for two-column tables */
+.sl-markdown-content table td:nth-child(2) {
+	border-inline-start: 2px solid var(--sl-color-gray-5);
+	padding-inline-start: 1.5rem;
+}
+
+/* R3: Center and bold version matrix data cells */
+.sl-markdown-content table tbody td:not(:first-child) {
+	text-align: center;
+	font-weight: 600;
+}
+
 /* R1: Make cards with links feel clickable */
 .card:has(a) {
 	transition: border-color 0.15s ease;
