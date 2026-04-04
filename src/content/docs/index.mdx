@@ -1,0 +1,48 @@
+---
+title: OpenSearch Migration Assistant — EKS Release
+description: Deploy and operate OpenSearch migrations on Amazon EKS. Kubernetes-native workflow orchestration for Elasticsearch to OpenSearch migrations.
+template: splash
+hero:
+  tagline: Kubernetes-native, workflow-driven migration from Elasticsearch and OpenSearch to OpenSearch — deployed on Amazon EKS.
+  actions:
+    - text: Get Started
+      link: /opensearch-migrations-eks/deployment/deploying-to-eks/
+      icon: right-arrow
+      variant: primary
+    - text: View on GitHub
+      link: https://github.com/opensearch-project/opensearch-migrations
+      icon: external
+---
+
+import { Card, CardGrid } from '@astrojs/starlight/components';
+
+## Migration Scenarios
+
+<CardGrid>
+  <Card title="Backfill Only" icon="document">
+    Migrate existing data using Reindex-from-Snapshot (RFS). Reads raw Lucene segment files directly from S3 — zero load on the source cluster.
+  </Card>
+  <Card title="Live Capture & Replay" icon="rocket">
+    Capture live traffic via a proxy fleet, buffer in Kafka, and replay against the target for zero-downtime migration validation.
+  </Card>
+  <Card title="Combined Migration" icon="star">
+    Run backfill and live capture together for a complete migration with historical data and real-time traffic continuity.
+  </Card>
+</CardGrid>
+
+## Why EKS?
+
+<CardGrid stagger>
+  <Card title="Workflow Orchestration" icon="setting">
+    Argo Workflows provides parallel execution, retry logic, progress tracking, and approval gates for safe migration operations.
+  </Card>
+  <Card title="Declarative Configuration" icon="pencil">
+    Define your entire migration as YAML. Submit, monitor, and manage workflows from the Migration Console CLI.
+  </Card>
+  <Card title="Scalable Workers" icon="up-caret">
+    RFS workers read from S3 — scaling up has zero impact on the source cluster. Peak throughput: 590K docs/min per 2 vCPU worker.
+  </Card>
+  <Card title="Broad Compatibility" icon="approve-check">
+    Migrate from Elasticsearch 1.x–8.x or OpenSearch 1.x–2.x to OpenSearch 1.x, 2.x, or 3.x.
+  </Card>
+</CardGrid>

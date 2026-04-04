@@ -1,0 +1,46 @@
+/* OpenSearch Migrations EKS — Custom Starlight Theme
+   Inspired by observability.opensearch.org dark palette */
+
+:root {
+	--sl-color-accent-low: #003347;
+	--sl-color-accent: #00d4ff;
+	--sl-color-accent-high: #b3efff;
+	--sl-color-white: #ffffff;
+	--sl-color-gray-1: #e2e8f0;
+	--sl-color-gray-2: #cbd5e1;
+	--sl-color-gray-3: #94a3b8;
+	--sl-color-gray-4: #475569;
+	--sl-color-gray-5: #1e293b;
+	--sl-color-gray-6: #0f172a;
+	--sl-color-black: #0a0e1a;
+
+	--sl-font: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
+		Roboto, sans-serif;
+	--sl-font-mono: 'Fira Code', 'Monaco', 'Courier New', monospace;
+}
+
+/* Force dark mode */
+:root[data-theme='light'] {
+	--sl-color-accent-low: #003347;
+	--sl-color-accent: #00d4ff;
+	--sl-color-accent-high: #b3efff;
+	--sl-color-white: #ffffff;
+	--sl-color-gray-1: #e2e8f0;
+	--sl-color-gray-2: #cbd5e1;
+	--sl-color-gray-3: #94a3b8;
+	--sl-color-gray-4: #475569;
+	--sl-color-gray-5: #1e293b;
+	--sl-color-gray-6: #0f172a;
+	--sl-color-black: #0a0e1a;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+	}
+}
