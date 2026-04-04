@@ -1,79 +1,95 @@
 ---
 title: OpenSearch Migration Assistant — EKS Release
-description: Deploy and operate OpenSearch migrations on Amazon EKS. Kubernetes-native workflow orchestration for Elasticsearch to OpenSearch migrations.
+description: Migrate to OpenSearch without downtime, without loading your source cluster, and without intermediate upgrades.
 template: splash
 hero:
-  tagline: "Migrate from Elasticsearch or OpenSearch to OpenSearch — without loading your source cluster, without intermediate upgrades, and without downtime."
+  tagline: "Keep your production cluster running. Skip intermediate upgrades. Migrate from Elasticsearch or OpenSearch to OpenSearch — on your schedule."
   actions:
-    - text: Get Started
+    - text: Deploy in 5 Minutes
       link: /opensearch-migrations-eks/deployment/deploying-to-eks/
       icon: right-arrow
       variant: primary
-    - text: View on GitHub
+    - text: I'm New — What Is This?
+      link: /opensearch-migrations-eks/overview/what-is-a-migration/
+      icon: open-book
+    - text: GitHub
       link: https://github.com/opensearch-project/opensearch-migrations
       icon: external
       variant: minimal
 ---
 
-import { Card, CardGrid, LinkCard, Aside } from '@astrojs/starlight/components';
+import { Card, CardGrid, LinkCard, Aside, Steps } from '@astrojs/starlight/components';
 
-<Aside type="caution">
-The configuration schema changes between Migration Assistant versions. Do not copy YAML examples from documentation verbatim. After deploying, run `workflow configure sample` on the Migration Console to get the accurate schema for your installed version.
-</Aside>
-
-## Why Migration Assistant?
-
-Native snapshot/restore only works within one major version gap and requires downtime. The `_reindex` API reads every document through the source cluster's HTTP layer — slow, fragile, and puts heavy load on production. **Reindex-from-Snapshot (RFS)** takes a fundamentally different approach:
+## What You Get
 
 <CardGrid>
-  <Card title="Zero Source Load" icon="approve-check-circle">
-    Takes a one-time snapshot, then reads raw Lucene segment files directly from S3. After the snapshot, the source cluster is never touched again.
+  <Card title="Keep Production Running" icon="approve-check-circle">
+    Migration reads from a snapshot in S3 — not your live cluster. After one snapshot, your source is never touched again. Zero performance impact.
   </Card>
-  <Card title="Any Version Gap" icon="random">
-    Works across any supported version gap (e.g., ES 1.x → OS 3.x) — no intermediate upgrades required.
+  <Card title="Skip Intermediate Upgrades" icon="random">
+    Go directly from Elasticsearch 1.x to OpenSearch 3.x. No stepping through 5.x → 6.x → 7.x → OS 1.x. One migration, any version gap.
   </Card>
-  <Card title="Massive Parallelism" icon="up-caret">
-    One worker per shard, all reading from S3 independently. Peak throughput: 590K docs/min per 2 vCPU worker.
+  <Card title="Scale Without Limits" icon="up-caret">
+    Each worker processes one shard independently from S3. Add workers to go faster — 590K docs/min per worker. Failed shards retry automatically.
   </Card>
-  <Card title="Full Resumability" icon="rocket">
-    Failed shards are automatically retried. Completed shards are never reprocessed. Work is never lost.
+  <Card title="Declarative Workflows" icon="puzzle">
+    Define your migration as YAML. Argo Workflows handles orchestration with parallel execution, retry logic, and approval gates before critical steps.
   </Card>
 </CardGrid>
 
-## What's Included
+## How It Works
 
-| Component | Supported |
-|-----------|-----------|
-| Index templates (legacy + composable) | ✓ |
-| Component templates | ✓ |
-| Index settings & mappings | ✓ |
-| Aliases | ✓ |
-| Documents | ✓ |
-| ISM / ILM policies | ✗ — recreate manually |
-| Security configuration | ✗ — configure separately |
-| Kibana / Dashboards objects | ✗ — export/import via UI |
-| Ingest pipelines | ✗ — recreate manually |
-| Data streams | ✗ — recreate manually |
+<Steps>
+1. **Deploy** — Run the bootstrap script to create an EKS cluster with Migration Assistant in minutes
 
-## Migration Scenarios
+2. **Configure** — Define source, target, and migration options in YAML from the Migration Console
+
+3. **Migrate** — Submit the workflow. It snapshots, migrates metadata, backfills documents, and pauses for your approval at each stage
+
+4. **Validate & Switch** — Verify document counts and query results, then redirect traffic to the target
+</Steps>
+
+## Choose Your Path
 
 <CardGrid>
   <Card title="Backfill Only" icon="open-book">
-    Snapshot → Metadata → RFS backfill → Verify → Switch traffic. Best when you can tolerate a brief write pause.
+    Snapshot → Metadata → Backfill → Verify → Switch. Best when you can briefly pause writes.
   </Card>
-  <Card title="Capture & Replay" icon="random">
-    Deploy proxy fleet → Record to Kafka → Replay on target. Validates target behavior with real production traffic.
-  </Card>
-  <Card title="Combined (Zero-Downtime)" icon="star">
-    Start capture first → Snapshot → Metadata → Backfill → Replay catches up → Verify → Switch. The complete path.
+  <Card title="Zero-Downtime Migration" icon="star">
+    Capture live traffic → Snapshot → Metadata → Backfill → Replay catches up → Verify → Switch. No write pause needed.
   </Card>
 </CardGrid>
+
+## What's Migrated
+
+| ✓ Supported | ✗ Manual Setup Required |
+|-------------|------------------------|
+| Documents | ISM / ILM policies |
+| Index settings & mappings | Security configuration |
+| Index templates (legacy + composable) | Kibana / Dashboards objects |
+| Component templates | Ingest pipelines |
+| Aliases | Data streams |
+
+## Version Support
+
+| Source | → OpenSearch 1.x | → OpenSearch 2.x | → OpenSearch 3.x |
+|--------|:-:|:-:|:-:|
+| **Elasticsearch 1.x–7.x** | ✓ | ✓ | ✓ |
+| **Elasticsearch 8.x** | — | ✓ | ✓ |
+| **OpenSearch 1.x** | ✓ | ✓ | ✓ |
+| **OpenSearch 2.x** | — | ✓ | ✓ |
+
+Runs on: **Amazon EKS** · GKE · AKS · OpenShift · any Kubernetes 1.24+
+
+<Aside type="tip">
+Already deployed? Reconnect: `kubectl exec -it migration-console-0 -n ma -- bash` then run `workflow configure sample` to see the config schema for your version.
+</Aside>
 
 ## Quick Links
 
 <CardGrid>
-  <LinkCard title="What Is a Migration" description="RFS internals, why not reindex API, choosing your scenario" href="/opensearch-migrations-eks/overview/what-is-a-migration/" />
+  <LinkCard title="Architecture" description="Components, data flow, and Argo orchestration" href="/opensearch-migrations-eks/overview/architecture/" />
   <LinkCard title="Migration Paths" description="Version matrix, platform support, pre-migration checklist" href="/opensearch-migrations-eks/overview/migration-paths/" />
-  <LinkCard title="Workflow CLI" description="Declarative YAML config, Argo orchestration, approval gates" href="/opensearch-migrations-eks/workflow-cli/overview/" />
-  <LinkCard title="Troubleshooting" description="Connectivity, auth, workflow failures, performance tuning" href="/opensearch-migrations-eks/reference/troubleshooting/" />
+  <LinkCard title="Workflow CLI" description="Declarative YAML config and CLI reference" href="/opensearch-migrations-eks/workflow-cli/overview/" />
+  <LinkCard title="Troubleshooting" description="Connectivity, auth, workflow failures, debugging" href="/opensearch-migrations-eks/reference/troubleshooting/" />
 </CardGrid>
