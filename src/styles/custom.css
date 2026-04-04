@@ -523,6 +523,14 @@
 
 
 /* ============================================
+   11.5. ARCHITECTURE DIAGRAM — rounded container
+   ============================================ */
+.sl-markdown-content img[src*="architecture"] {
+	border-radius: var(--md3-shape-large);
+	box-shadow: var(--md3-elevation-2);
+}
+
+/* ============================================
    12. CODE BLOCKS — MD3 surface container
    ============================================ */
 .sl-markdown-content .expressive-code {
