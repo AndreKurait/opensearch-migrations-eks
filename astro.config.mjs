@@ -28,6 +28,14 @@ export default defineConfig({
 			],
 			head: [
 				{
+					tag: 'link',
+					attrs: {
+						rel: 'icon',
+						href: '/opensearch-migrations-eks/favicon.svg',
+						type: 'image/svg+xml',
+					},
+				},
+				{
 					tag: 'meta',
 					attrs: {
 						property: 'og:image',
