@@ -17,6 +17,20 @@
 	--sl-color-accent-low: hsl(192, 60%, 90%);
 }
 
+/* R1: Better table readability */
+.sl-markdown-content table td,
+.sl-markdown-content table th {
+	padding: 0.75rem 1rem;
+}
+
+/* R1: Make cards with links feel clickable */
+.card:has(a) {
+	transition: border-color 0.15s ease;
+}
+.card:has(a):hover {
+	border-color: var(--sl-color-accent);
+}
+
 @media (prefers-reduced-motion: reduce) {
 	*,
 	*::before,

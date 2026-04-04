@@ -52,12 +52,8 @@ import { Card, CardGrid, LinkCard, Aside, Steps } from '@astrojs/starlight/compo
 ## Choose Your Path
 
 <CardGrid>
-  <Card title="Backfill Only" icon="open-book">
-    Snapshot → Metadata → Backfill → Verify → Switch. Best when you can briefly pause writes.
-  </Card>
-  <Card title="Zero-Downtime Migration" icon="star">
-    Capture live traffic → Snapshot → Metadata → Backfill → Replay catches up → Verify → Switch. No write pause needed.
-  </Card>
+  <LinkCard title="Backfill Only" description="Snapshot → Metadata → Backfill → Verify → Switch. Best when you can briefly pause writes." href="/opensearch-migrations-eks/migration-guide/backfill/" />
+  <LinkCard title="Zero-Downtime Migration" description="Capture live traffic → Snapshot → Metadata → Backfill → Replay catches up → Verify → Switch. No write pause needed." href="/opensearch-migrations-eks/migration-guide/capture-and-replay/" />
 </CardGrid>
 
 ## What's Migrated
