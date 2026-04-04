@@ -1,58 +1,334 @@
 /* OpenSearch Migration Assistant — EKS Docs
-   Clean Starlight theme overrides */
+   MD3 + OpenSearch Brand Design System
+   ============================================ */
 
 /* ============================================
    1. TYPOGRAPHY
    ============================================ */
 :root {
-	--sl-font: 'Inter', system-ui, -apple-system, sans-serif;
+	--sl-font: 'Inter', 'Open Sans', system-ui, -apple-system, sans-serif;
 	--sl-font-mono: 'Fira Code', ui-monospace, monospace;
+
+	/* MD3 Type Scale */
+	--md3-display-large: 3.5rem;
+	--md3-display-medium: 2.75rem;
+	--md3-headline-large: 2rem;
+	--md3-headline-medium: 1.75rem;
+	--md3-title-large: 1.375rem;
+	--md3-title-medium: 1rem;
+	--md3-body-large: 1.125rem;
+	--md3-body-medium: 0.875rem;
+	--md3-label-large: 0.875rem;
+	--md3-label-medium: 0.75rem;
+
+	/* MD3 Shape Scale */
+	--md3-shape-none: 0;
+	--md3-shape-extra-small: 4px;
+	--md3-shape-small: 8px;
+	--md3-shape-medium: 12px;
+	--md3-shape-large: 16px;
+	--md3-shape-extra-large: 28px;
+	--md3-shape-full: 9999px;
+
+	/* MD3 Elevation (dark theme defaults, using OpenSearch navy tint) */
+	--md3-elevation-0: none;
+	--md3-elevation-1: 0 1px 3px 1px rgba(0, 53, 81, 0.15), 0 1px 2px 0 rgba(0, 53, 81, 0.3);
+	--md3-elevation-2: 0 2px 6px 2px rgba(0, 53, 81, 0.15), 0 1px 2px 0 rgba(0, 53, 81, 0.3);
+	--md3-elevation-3: 0 4px 8px 3px rgba(0, 53, 81, 0.15), 0 1px 3px 0 rgba(0, 53, 81, 0.3);
+	--md3-elevation-4: 0 6px 10px 4px rgba(0, 53, 81, 0.15), 0 2px 3px 0 rgba(0, 53, 81, 0.3);
+	--md3-elevation-5: 0 8px 12px 6px rgba(0, 53, 81, 0.15), 0 4px 4px 0 rgba(0, 53, 81, 0.3);
+
+	/* MD3 State Layer Opacities */
+	--md3-state-hover: 0.08;
+	--md3-state-focus: 0.12;
+	--md3-state-pressed: 0.12;
+	--md3-state-dragged: 0.16;
+
+	/* MD3 Motion (duration + easing) */
+	--md3-motion-duration-short1: 50ms;
+	--md3-motion-duration-short2: 100ms;
+	--md3-motion-duration-short3: 150ms;
+	--md3-motion-duration-short4: 200ms;
+	--md3-motion-duration-medium1: 250ms;
+	--md3-motion-duration-medium2: 300ms;
+	--md3-motion-duration-medium3: 350ms;
+	--md3-motion-duration-medium4: 400ms;
+	--md3-motion-duration-long1: 450ms;
+	--md3-motion-duration-long2: 500ms;
+	--md3-motion-easing-standard: cubic-bezier(0.2, 0, 0, 1);
+	--md3-motion-easing-standard-decelerate: cubic-bezier(0, 0, 0, 1);
+	--md3-motion-easing-standard-accelerate: cubic-bezier(0.3, 0, 1, 1);
+	--md3-motion-easing-emphasized: cubic-bezier(0.2, 0, 0, 1);
+	--md3-motion-easing-emphasized-decelerate: cubic-bezier(0.05, 0.7, 0.1, 1);
+	--md3-motion-easing-emphasized-accelerate: cubic-bezier(0.3, 0, 0.8, 0.15);
+
+	/* OpenSearch Brand Colors */
+	--os-primary: #005eb8;
+	--os-primary-rgb: 0, 94, 184;
+	--os-accent: #057eb6;
+	--os-accent-rgb: 5, 126, 182;
+	--os-secondary: #0085b8;
+	--os-secondary-rgb: 0, 133, 184;
+	--os-navy: #003551;
+	--os-navy-rgb: 0, 53, 81;
+	--os-dark-text: #00121a;
+	--os-heading: #003b5c;
+	--os-link: #14a8ff;
+	--os-link-rgb: 20, 168, 255;
+	--os-gradient: linear-gradient(to right, #005eb8, #0085b8);
 }
+
 
 /* ============================================
    2. COLOR ACCENT — Dark (default)
    ============================================ */
 :root {
-	--sl-color-accent-low: hsl(192, 60%, 15%);
-	--sl-color-accent: hsl(192, 100%, 50%);
-	--sl-color-accent-high: hsl(192, 80%, 80%);
+	/* Map OpenSearch brand to Starlight accent system */
+	--sl-color-accent-low: hsl(210, 100%, 12%);
+	--sl-color-accent: hsl(207, 95%, 42%);
+	--sl-color-accent-high: hsl(201, 80%, 72%);
+
+	/* MD3 surface tint colors for dark theme */
+	--md3-surface-tint: rgba(var(--os-accent-rgb), 0.05);
+	--md3-surface-tint-2: rgba(var(--os-accent-rgb), 0.08);
+	--md3-surface-tint-3: rgba(var(--os-accent-rgb), 0.11);
+	--md3-surface-tint-4: rgba(var(--os-accent-rgb), 0.14);
+	--md3-surface-tint-5: rgba(var(--os-accent-rgb), 0.18);
+
+	/* Override Starlight gray with slightly blue-tinted grays for dark */
+	--sl-color-gray-1: hsl(210, 10%, 85%);
+	--sl-color-gray-2: hsl(210, 8%, 68%);
+	--sl-color-gray-3: hsl(210, 7%, 52%);
+	--sl-color-gray-4: hsl(210, 10%, 30%);
+	--sl-color-gray-5: hsl(210, 14%, 18%);
+	--sl-color-gray-6: hsl(210, 18%, 13%);
+	--sl-color-gray-7: hsl(210, 20%, 9%);
 }
+
 
 /* ============================================
    3. COLOR ACCENT — Light
    ============================================ */
 :root[data-theme='light'] {
-	--sl-color-accent-high: hsl(192, 80%, 25%);
-	--sl-color-accent: hsl(192, 100%, 36%);
-	--sl-color-accent-low: hsl(192, 60%, 90%);
+	--sl-color-accent-high: hsl(210, 100%, 28%);
+	--sl-color-accent: hsl(207, 95%, 38%);
+	--sl-color-accent-low: hsl(207, 60%, 93%);
+
+	/* MD3 surface tint colors for light theme */
+	--md3-surface-tint: rgba(var(--os-primary-rgb), 0.04);
+	--md3-surface-tint-2: rgba(var(--os-primary-rgb), 0.06);
+	--md3-surface-tint-3: rgba(var(--os-primary-rgb), 0.08);
+	--md3-surface-tint-4: rgba(var(--os-primary-rgb), 0.10);
+	--md3-surface-tint-5: rgba(var(--os-primary-rgb), 0.14);
+
+	/* Light elevation uses softer, blue-tinted shadows */
+	--md3-elevation-1: 0 1px 2px rgba(0, 53, 81, 0.1), 0 1px 3px 1px rgba(0, 53, 81, 0.08);
+	--md3-elevation-2: 0 1px 2px rgba(0, 53, 81, 0.1), 0 2px 6px 2px rgba(0, 53, 81, 0.08);
+	--md3-elevation-3: 0 1px 3px rgba(0, 53, 81, 0.1), 0 4px 8px 3px rgba(0, 53, 81, 0.08);
+	--md3-elevation-4: 0 2px 3px rgba(0, 53, 81, 0.1), 0 6px 10px 4px rgba(0, 53, 81, 0.08);
+	--md3-elevation-5: 0 4px 4px rgba(0, 53, 81, 0.1), 0 8px 12px 6px rgba(0, 53, 81, 0.08);
+
+	/* Override Starlight gray with slightly blue-tinted grays for light */
+	--sl-color-gray-1: hsl(210, 15%, 25%);
+	--sl-color-gray-2: hsl(210, 10%, 38%);
+	--sl-color-gray-3: hsl(210, 8%, 55%);
+	--sl-color-gray-4: hsl(210, 10%, 75%);
+	--sl-color-gray-5: hsl(210, 14%, 88%);
+	--sl-color-gray-6: hsl(210, 18%, 95%);
+	--sl-color-gray-7: hsl(210, 20%, 98%);
 }
 
+
 /* ============================================
-   4. TABLES
+   4. GLOBAL ELEMENT STYLING (MD3)
    ============================================ */
+
+/* Body text sizing matching OpenSearch's 18px/32px */
+.sl-markdown-content {
+	font-size: var(--md3-body-large);
+	line-height: 1.75;
+}
+
+/* Headings — MD3 type scale with OpenSearch heading color */
+.sl-markdown-content h1 {
+	font-size: var(--md3-display-large);
+	font-weight: 700;
+	letter-spacing: -0.02em;
+	line-height: 1.1;
+}
+
+.sl-markdown-content h2 {
+	font-size: var(--md3-headline-large);
+	font-weight: 700;
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+}
+
+.sl-markdown-content h3 {
+	font-size: var(--md3-headline-medium);
+	font-weight: 600;
+	line-height: 1.3;
+}
+
+.sl-markdown-content h4 {
+	font-size: var(--md3-title-large);
+	font-weight: 600;
+	line-height: 1.35;
+}
+
+/* Links — MD3 state layers + OpenSearch link color */
+.sl-markdown-content a:not([class]) {
+	color: var(--sl-color-accent);
+	text-decoration: underline;
+	text-decoration-color: transparent;
+	text-underline-offset: 0.15em;
+	transition:
+		text-decoration-color var(--md3-motion-duration-short4) var(--md3-motion-easing-standard),
+		color var(--md3-motion-duration-short4) var(--md3-motion-easing-standard);
+}
+.sl-markdown-content a:not([class]):hover {
+	text-decoration-color: currentColor;
+	color: var(--sl-color-accent-high);
+}
+:root[data-theme='light'] .sl-markdown-content a:not([class]):hover {
+	color: var(--os-primary);
+}
+
+
+/* ============================================
+   5. CARDS — MD3 Elevation + Shape + State Layers
+   ============================================ */
+
+/* Starlight Card component */
+.card {
+	border: 1px solid var(--sl-color-gray-5);
+	border-radius: var(--md3-shape-medium);
+	background: var(--md3-surface-tint);
+	box-shadow: var(--md3-elevation-0);
+	transition:
+		box-shadow var(--md3-motion-duration-medium2) var(--md3-motion-easing-standard),
+		border-color var(--md3-motion-duration-medium2) var(--md3-motion-easing-standard),
+		background var(--md3-motion-duration-medium2) var(--md3-motion-easing-standard);
+	overflow: hidden;
+	position: relative;
+}
+.card:hover {
+	box-shadow: var(--md3-elevation-1);
+	border-color: var(--sl-color-gray-4);
+	background: var(--md3-surface-tint-2);
+}
+
+/* Card title — MD3 title-large */
+.card .card-title {
+	font-size: var(--md3-title-large);
+	font-weight: 600;
+}
+
+/* Card icon treatment */
+.card .icon {
+	color: var(--sl-color-accent);
+}
+
+/* LinkCard — MD3 interactive surface */
+.sl-link-card {
+	border: 1px solid var(--sl-color-gray-5);
+	border-radius: var(--md3-shape-medium);
+	background: var(--sl-color-gray-7);
+	box-shadow: var(--md3-elevation-0);
+	transition:
+		box-shadow var(--md3-motion-duration-medium2) var(--md3-motion-easing-emphasized),
+		border-color var(--md3-motion-duration-medium2) var(--md3-motion-easing-emphasized),
+		background var(--md3-motion-duration-medium2) var(--md3-motion-easing-emphasized),
+		transform var(--md3-motion-duration-medium2) var(--md3-motion-easing-emphasized);
+	position: relative;
+	overflow: hidden;
+}
+.sl-link-card::before {
+	content: '';
+	position: absolute;
+	inset: 0;
+	background: rgba(var(--os-primary-rgb), 0);
+	transition: background var(--md3-motion-duration-medium1) var(--md3-motion-easing-standard);
+	pointer-events: none;
+	border-radius: inherit;
+}
+.sl-link-card:hover {
+	border-color: var(--sl-color-accent);
+	box-shadow: var(--md3-elevation-2);
+	transform: translateY(-1px);
+}
+.sl-link-card:hover::before {
+	background: rgba(var(--os-primary-rgb), var(--md3-state-hover));
+}
+.sl-link-card:active {
+	transform: translateY(0);
+	box-shadow: var(--md3-elevation-1);
+}
+.sl-link-card:active::before {
+	background: rgba(var(--os-primary-rgb), var(--md3-state-pressed));
+}
+.sl-link-card:focus-visible {
+	outline: 2px solid var(--sl-color-accent);
+	outline-offset: 2px;
+	box-shadow: var(--md3-elevation-1);
+}
+.sl-link-card:focus-visible::before {
+	background: rgba(var(--os-primary-rgb), var(--md3-state-focus));
+}
+
+
+/* ============================================
+   6. TABLES — MD3 surface treatment
+   ============================================ */
+.sl-markdown-content table {
+	border-radius: var(--md3-shape-medium);
+	overflow: hidden;
+	border: 1px solid var(--sl-color-gray-5);
+	border-collapse: separate;
+	border-spacing: 0;
+	width: 100%;
+}
+
 .sl-markdown-content table th,
 .sl-markdown-content table td {
-	padding: 0.625rem 1rem;
+	padding: 0.75rem 1rem;
+	border-bottom: 1px solid var(--sl-color-gray-5);
 }
 
 .sl-markdown-content table thead th {
-	font-size: 0.78rem;
+	font-size: var(--md3-label-large);
 	font-weight: 600;
 	text-transform: uppercase;
 	letter-spacing: 0.05em;
 	background-color: var(--sl-color-gray-6);
-	border-bottom: 2px solid var(--sl-color-gray-5);
+	border-bottom: 2px solid var(--sl-color-gray-4);
+	color: var(--sl-color-gray-1);
+}
+
+.sl-markdown-content table tbody tr {
+	transition: background-color var(--md3-motion-duration-short3) var(--md3-motion-easing-standard);
 }
 
 .sl-markdown-content table tbody tr:nth-child(even) {
-	background-color: var(--sl-color-gray-7, rgba(0, 0, 0, 0.02));
-}
-:root[data-theme='light'] .sl-markdown-content table tbody tr:nth-child(even) {
-	background-color: rgba(0, 0, 0, 0.02);
+	background-color: var(--md3-surface-tint);
 }
 
+.sl-markdown-content table tbody tr:hover {
+	background-color: var(--md3-surface-tint-3);
+}
+
+.sl-markdown-content table tbody tr:last-child td {
+	border-bottom: none;
+}
+
+/* First column bold treatment for tables with row headers */
+.sl-markdown-content table td:first-child {
+	font-weight: 500;
+}
+
+
 /* ============================================
-   5. MIGRATION MATRIX (landing page)
+   7. MIGRATION MATRIX (landing page)
    ============================================ */
 .migration-matrix th:nth-child(2) {
 	background: rgba(34, 197, 94, 0.12);
@@ -95,16 +371,18 @@
 	color: rgb(161, 98, 7);
 }
 
+
 /* ============================================
-   6. VERSION SUPPORT TABLE (landing page)
+   8. VERSION SUPPORT TABLE (landing page)
    ============================================ */
 .version-support td:not(:first-child) {
 	text-align: center;
 	font-weight: 600;
 }
 
+
 /* ============================================
-   7. STEPS
+   9. STEPS — MD3 numbered list treatment
    ============================================ */
 .sl-steps > li {
 	padding-bottom: 1rem;
@@ -113,8 +391,14 @@
 	padding-bottom: 0;
 }
 
+/* Steps counter styling — MD3 surface container */
+.sl-steps > li::before {
+	border-radius: var(--md3-shape-full) !important;
+}
+
+
 /* ============================================
-   8. HERO (splash page)
+   10. HERO (splash page) — MD3 display typography
    ============================================ */
 @media (min-width: 72rem) {
 	[data-page-type='splash'] .hero {
@@ -122,49 +406,405 @@
 		margin-inline: auto;
 	}
 }
+
 [data-page-type='splash'] .hero .tagline {
 	max-width: 42ch;
+	font-size: var(--md3-title-large);
+	line-height: 1.5;
+	color: var(--sl-color-gray-2);
 }
 
-/* ============================================
-   9. CARDS — hover effect for link cards
-   ============================================ */
-.sl-link-card:hover {
+/* Hero heading — uses display-large */
+[data-page-type='splash'] .hero h1 {
+	font-size: clamp(2.5rem, 5vw, var(--md3-display-large));
+	font-weight: 700;
+	letter-spacing: -0.02em;
+	line-height: 1.08;
+	background: var(--os-gradient);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	background-clip: text;
+}
+
+/* Hero actions — MD3 buttons */
+[data-page-type='splash'] .hero .action {
+	border-radius: var(--md3-shape-full);
+}
+[data-page-type='splash'] .hero .action.primary {
+	background: var(--os-primary);
+	border-color: var(--os-primary);
+	color: #fff;
+	box-shadow: var(--md3-elevation-1);
+	transition:
+		box-shadow var(--md3-motion-duration-medium2) var(--md3-motion-easing-standard),
+		background var(--md3-motion-duration-short4) var(--md3-motion-easing-standard),
+		transform var(--md3-motion-duration-short4) var(--md3-motion-easing-standard);
+	position: relative;
+	overflow: hidden;
+}
+[data-page-type='splash'] .hero .action.primary::after {
+	content: '';
+	position: absolute;
+	inset: 0;
+	background: rgba(255, 255, 255, 0);
+	transition: background var(--md3-motion-duration-short4) var(--md3-motion-easing-standard);
+	border-radius: inherit;
+}
+[data-page-type='splash'] .hero .action.primary:hover {
+	box-shadow: var(--md3-elevation-2);
+	transform: translateY(-1px);
+}
+[data-page-type='splash'] .hero .action.primary:hover::after {
+	background: rgba(255, 255, 255, var(--md3-state-hover));
+}
+[data-page-type='splash'] .hero .action.primary:active {
+	box-shadow: var(--md3-elevation-0);
+	transform: translateY(0);
+}
+[data-page-type='splash'] .hero .action.primary:active::after {
+	background: rgba(255, 255, 255, var(--md3-state-pressed));
+}
+
+/* Secondary button — MD3 tonal / outlined */
+[data-page-type='splash'] .hero .action:not(.primary):not(.minimal) {
 	border-color: var(--sl-color-accent);
+	color: var(--sl-color-accent-high);
+	background: transparent;
+	transition:
+		background var(--md3-motion-duration-short4) var(--md3-motion-easing-standard),
+		border-color var(--md3-motion-duration-short4) var(--md3-motion-easing-standard),
+		color var(--md3-motion-duration-short4) var(--md3-motion-easing-standard);
+}
+[data-page-type='splash'] .hero .action:not(.primary):not(.minimal):hover {
+	background: rgba(var(--os-primary-rgb), var(--md3-state-hover));
 }
 
+/* Minimal (text) button */
+[data-page-type='splash'] .hero .action.minimal {
+	color: var(--sl-color-accent-high);
+	transition: color var(--md3-motion-duration-short4) var(--md3-motion-easing-standard);
+}
+[data-page-type='splash'] .hero .action.minimal:hover {
+	color: var(--sl-color-accent);
+}
+
+
 /* ============================================
-   10. LANDING PAGE SECTIONS
+   11. LANDING PAGE SECTIONS
    ============================================ */
 [data-page-type='splash'] .sl-markdown-content > h2 {
-	margin-block-start: 3rem;
+	margin-block-start: 3.5rem;
+	padding-block-end: 0.5rem;
+	border-bottom: none;
+	position: relative;
 }
+
+[data-page-type='splash'] .sl-markdown-content > h2::after {
+	content: '';
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: 3rem;
+	height: 3px;
+	background: var(--os-gradient);
+	border-radius: var(--md3-shape-full);
+}
+
 [data-page-type='splash'] .sl-markdown-content > h2:first-child {
 	margin-block-start: 1rem;
 }
 
 .platform-row {
-	font-size: 0.875rem;
+	font-size: var(--md3-body-medium);
 	color: var(--sl-color-gray-3);
-	margin-block-start: 0.5rem;
+	margin-block-start: 0.75rem;
+	letter-spacing: 0.01em;
 }
 
+
 /* ============================================
-   11. CODE BLOCKS
+   12. CODE BLOCKS — MD3 surface container
    ============================================ */
+.sl-markdown-content .expressive-code {
+	border-radius: var(--md3-shape-medium);
+	overflow: hidden;
+	box-shadow: var(--md3-elevation-1);
+}
+
 .sl-markdown-content .expressive-code pre {
 	padding: 1rem 1.25rem;
+	border-radius: var(--md3-shape-medium);
 }
 
+/* Inline code — MD3 small shape */
+.sl-markdown-content :not(pre) > code {
+	border-radius: var(--md3-shape-extra-small);
+	padding: 0.125em 0.375em;
+	font-size: 0.9em;
+	background: var(--md3-surface-tint-2);
+	border: 1px solid var(--sl-color-gray-5);
+}
+
+
 /* ============================================
-   12. ASIDES
+   13. ASIDES — MD3 filled card treatment
    ============================================ */
 .sl-markdown-content .starlight-aside {
-	margin-block: 1.5rem;
+	margin-block: 1.75rem;
+	border-radius: var(--md3-shape-medium);
+	border-left-width: 4px;
+	padding: 1.25rem 1.5rem;
+	box-shadow: var(--md3-elevation-0);
+	transition: box-shadow var(--md3-motion-duration-medium2) var(--md3-motion-easing-standard);
 }
 
+/* Note aside — OpenSearch primary tint */
+.sl-markdown-content .starlight-aside--note {
+	background: rgba(var(--os-primary-rgb), 0.06);
+	border-color: var(--os-primary);
+}
+:root[data-theme='light'] .sl-markdown-content .starlight-aside--note {
+	background: rgba(var(--os-primary-rgb), 0.04);
+}
+
+/* Tip aside — OpenSearch secondary tint */
+.sl-markdown-content .starlight-aside--tip {
+	background: rgba(var(--os-secondary-rgb), 0.06);
+	border-color: var(--os-accent);
+}
+:root[data-theme='light'] .sl-markdown-content .starlight-aside--tip {
+	background: rgba(var(--os-secondary-rgb), 0.04);
+}
+
+/* Aside title — MD3 label-large */
+.sl-markdown-content .starlight-aside__title {
+	font-size: var(--md3-label-large);
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
+}
+
+
 /* ============================================
-   13. ACCESSIBILITY — reduced motion
+   14. SIDEBAR — MD3 navigation rail styling
+   ============================================ */
+
+/* Sidebar links — MD3 state layers */
+nav.sidebar-content a {
+	border-radius: var(--md3-shape-full);
+	transition:
+		background var(--md3-motion-duration-short4) var(--md3-motion-easing-standard),
+		color var(--md3-motion-duration-short4) var(--md3-motion-easing-standard);
+}
+nav.sidebar-content a:hover {
+	background: rgba(var(--os-primary-rgb), var(--md3-state-hover));
+}
+nav.sidebar-content a[aria-current='page'] {
+	background: rgba(var(--os-primary-rgb), 0.12);
+	color: var(--sl-color-accent);
+	font-weight: 600;
+}
+
+
+/* ============================================
+   15. HEADER / NAV — MD3 top app bar
+   ============================================ */
+header.header {
+	backdrop-filter: blur(12px);
+	-webkit-backdrop-filter: blur(12px);
+}
+
+/* Search button — MD3 shape */
+site-search button {
+	border-radius: var(--md3-shape-full) !important;
+}
+
+
+/* ============================================
+   16. TABLE OF CONTENTS — MD3 typography
+   ============================================ */
+starlight-toc a {
+	font-size: var(--md3-body-medium);
+	border-radius: var(--md3-shape-extra-small);
+	transition:
+		color var(--md3-motion-duration-short4) var(--md3-motion-easing-standard),
+		background var(--md3-motion-duration-short4) var(--md3-motion-easing-standard);
+}
+starlight-toc a:hover {
+	background: rgba(var(--os-primary-rgb), var(--md3-state-hover));
+}
+starlight-toc a[aria-current='true'] {
+	color: var(--sl-color-accent);
+	font-weight: 600;
+}
+
+
+/* ============================================
+   17. PAGINATION — MD3 outlined button
+   ============================================ */
+.pagination-links a {
+	border-radius: var(--md3-shape-medium) !important;
+	border: 1px solid var(--sl-color-gray-5);
+	transition:
+		border-color var(--md3-motion-duration-medium2) var(--md3-motion-easing-standard),
+		box-shadow var(--md3-motion-duration-medium2) var(--md3-motion-easing-standard),
+		background var(--md3-motion-duration-medium2) var(--md3-motion-easing-standard);
+	position: relative;
+	overflow: hidden;
+}
+.pagination-links a::before {
+	content: '';
+	position: absolute;
+	inset: 0;
+	background: transparent;
+	transition: background var(--md3-motion-duration-short4) var(--md3-motion-easing-standard);
+	pointer-events: none;
+}
+.pagination-links a:hover {
+	border-color: var(--sl-color-accent);
+	box-shadow: var(--md3-elevation-1);
+}
+.pagination-links a:hover::before {
+	background: rgba(var(--os-primary-rgb), var(--md3-state-hover));
+}
+
+
+/* ============================================
+   18. CARD GRID — responsive spacing
+   ============================================ */
+.sl-link-card-grid {
+	gap: 1rem;
+}
+
+
+/* ============================================
+   19. SCROLL BAR — subtle OpenSearch-tinted
+   ============================================ */
+:root {
+	scrollbar-color: var(--sl-color-gray-4) transparent;
+	scrollbar-width: thin;
+}
+
+
+/* ============================================
+   20. FOCUS VISIBLE — MD3 focus ring
+   ============================================ */
+:focus-visible {
+	outline: 2px solid var(--sl-color-accent);
+	outline-offset: 2px;
+	border-radius: var(--md3-shape-extra-small);
+}
+
+
+/* ============================================
+   21. SELECTION — OpenSearch brand
+   ============================================ */
+::selection {
+	background: rgba(var(--os-primary-rgb), 0.25);
+	color: inherit;
+}
+:root[data-theme='light'] ::selection {
+	background: rgba(var(--os-primary-rgb), 0.2);
+}
+
+
+/* ============================================
+   22. HORIZONTAL RULES
+   ============================================ */
+.sl-markdown-content hr {
+	border: none;
+	height: 1px;
+	background: linear-gradient(
+		to right,
+		transparent,
+		var(--sl-color-gray-4),
+		transparent
+	);
+	margin-block: 2.5rem;
+}
+
+
+/* ============================================
+   23. BLOCKQUOTES — MD3 surface variant
+   ============================================ */
+.sl-markdown-content blockquote {
+	border-left: 4px solid var(--sl-color-accent);
+	border-radius: 0 var(--md3-shape-small) var(--md3-shape-small) 0;
+	background: var(--md3-surface-tint);
+	padding: 1rem 1.5rem;
+	margin-block: 1.5rem;
+	font-style: italic;
+	color: var(--sl-color-gray-2);
+}
+.sl-markdown-content blockquote p {
+	margin: 0;
+}
+
+
+/* ============================================
+   24. LISTS — improved spacing
+   ============================================ */
+.sl-markdown-content ul,
+.sl-markdown-content ol {
+	padding-inline-start: 1.5em;
+}
+.sl-markdown-content li + li {
+	margin-block-start: 0.375rem;
+}
+.sl-markdown-content li::marker {
+	color: var(--sl-color-accent);
+}
+
+
+/* ============================================
+   25. MOBILE REFINEMENTS
+   ============================================ */
+@media (max-width: 50rem) {
+	.sl-markdown-content h1 {
+		font-size: 2rem;
+	}
+	.sl-markdown-content h2 {
+		font-size: 1.5rem;
+	}
+	.sl-markdown-content h3 {
+		font-size: 1.25rem;
+	}
+
+	[data-page-type='splash'] .hero h1 {
+		font-size: 2.25rem;
+	}
+
+	.sl-markdown-content table {
+		font-size: var(--md3-body-medium);
+	}
+	.sl-markdown-content table th,
+	.sl-markdown-content table td {
+		padding: 0.5rem 0.625rem;
+	}
+}
+
+
+/* ============================================
+   26. PRINT
+   ============================================ */
+@media print {
+	:root {
+		--md3-elevation-1: none;
+		--md3-elevation-2: none;
+		--md3-elevation-3: none;
+		--md3-elevation-4: none;
+		--md3-elevation-5: none;
+	}
+	.card,
+	.sl-link-card {
+		border: 1px solid #ccc;
+		box-shadow: none;
+	}
+}
+
+
+/* ============================================
+   27. ACCESSIBILITY — reduced motion
    ============================================ */
 @media (prefers-reduced-motion: reduce) {
 	*,
@@ -173,5 +813,6 @@
 		animation-duration: 0.01ms !important;
 		animation-iteration-count: 1 !important;
 		transition-duration: 0.01ms !important;
+		scroll-behavior: auto !important;
 	}
 }
