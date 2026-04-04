@@ -67,13 +67,22 @@ import { Card, CardGrid, LinkCard, Aside, Steps } from '@astrojs/starlight/compo
 
 ## What's Migrated
 
-| ✓ Supported | ✗ Manual Setup Required |
-|-------------|------------------------|
-| Documents | ISM / ILM policies |
-| Index settings & mappings | Security configuration |
-| Index templates (legacy + composable) | Kibana / Dashboards objects |
-| Component templates | Ingest pipelines |
-| Aliases | Data streams |
+<div class="migration-matrix">
+
+| Component | ✓ Supported | ✗ Manual Setup |
+|-----------|:-----------:|:--------------:|
+| Documents | ✓ | |
+| Index settings & mappings | ✓ | |
+| Index templates (legacy + composable) | ✓ | |
+| Component templates | ✓ | |
+| Aliases | ✓ | |
+| ISM / ILM policies | | ✗ |
+| Security configuration | | ✗ |
+| Kibana / Dashboards objects | | ✗ |
+| Ingest pipelines | | ✗ |
+| Data streams | | ✗ |
+
+</div>
 
 ## Version Support
 
