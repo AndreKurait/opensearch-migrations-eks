@@ -1,50 +1,69 @@
 ---
 title: Traffic Routing
-description: Route traffic through the capture proxy and switch to the target cluster.
+description: Route traffic from the source cluster through the capture proxy and to the target cluster.
 ---
 
-## Reroute to Capture Proxy
+Traffic routing manages the flow of client requests during migration — from the source cluster, through the capture proxy, and ultimately to the target cluster.
 
-Before capturing traffic, route client requests through the proxy fleet.
+## Routing to the Capture Proxy
 
-### On EKS
+### ALB/NLB Configuration
 
-The Capture Proxy is exposed via a Network Load Balancer (NLB). Update your client configuration or DNS to point to the NLB endpoint.
+On EKS, the capture proxy fleet is exposed via a Network Load Balancer (NLB). Route client traffic to the NLB endpoint:
 
-### Verify Capture
-
-Confirm traffic is flowing through the proxy and being recorded to Kafka:
+1. Update your application's connection endpoint to point to the proxy NLB
+2. Verify traffic is flowing through the proxy:
 
 ```bash
-console replay status
-kubectl get kafkatopics -n ma
+console kafka describe-topics
 ```
 
 ### Host Header Configuration
 
-If your source cluster requires a specific `Host` header, configure it in the proxy settings.
+If your source cluster uses host-based routing, configure the proxy to forward the correct `Host` header:
 
-## Reroute to Target
+```yaml
+captureProxy:
+  sourceClusterHost: source-cluster.example.com
+```
 
-Once validation is complete, switch traffic from the source to the target cluster.
+## Routing to the Target
 
-### Gradual Switchover
+When you're ready to cut over to the target cluster:
 
-Use weighted routing to gradually shift traffic:
+### 1. Verify Target Readiness
 
-1. Start with 10% to target, 90% to source
-2. Monitor error rates and latency
-3. Increase target weight incrementally
-4. Complete switchover to 100% target
+```bash
+console clusters cat-indices --target
+console clusters connection-check --target
+```
 
-### Fallback Procedure
+### 2. Switch Traffic
 
-If issues are detected after switchover:
+For ALB-based routing, adjust target group weights:
 
-1. Immediately route traffic back to the source
-2. Investigate errors on the target
-3. Re-run validation before attempting switchover again
+```bash
+# Gradually shift traffic (e.g., 10% → 50% → 100%)
+# This is done at the load balancer level
+```
 
-:::tip
-Keep the capture proxy running during the switchover period so you can continue monitoring traffic patterns and quickly fall back if needed.
-:::
+### 3. Scale Down Proxy
+
+After confirming all traffic is flowing to the target:
+
+```bash
+# Scale down the capture proxy fleet
+kubectl scale deployment capture-proxy -n ma --replicas=0
+```
+
+## Fallback Procedure
+
+If issues are detected after cutover:
+
+1. Route traffic back to the source cluster
+2. Investigate issues using tuple logs and CloudWatch metrics
+3. Address issues and retry the cutover
+
+## Next Steps
+
+- [Teardown](/opensearch-migrations-eks/migration-guide/teardown/) — remove migration infrastructure after successful cutover

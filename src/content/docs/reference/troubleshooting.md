@@ -3,106 +3,118 @@ title: Troubleshooting
 description: Common issues and solutions for Migration Assistant on EKS.
 ---
 
+This guide covers common issues encountered when deploying and operating Migration Assistant on EKS.
+
 ## Connectivity Issues
 
-### Cannot reach source/target cluster
+### Cannot Connect to Source/Target Cluster
 
 ```bash
-# Verify from the Migration Console
 console clusters connection-check
 ```
 
 **Common causes:**
-- Security group rules not allowing traffic from EKS cluster
-- VPC peering or transit gateway not configured
-- DNS resolution failing inside the pod
+- Security group rules not allowing traffic from EKS nodes
+- Incorrect endpoint URL or port
+- Authentication credentials expired or incorrect
 
-### Get EKS cluster security group
+**Resolution:**
+1. Verify the cluster security group allows inbound from the EKS node security group
+2. Check the endpoint URL in your configuration
+3. Verify authentication secrets are correctly created
+
+### EKS Security Group Lookup
 
 ```bash
 aws eks describe-cluster \
-  --name migration-eks-cluster-dev-us-east-1 \
+  --name migration-eks-cluster-<STAGE>-<REGION> \
   --query 'cluster.resourcesVpcConfig.clusterSecurityGroupId' \
   --output text
 ```
 
-## Authentication Failures
+## Authentication Issues
 
-### Basic Auth
+### Basic Auth Failures
 
-Verify the Kubernetes secret exists and contains correct credentials:
+Verify the Kubernetes secret contains correct credentials:
 
 ```bash
 kubectl get secret source-auth -n ma -o jsonpath='{.data.username}' | base64 -d
 ```
 
-### SigV4
+### SigV4 Auth Failures
 
-Ensure the Migration Console pod's service account has the correct IAM role annotation:
-
-```bash
-kubectl describe sa migration-console -n ma
-```
+- Verify the IAM role has the correct permissions
+- Check that the region and service name are correct in the secret
+- Ensure the EKS node role can assume the migration role
 
 ## Workflow Failures
 
-### Check workflow status
+### Workflow Stuck in Pending
 
 ```bash
 workflow status
+kubectl get pods -n ma
 ```
 
-### View Argo Workflows UI
+**Common causes:**
+- Insufficient cluster resources (CPU/memory)
+- Node pool not scaled up
+- Image pull failures
 
-Port-forward the Argo server:
-
-```bash
-kubectl port-forward svc/argo-workflows-server -n ma 2746:2746
-```
-
-Then open `https://localhost:2746` in your browser.
-
-### View pod logs
+### Workflow Step Failed
 
 ```bash
-kubectl logs migration-console-0 -n ma
-kubectl logs -l app=rfs-worker -n ma
+# Check Argo workflow logs
+kubectl logs -n ma -l workflows.argoproj.io/workflow=<WORKFLOW_NAME>
 ```
 
 ## Pod Issues
 
-### Pods stuck in Pending
-
-Check node resources:
-
-```bash
-kubectl describe nodes
-kubectl get events -n ma --sort-by='.lastTimestamp'
-```
-
 ### Pods in CrashLoopBackOff
 
-Check logs for the failing pod:
-
 ```bash
-kubectl logs <pod-name> -n ma --previous
+kubectl describe pod <POD_NAME> -n ma
+kubectl logs <POD_NAME> -n ma --previous
 ```
 
-## Performance Tuning
+### Pods Pending (Unschedulable)
 
-### RFS Backfill Slow
+```bash
+kubectl describe pod <POD_NAME> -n ma
+# Check for resource constraints or node affinity issues
+kubectl get nodes -o wide
+```
 
-- Increase worker count (max 1 per primary shard)
-- Increase node resources (CPU/memory)
-- Check target cluster indexing throughput
+## Performance Issues
 
-### Replay Falling Behind
+### Slow Backfill
 
-- Increase `speedupFactor` in configuration
-- Scale replayer resources
-- Check Kafka consumer lag:
-  ```bash
-  kubectl exec -it migration-console-0 -n ma -- \
-    kafka-consumer-groups.sh --bootstrap-server kafka:9092 \
-    --describe --group replayer
-  ```
+- Increase worker count (up to 1 per shard)
+- Check S3 throughput limits
+- Verify target cluster can handle the indexing rate
+- Monitor target cluster CPU and memory
+
+### Slow Replay
+
+- Check Kafka consumer lag
+- Verify target cluster performance
+- Consider adjusting the speedup factor
+- Monitor replayer pod resource usage
+
+## Debugging Commands
+
+```bash
+# Cluster status
+kubectl get pods -n ma
+kubectl get events -n ma --sort-by='.lastTimestamp'
+
+# Argo workflows
+kubectl get workflows -n ma
+kubectl get pods -n ma -l workflows.argoproj.io/workflow
+
+# Logs
+kubectl logs migration-console-0 -n ma
+kubectl logs -l app=capture-proxy -n ma
+kubectl logs -l app=traffic-replayer -n ma
+```

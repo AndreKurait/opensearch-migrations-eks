@@ -1,36 +1,23 @@
 ---
 title: IAM & Security
-description: Configure IAM roles, security groups, and authentication for EKS deployments.
+description: IAM roles, security groups, and authentication configuration for EKS deployments.
 ---
 
-## EKS IAM Access Entries
+This guide covers IAM configuration, security groups, and authentication setup for Migration Assistant on EKS.
 
-The bootstrap script configures IAM access entries for the EKS cluster. To grant additional users access:
+## IAM Roles
 
-```bash
-aws eks create-access-entry \
-  --cluster-name migration-eks-cluster-dev-us-east-1 \
-  --principal-arn arn:aws:iam::123456789:user/developer \
-  --type STANDARD
-```
+The bootstrap script creates the following IAM roles:
 
-## Security Groups
+| Role | Purpose |
+|------|---------|
+| **EKS Node Role** | Permissions for EKS worker nodes |
+| **Snapshot Role** | S3 access for snapshot creation and RFS reading |
+| **Migration Console Role** | Permissions for migration operations |
 
-When connecting to an existing Amazon OpenSearch Service domain, ensure the EKS cluster's security group allows traffic to the domain:
+### Snapshot Role Policy
 
-```bash
-# Get the EKS cluster security group
-aws eks describe-cluster \
-  --name migration-eks-cluster-dev-us-east-1 \
-  --query 'cluster.resourcesVpcConfig.clusterSecurityGroupId' \
-  --output text
-```
-
-Add an inbound rule to the OpenSearch domain's security group allowing traffic from the EKS cluster security group on port 443.
-
-## Snapshot IAM Role
-
-The snapshot role must have permissions to read/write to the S3 bucket:
+The snapshot role requires access to the S3 bucket used for snapshots:
 
 ```json
 {
@@ -53,16 +40,42 @@ The snapshot role must have permissions to read/write to the S3 bucket:
 }
 ```
 
-## SigV4 Authentication
+## Security Groups
 
-For Amazon OpenSearch Service targets, configure SigV4 authentication in your workflow configuration:
+### EKS Cluster Security Group
 
-```yaml
-target:
-  auth:
-    type: sigv4
-    region: us-east-1
-    service: es          # "es" for managed, "aoss" for serverless
+The EKS cluster security group must allow:
+
+- Inbound from source cluster (for snapshot registration)
+- Inbound from target cluster (for migration operations)
+- Outbound to source and target clusters
+
+```bash
+# Look up the cluster security group
+aws eks describe-cluster --name migration-eks-cluster-<STAGE>-<REGION> \
+  --query 'cluster.resourcesVpcConfig.clusterSecurityGroupId' --output text
 ```
 
-The Migration Console pod's service account must have an IAM role with permissions to access the target domain.
+### OpenSearch Service Configuration
+
+For Amazon OpenSearch Service targets, configure the domain access policy to allow the Migration Console role:
+
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": "arn:aws:iam::<ACCOUNT>:role/migration-console-role"
+      },
+      "Action": "es:*",
+      "Resource": "arn:aws:es:<REGION>:<ACCOUNT>:domain/<DOMAIN>/*"
+    }
+  ]
+}
+```
+
+## Authentication Methods
+
+See [Configuration Options](/opensearch-migrations-eks/deployment/configuration-options/) for details on configuring `basic`, `mtls`, `sigv4`, or `none` authentication for source and target clusters.

@@ -1,11 +1,13 @@
 ---
 title: Security Patching
-description: Keep Migration Assistant components up to date.
+description: Updating and patching Migration Assistant components.
 ---
+
+Keep Migration Assistant components up to date with security patches and updates.
 
 ## Updating Container Images
 
-Migration Assistant components run as container images. To apply security patches:
+Migration Assistant components run as container images. To update:
 
 ### 1. Clear Docker Cache
 
@@ -16,24 +18,28 @@ docker system prune -a
 ### 2. Rebuild Images
 
 ```bash
+# Clean build artifacts
 ./gradlew clean
-./gradlew docker
+
+# Rebuild all images
+./gradlew buildDockerImages
 ```
 
-### 3. Update Helm Release
+### 3. Push to Registry
+
+If using a private ECR registry:
 
 ```bash
-helm upgrade migration-assistant \
-  opensearch-migrations/migrationAssistantWithArgo \
+# Mirror images to ECR
+./deployment/k8s/charts/aggregates/migrationAssistantWithArgo/scripts/mirrorToEcr.sh
+```
+
+### 4. Update Helm Release
+
+```bash
+helm upgrade migration-assistant opensearch-migrations/migrationAssistantWithArgo \
   -n ma \
   -f values.yaml
-```
-
-### 4. Verify Updated Pods
-
-```bash
-kubectl get pods -n ma -o wide
-kubectl describe pod migration-console-0 -n ma | grep Image
 ```
 
 ## OS-Level Patching
@@ -42,10 +48,21 @@ For EKS managed node groups, update the AMI:
 
 ```bash
 aws eks update-nodegroup-version \
-  --cluster-name migration-eks-cluster-dev-us-east-1 \
+  --cluster-name migration-eks-cluster-<STAGE>-<REGION> \
   --nodegroup-name <NODEGROUP_NAME>
 ```
 
-## Checking for Updates
+## Checking Current Versions
 
-Monitor the [GitHub Releases](https://github.com/opensearch-project/opensearch-migrations/releases) page for new versions and security advisories.
+```bash
+# Check running image versions
+kubectl get pods -n ma -o jsonpath='{range .items[*]}{.metadata.name}{"\t"}{.spec.containers[*].image}{"\n"}{end}'
+```
+
+## Security Considerations
+
+- Rotate authentication secrets regularly
+- Use SigV4 authentication where possible (avoids storing credentials)
+- Enable encryption in transit (TLS) for all cluster connections
+- Review IAM role permissions periodically
+- Keep EKS cluster version up to date

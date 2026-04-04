@@ -10,35 +10,41 @@ This guide covers deploying Migration Assistant to Amazon Elastic Kubernetes Ser
 - AWS CLI configured with appropriate permissions
 - `kubectl` installed
 - Helm 3 installed
-- An AWS account with permissions to create EKS clusters, IAM roles, and S3 buckets
+- An AWS account with permissions to create EKS clusters, CloudFormation stacks, and IAM roles
 
 ## Quick Start
 
 ### 1. Run the Bootstrap Script
 
-The bootstrap script creates all required AWS infrastructure:
+The bootstrap script creates the EKS cluster, VPC, IAM roles, and S3 bucket via CloudFormation, then installs the Helm chart.
 
 ```bash
-./aws-bootstrap.sh --stage dev --region us-east-1
+# Create a new VPC and EKS cluster
+./aws-bootstrap.sh --stage dev --region us-east-1 --deploy-create-vpc-cfn
+
+# Or import an existing VPC
+./aws-bootstrap.sh --stage dev --region us-east-1 --deploy-import-vpc-cfn \
+  --vpc-id vpc-xxxxx --private-subnet-ids subnet-aaa,subnet-bbb
 ```
 
-This creates:
-- **EKS Cluster:** `migration-eks-cluster-dev-us-east-1`
-- **S3 Bucket:** `migrations-default-<ACCOUNT>-dev-us-east-1`
-- **IAM Roles:** Snapshot role, node role
-- **VPC:** New VPC or import existing
+### 2. CloudFormation Resources
 
-### 2. Configure kubectl
+The bootstrap script creates:
 
-```bash
-aws eks update-kubeconfig \
-  --region us-east-1 \
-  --name migration-eks-cluster-dev-us-east-1
-```
+| Resource | Naming Convention |
+|----------|-------------------|
+| EKS Cluster | `migration-eks-cluster-<STAGE>-<REGION>` |
+| S3 Bucket | `migrations-default-<ACCOUNT>-<STAGE>-<REGION>` |
+| IAM Roles | Snapshot role, node role |
+| VPC | Created or imported |
 
 ### 3. Verify Deployment
 
 ```bash
+# Configure kubectl
+aws eks update-kubeconfig --region <REGION> --name migration-eks-cluster-<STAGE>-<REGION>
+
+# Check pods
 kubectl get pods -n ma
 ```
 
@@ -57,29 +63,23 @@ migration-console-0                                    1/1     Running   0      
 kubectl exec -it migration-console-0 -n ma -- bash
 ```
 
-## VPC Options
-
-### Create a New VPC
-
-```bash
-./aws-bootstrap.sh --stage dev --region us-east-1 --deploy-create-vpc-cfn
-```
-
-### Import an Existing VPC
-
-```bash
-./aws-bootstrap.sh --stage dev --region us-east-1 \
-  --vpc-id vpc-0123456789abcdef0
-```
-
 ## Stage-Based Naming
 
-All resources use the pattern: `migration-*-<STAGE>-<REGION>`
+The `--stage` parameter controls resource naming and allows multiple deployments in the same account/region. Use descriptive stage names like `dev`, `staging`, or `prod`.
 
-This allows multiple independent deployments in the same account (e.g., `dev`, `staging`, `prod`).
+## IAM Access Entries
+
+The bootstrap script configures IAM access entries for the EKS cluster. Additional users or roles can be granted access:
+
+```bash
+aws eks create-access-entry \
+  --cluster-name migration-eks-cluster-<STAGE>-<REGION> \
+  --principal-arn arn:aws:iam::<ACCOUNT>:role/<ROLE_NAME> \
+  --type STANDARD
+```
 
 ## Next Steps
 
 - [Configure your migration](/opensearch-migrations-eks/deployment/configuration-options/)
 - [Set up IAM and security](/opensearch-migrations-eks/deployment/iam-and-security/)
-- [Start the Workflow CLI](/opensearch-migrations-eks/workflow-cli/getting-started/)
+- [Start with the Workflow CLI](/opensearch-migrations-eks/workflow-cli/getting-started/)

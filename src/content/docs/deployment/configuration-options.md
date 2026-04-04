@@ -1,49 +1,38 @@
 ---
 title: Configuration Options
-description: Configure Migration Assistant for your environment.
+description: Configuration options for Migration Assistant deployment and workflows.
 ---
 
-Migration Assistant uses a declarative YAML configuration that defines source and target clusters, authentication, and migration behavior.
+Migration Assistant is configured through Helm values and workflow YAML configuration.
 
-## Workflow Configuration
+## Helm Chart Configuration
 
-Generate a sample configuration:
-
-```bash
-workflow configure sample --load
-```
-
-Edit the configuration:
-
-```bash
-workflow configure edit
-```
-
-## Key Configuration Sections
-
-### Source Cluster
+### Source and Target Clusters
 
 ```yaml
-source:
-  host: https://source-cluster:9200
+sourceCluster:
+  endpoint: https://source-cluster:9200
   auth:
-    type: basic          # basic | sigv4 | none
-    username: admin
-    passwordSecret: source-auth
-  version: ES_7_10
-```
+    type: basic       # basic, mtls, sigv4, or none
+    secretName: source-auth
+  version: ES_7_10    # Source version identifier
 
-### Target Cluster
-
-```yaml
-target:
-  host: https://target-cluster:9200
+targetCluster:
+  endpoint: https://target-cluster:9200
   auth:
     type: sigv4
-    region: us-east-1
-    service: es
-  version: OS_2_15
+    secretName: target-sigv4
+  version: OS_2_11
 ```
+
+### Authentication Types
+
+| Type | Description | Secret Fields |
+|------|-------------|---------------|
+| `none` | No authentication | — |
+| `basic` | Username/password | `username`, `password` |
+| `mtls` | Mutual TLS | `tls.crt`, `tls.key`, `ca.crt` |
+| `sigv4` | AWS Signature V4 | `region`, `service` |
 
 ### Snapshot Configuration
 
@@ -55,32 +44,39 @@ snapshot:
     roleArn: arn:aws:iam::123456789:role/snapshot-role
 ```
 
-### Backfill Options
+### RFS (Backfill) Configuration
 
 ```yaml
-backfill:
-  type: reindex_from_snapshot
-  reindexFromSnapshot:
-    workerCount: 4
-    indexAllowlist:
-      - my-index-*
-      - other-index
+rfs:
+  workers: 4              # Number of parallel workers
+  maxShardSizeGb: 80      # Max shard size to process
+  indexAllowlist:          # Optional: only migrate specific indices
+    - my-index-*
+    - other-index
 ```
 
-### Capture & Replay Options
+### Capture and Replay Configuration
 
 ```yaml
-captureAndReplay:
-  kafka:
-    brokerEndpoints: kafka-bootstrap:9092
-  replayer:
-    speedupFactor: 2.0
+captureProxy:
+  replicas: 2             # Number of proxy instances
+  
+trafficReplayer:
+  replicas: 1
+  speedupFactor: 1.0      # Replay speed multiplier
+  joltTransforms: []      # Optional request transforms
 ```
 
-## Authentication Types
+## Workflow Configuration
 
-| Type | Configuration | Use Case |
-|------|--------------|----------|
-| `none` | No auth required | Development/testing |
-| `basic` | Username + K8s Secret | Self-managed clusters |
-| `sigv4` | IAM role + region | Amazon OpenSearch Service |
+The Workflow CLI uses a YAML configuration file that defines the migration parameters:
+
+```bash
+# Generate a sample configuration
+workflow configure sample --load
+
+# Edit the configuration
+workflow configure edit
+```
+
+See [Workflow CLI Getting Started](/opensearch-migrations-eks/workflow-cli/getting-started/) for details.

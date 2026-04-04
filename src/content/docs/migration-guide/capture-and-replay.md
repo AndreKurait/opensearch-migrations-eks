@@ -1,49 +1,57 @@
 ---
 title: Capture & Replay
-description: Capture live traffic and replay it against the target cluster.
+description: Capture live traffic and replay it against the target cluster for zero-downtime migration validation.
 ---
 
-Capture and Replay enables zero-downtime migration validation by recording live traffic and replaying it against the target.
+Capture and Replay enables zero-downtime migration validation by recording live traffic from the source cluster and replaying it against the target.
 
 ## Architecture
 
 ```
 Clients → Capture Proxy Fleet → Source Cluster
-              │
-              └── records → Kafka (Strimzi)
-                               │
-                               └── replays → Traffic Replayer → Target Cluster
+                  ↓
+                Kafka (Strimzi)
+                  ↓
+           Traffic Replayer → Target Cluster
 ```
 
-## Start Capture & Replay
+## Starting Capture
 
-### Using the Workflow CLI
+### Deploy the Proxy Fleet
 
-```bash
-workflow configure edit    # Configure proxy and replayer settings
-workflow submit            # Submit the capture-and-replay workflow
-```
-
-### Using Console Commands
+The capture proxy fleet is deployed as a Kubernetes Deployment with a Service (NLB on EKS):
 
 ```bash
 console replay start
 ```
 
-## Monitor Replay
+### Verify Kafka Topics
+
+```bash
+console kafka describe-topics
+```
+
+## Replaying Traffic
+
+### Start the Replayer
+
+```bash
+console replay start
+```
+
+### Check Replay Status
 
 ```bash
 console replay status
 ```
 
-## Time Scaling
+### Time Scaling
 
-Speed up replay to catch up with real-time traffic:
+The replayer supports a speedup factor to replay traffic faster than real-time:
 
 ```yaml
-captureAndReplay:
-  replayer:
-    speedupFactor: 2.0    # Replay at 2x speed
+trafficReplayer:
+  speedupFactor: 2.0    # Replay at 2x speed
 ```
 
 ## Jolt Transforms
@@ -52,11 +60,17 @@ Apply request transformations during replay using Jolt:
 
 ```json
 {
-  "transforms": [
+  "transformations": [
     {
-      "operation": "shift",
-      "spec": {
-        "old_field": "new_field"
+      "JsonJoltTransformerProvider": {
+        "spec": [
+          {
+            "operation": "modify-overwrite-beta",
+            "spec": {
+              "index": "new-index-name"
+            }
+          }
+        ]
       }
     }
   ]
@@ -65,26 +79,31 @@ Apply request transformations during replay using Jolt:
 
 ## Tuple Logs
 
-View captured request/response pairs:
+The replayer generates tuple logs that pair source requests with target responses for comparison:
 
 ```bash
-console tuples show --last 10
+console tuples show
 ```
 
-## Stop Replay
+## Monitoring
+
+Monitor replay progress via:
+- `console replay status` — summary statistics
+- CloudWatch dashboards — detailed metrics
+- Argo Workflows UI — workflow step status
+
+## Document ID Requirements
+
+:::caution
+Capture and Replay requires that documents have stable IDs. If your application generates random document IDs on each request, replayed writes will create duplicate documents on the target.
+:::
+
+## Stopping Replay
 
 ```bash
 console replay stop
 ```
 
-:::caution
-Document ID requirements: For accurate replay validation, documents must have explicit `_id` fields. Auto-generated IDs will differ between source and target.
-:::
+## Next Steps
 
-## Kafka Management
-
-On EKS, Kafka is managed by the **Strimzi operator**. Verify Kafka topics:
-
-```bash
-kubectl get kafkatopics -n ma
-```
+- [Traffic Routing](/opensearch-migrations-eks/migration-guide/traffic-routing/) — route traffic to the target cluster

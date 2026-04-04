@@ -3,22 +3,21 @@ title: Deploying to Kubernetes
 description: Deploy Migration Assistant to any Kubernetes cluster using Helm.
 ---
 
-Migration Assistant can be deployed to any Kubernetes distribution — EKS, GKE, AKS, OpenShift, or self-managed clusters.
+This guide covers deploying Migration Assistant to a generic Kubernetes cluster (non-EKS). For Amazon EKS, see [Deploying to EKS](/opensearch-migrations-eks/deployment/deploying-to-eks/).
 
 ## Prerequisites
 
-- Kubernetes 1.25+
-- Helm 3
+- Kubernetes cluster (1.24+)
+- Helm 3 installed
 - `kubectl` configured for your cluster
 - S3-compatible object storage for snapshots
 
-## Install with Helm
+## Installation
 
 ### 1. Add the Helm Repository
 
 ```bash
-helm repo add opensearch-migrations \
-  https://opensearch-project.github.io/opensearch-migrations
+helm repo add opensearch-migrations https://opensearch-project.github.io/opensearch-migrations
 helm repo update
 ```
 
@@ -28,29 +27,30 @@ helm repo update
 kubectl create namespace ma
 ```
 
-### 3. Create Secrets
+### 3. Configure Authentication Secrets
 
-Configure authentication for your source and target clusters:
+Create Kubernetes secrets for source and target cluster authentication:
 
 ```bash
 # Basic auth
-kubectl create secret generic source-auth \
-  -n ma \
+kubectl create secret generic source-auth -n ma \
   --from-literal=username=admin \
   --from-literal=password=<PASSWORD>
 
-# mTLS
-kubectl create secret tls source-tls \
-  -n ma \
-  --cert=client.crt \
-  --key=client.key
+# Or mTLS
+kubectl create secret tls source-tls -n ma \
+  --cert=client.crt --key=client.key
+
+# Or SigV4 (AWS)
+kubectl create secret generic source-sigv4 -n ma \
+  --from-literal=region=us-east-1 \
+  --from-literal=service=es
 ```
 
 ### 4. Install the Chart
 
 ```bash
-helm install migration-assistant \
-  opensearch-migrations/migrationAssistantWithArgo \
+helm install migration-assistant opensearch-migrations/migrationAssistantWithArgo \
   -n ma \
   -f values.yaml
 ```
@@ -61,15 +61,29 @@ helm install migration-assistant \
 kubectl get pods -n ma
 ```
 
-## Authentication Methods
+## Helm Values
 
-| Method | Use Case |
-|--------|----------|
-| **Basic auth** | Username/password for source and target |
-| **mTLS** | Mutual TLS certificate authentication |
-| **SigV4** | AWS IAM-based authentication for Amazon OpenSearch Service |
+Key values to configure in your `values.yaml`:
+
+```yaml
+sourceCluster:
+  endpoint: https://source-cluster:9200
+  auth:
+    type: basic  # basic, mtls, or sigv4
+    secretName: source-auth
+
+targetCluster:
+  endpoint: https://target-cluster:9200
+  auth:
+    type: basic
+    secretName: target-auth
+
+s3:
+  bucket: my-migration-bucket
+  region: us-east-1
+```
 
 ## Next Steps
 
-- [Deploying to EKS](/opensearch-migrations-eks/deployment/deploying-to-eks/) for AWS-specific setup
-- [Configuration Options](/opensearch-migrations-eks/deployment/configuration-options/) for customization
+- [Configuration Options](/opensearch-migrations-eks/deployment/configuration-options/)
+- [Workflow CLI Getting Started](/opensearch-migrations-eks/workflow-cli/getting-started/)

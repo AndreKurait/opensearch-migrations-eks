@@ -1,57 +1,51 @@
 ---
 title: What Is a Migration
-description: Understand how Migration Assistant moves data between clusters.
+description: Understanding the three aspects of migration and the scenarios Migration Assistant supports.
 ---
 
-## How RFS Works
+A migration from Elasticsearch or OpenSearch to OpenSearch involves three distinct aspects, each of which can be performed independently or combined.
+
+## Three Aspects of Migration
+
+### 1. Metadata Migration
+
+Migrates index settings, mappings, templates, component templates, and aliases from the source to the target cluster. Includes automatic field type transformations for compatibility (e.g., `string` → `text`/`keyword`, `dense_vector` → `knn_vector`).
+
+### 2. Backfill (Existing Data)
 
 Reindex-from-Snapshot (RFS) takes a fundamentally different approach from traditional reindexing. Instead of reading documents through the source cluster's HTTP API, it:
 
-1. Takes a **one-time snapshot** of the source cluster
-2. Reads the **raw Lucene segment files** directly from the snapshot in S3
+1. Takes a one-time snapshot of the source cluster
+2. Reads the raw Lucene segment files directly from the snapshot in S3
 3. Extracts documents and applies transformations
-4. Bulk-indexes them on the target cluster
+4. Bulk-indexes them on the target
 
-Because workers read from object storage — not the source cluster — **scaling up workers has zero impact on the source cluster**.
+Because workers read from object storage — not the source cluster — scaling up workers has **zero impact on the source cluster**.
 
-## How Traffic Capture & Replay Works
+### 3. Live Traffic Capture and Replay
 
-For live traffic migration:
+A proxy fleet sits in front of the source cluster, forwarding all requests while recording them to Kafka. The Traffic Replayer reads from Kafka and replays requests against the target cluster, enabling zero-downtime migration validation.
 
-1. A **Capture Proxy fleet** sits between clients and the source cluster
-2. All requests are forwarded to the source **and** recorded to **Kafka**
-3. The **Traffic Replayer** reads from Kafka and replays requests against the target
-4. Responses are compared for validation
-
-This enables zero-downtime migration validation while the source cluster continues serving production traffic.
-
-## Migration Scenarios
+## Three Migration Scenarios
 
 ### Scenario 1: Backfill Only
 
-Best for migrations where you can tolerate a maintenance window or where live traffic continuity is not required.
+Migrate existing data without capturing live traffic. Best for clusters that can tolerate a maintenance window or where live traffic validation is not required.
 
-**Steps:** Snapshot → Metadata migration → RFS backfill → Validate → Switch traffic
+**Steps:** Assessment → Snapshot → Metadata → Backfill → Validation → Cutover
 
-### Scenario 2: Live Capture & Replay Only
+### Scenario 2: Live Capture and Replay Only
 
-Best when you need to validate the target cluster with real production traffic before switching.
+Capture and replay live traffic without backfilling historical data. Useful for validating the target cluster with real traffic patterns before a full migration.
 
-**Steps:** Deploy proxy → Capture traffic → Replay against target → Validate → Switch traffic
+**Steps:** Assessment → Deploy Proxy → Capture Traffic → Replay → Validation
 
-### Scenario 3: Combined Migration
+### Scenario 3: Combined (Backfill + Live Capture)
 
-The most comprehensive approach — migrates historical data while simultaneously capturing and replaying live traffic.
+The complete migration path — backfill historical data while simultaneously capturing and replaying live traffic for zero-downtime migration.
 
-**Steps:** Deploy proxy → Capture traffic → Snapshot → Metadata → RFS backfill → Replay → Validate → Switch traffic
+**Steps:** Assessment → Deploy Proxy → Capture → Snapshot → Metadata → Backfill → Replay → Validation → Cutover
 
-## Performance Benchmarks
+## Iterative Workflows
 
-Tested 2025-03-10:
-
-| Service | vCPU | Memory | Peak Docs/min | Primary Shard Rate (MBps) |
-|---------|------|--------|---------------|---------------------------|
-| RFS | 2 | 4 GB | 590,000 | 15.1 |
-| RFS (w/ type mapping) | 2 | 4 GB | 546,000 | 14.0 |
-| Traffic Replay | 8 | 48 GB | 1,694,000 | 43.5 |
-| Traffic Replay (w/ type mapping) | 8 | 48 GB | 1,645,000 | 42.2 |
+Migration Assistant supports iterative workflows. You can run metadata migration, backfill, or replay multiple times, adjusting configuration between runs. Argo Workflows provides approval gates so you can review results before proceeding to the next phase.

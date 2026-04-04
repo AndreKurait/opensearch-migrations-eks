@@ -19,7 +19,7 @@
 	--sl-font-mono: 'Fira Code', 'Monaco', 'Courier New', monospace;
 }
 
-/* Force dark mode */
+/* Force dark mode — override light theme to match dark palette */
 :root[data-theme='light'] {
 	--sl-color-accent-low: #003347;
 	--sl-color-accent: #00d4ff;

@@ -1,9 +1,15 @@
 ---
-title: Getting Started
-description: Step-by-step guide to running your first migration workflow.
+title: Workflow CLI Getting Started
+description: Step-by-step tutorial for configuring and running your first migration workflow.
 ---
 
-This tutorial walks through a complete backfill migration using the Workflow CLI.
+This tutorial walks through configuring and running a backfill migration workflow using the Workflow CLI.
+
+## Prerequisites
+
+- Migration Assistant deployed ([EKS](/opensearch-migrations-eks/deployment/deploying-to-eks/) or [K8s](/opensearch-migrations-eks/deployment/deploying-to-kubernetes/))
+- Access to the Migration Console pod
+- Source and target clusters accessible
 
 ## Step 1: Access the Migration Console
 
@@ -11,29 +17,47 @@ This tutorial walks through a complete backfill migration using the Workflow CLI
 kubectl exec -it migration-console-0 -n ma -- bash
 ```
 
-## Step 2: Load a Sample Configuration
+## Step 2: Load Sample Configuration
 
 ```bash
 workflow configure sample --load
 ```
 
-This generates a YAML configuration with sensible defaults.
+This creates a sample YAML configuration with common defaults.
 
-## Step 3: Edit the Configuration
+## Step 3: Edit Configuration
 
 ```bash
 workflow configure edit
 ```
 
-Update the source and target cluster endpoints, authentication, and index allowlists for your environment.
+Update the configuration with your source and target cluster details, authentication, and migration parameters.
+
+Key fields to configure:
+
+```yaml
+source:
+  endpoint: https://source-cluster:9200
+  auth:
+    type: basic
+    
+target:
+  endpoint: https://target-cluster:9200
+  auth:
+    type: sigv4
+
+backfill:
+  enabled: true
+  indexAllowlist:
+    - my-index-*
+```
 
 ## Step 4: Create Secrets
 
-If your clusters require authentication, create Kubernetes secrets:
+If using authentication, create the required Kubernetes secrets:
 
 ```bash
-kubectl create secret generic source-auth \
-  -n ma \
+kubectl create secret generic source-auth -n ma \
   --from-literal=username=admin \
   --from-literal=password=<PASSWORD>
 ```
@@ -44,41 +68,39 @@ kubectl create secret generic source-auth \
 workflow submit
 ```
 
-The workflow will begin executing in Argo Workflows.
+The workflow is submitted to Argo Workflows and begins execution.
 
 ## Step 6: Monitor Progress
 
-Use the interactive TUI:
-
 ```bash
+# Check overall status
+workflow status
+
+# Interactive management TUI
 workflow manage
 ```
 
-Or check status from the CLI:
+## Step 7: Approve Gates
 
-```bash
-workflow status
-```
-
-## Step 7: Approve the Gate
-
-When the workflow reaches an approval gate (e.g., before starting document backfill), review the metadata migration results and approve:
+When the workflow reaches an approval gate, review the results and approve:
 
 ```bash
 workflow approve
 ```
 
-## Step 8: Validate
+The workflow pauses at approval gates to let you verify:
+- Metadata migration results
+- Document counts
+- Any errors or warnings
 
-After the workflow completes, validate your migration:
+## Step 8: Verify Completion
 
 ```bash
-# Check document counts
-console clusters compare --index my-index
+workflow status
+console clusters cat-indices --target
 ```
 
 ## Next Steps
 
-- [Backfill Workflow](/opensearch-migrations-eks/migration-guide/backfill/) for detailed backfill options
-- [Capture & Replay](/opensearch-migrations-eks/migration-guide/capture-and-replay/) for live traffic migration
-- [Command Reference](/opensearch-migrations-eks/workflow-cli/command-reference/) for all available commands
+- [Backfill](/opensearch-migrations-eks/migration-guide/backfill/) — detailed backfill configuration
+- [Command Reference](/opensearch-migrations-eks/workflow-cli/command-reference/) — full CLI reference

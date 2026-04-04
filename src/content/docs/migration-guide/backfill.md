@@ -1,71 +1,63 @@
 ---
 title: Backfill
-description: Migrate existing data using Reindex-from-Snapshot (RFS).
+description: Migrate existing documents using Reindex-from-Snapshot (RFS) workers.
 ---
 
-RFS migrates historical documents by reading raw Lucene segment files directly from S3 snapshots.
+Backfill migrates existing documents from the source cluster to the target using Reindex-from-Snapshot (RFS). Workers read raw Lucene segment files directly from the snapshot in S3.
 
-## Using the Workflow CLI
+## Starting Backfill
 
-The recommended approach uses the Workflow CLI:
+### Using the Workflow CLI
 
 ```bash
-workflow configure edit    # Set index allowlists, parallelism
-workflow submit            # Submit the backfill workflow
-workflow manage            # Monitor with the TUI
+workflow configure sample --load   # Load sample config
+workflow configure edit            # Edit backfill settings
+workflow submit                    # Submit to Argo Workflows
 ```
 
-The workflow orchestrates: Snapshot → Register → Metadata → RFS Load → Cleanup.
-
-## Using Console Commands
-
-Alternatively, manage backfill directly:
-
-### Start Backfill
+### Using Console Commands
 
 ```bash
 console backfill start
 ```
 
-### Scale Workers
-
-```bash
-console backfill scale --workers 8
-```
-
-:::note
-Maximum 1 worker per primary shard. Scaling beyond this has no effect.
-:::
-
-### Monitor Progress
+## Monitoring Progress
 
 ```bash
 console backfill status
 ```
 
-### Pause and Resume
+Monitor via CloudWatch dashboards or the Argo Workflows UI for detailed progress per index and shard.
+
+## Scaling Workers
+
+RFS workers read from S3, not the source cluster. Scaling up workers has **zero impact on the source cluster**.
+
+```yaml
+# In workflow configuration
+rfs:
+  workers: 8              # Increase parallel workers
+  indexAllowlist:
+    - my-large-index-*    # Optional: target specific indices
+```
+
+:::note
+Maximum 1 worker per shard. Adding workers beyond the shard count provides no benefit.
+:::
+
+## Pausing and Resuming
 
 ```bash
 console backfill pause
-console backfill start    # Resume
+console backfill resume
 ```
 
-### Stop Backfill
+Backfill is resumable — workers track progress per shard and resume from where they left off.
+
+## Stopping Backfill
 
 ```bash
 console backfill stop
-```
-
-## Index Allowlists
-
-Limit backfill to specific indexes:
-
-```yaml
-backfill:
-  reindexFromSnapshot:
-    indexAllowlist:
-      - my-index-*
-      - important-data
 ```
 
 ## Validation
@@ -73,18 +65,24 @@ backfill:
 After backfill completes, validate document counts:
 
 ```bash
-# On source
-curl -s source:9200/_cat/indices?v
+# Check source document count
+console clusters cat-indices --source
 
-# On target
-curl -s target:9200/_cat/indices?v
+# Check target document count
+console clusters cat-indices --target
 ```
 
 ## Performance Tuning
 
-| Setting | Default | Description |
-|---------|---------|-------------|
-| `workerCount` | 1 | Number of parallel RFS workers |
-| Node resources | 2 vCPU / 4 GB | K8s resource limits per worker |
+| Parameter | Default | Description |
+|-----------|---------|-------------|
+| `workers` | 4 | Number of parallel RFS workers |
+| `maxShardSizeGb` | 80 | Maximum shard size to process |
+| K8s resource limits | 2 vCPU / 4 GB | Per-worker resource allocation |
 
-At 2 vCPU / 4 GB per worker, expect ~590K docs/min throughput.
+Peak throughput: **590,000 docs/min** per 2 vCPU worker.
+
+## Next Steps
+
+- [Capture & Replay](/opensearch-migrations-eks/migration-guide/capture-and-replay/) — for live traffic validation
+- [Traffic Routing](/opensearch-migrations-eks/migration-guide/traffic-routing/) — to cut over to the target

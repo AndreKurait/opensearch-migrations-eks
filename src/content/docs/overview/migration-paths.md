@@ -1,7 +1,9 @@
 ---
 title: Migration Paths
-description: Supported source and target versions, platforms, and feature compatibility.
+description: Supported source and target versions, platforms, and compatibility matrix.
 ---
+
+Migration Assistant supports a wide range of source and target versions across multiple platforms.
 
 ## Version Compatibility Matrix
 
@@ -18,37 +20,31 @@ description: Supported source and target versions, platforms, and feature compat
 
 ## Supported Platforms
 
-| Platform | As Source | As Target |
-|----------|----------|-----------|
-| Self-managed (cloud/on-prem) | ✓ | ✓ |
-| Amazon OpenSearch Service | ✓ | ✓ |
-| Amazon OpenSearch Serverless | — | ✓ |
-| Elastic Cloud | ✓ | — |
-| AWS EC2 | ✓ | ✓ |
+**Source platforms:**
+- Self-managed (cloud or on-premises)
+- Amazon OpenSearch Service
+- Elastic Cloud
+- AWS EC2
 
-## Feature Support
+**Target platforms:**
+- Self-managed (cloud or on-premises)
+- Amazon OpenSearch Service
+- Amazon OpenSearch Serverless (target only)
 
-| Feature | Backfill (RFS) | Capture & Replay |
-|---------|---------------|-----------------|
-| Index data | ✓ | ✓ |
-| Index mappings | ✓ | ✓ |
-| Index settings | ✓ | ✓ |
-| Aliases | ✓ | ✓ |
-| Templates | ✓ | — |
-| Component templates | ✓ | — |
-| ISM policies | — | — |
+## Feature Support by Migration Path
 
-## Automatic Field Type Transformations
-
-Migration Assistant automatically handles these breaking changes:
-
-| Transformation | Source | Target |
-|---------------|--------|--------|
-| `string` → `text`/`keyword` | ES 1.x–5.x | OS all |
-| `flattened` → `flat_object` | ES 7.3+ | OS 2.7+ |
-| `dense_vector` → `knn_vector` | ES 7.x | OS all |
-| Type mapping sanitization | ES 5.x–6.x multi-type | OS single-type |
+| Feature | Backfill (RFS) | Live Capture & Replay |
+|---------|---------------|----------------------|
+| ES 1.x–2.x → OS | ✓ | Limited (no zero-downtime guarantee) |
+| ES 5.x–8.x → OS | ✓ | ✓ |
+| OS 1.x–2.x → OS | ✓ | ✓ |
+| Metadata migration | ✓ | N/A |
+| Field type transforms | ✓ | N/A |
 
 :::caution
-Migration Assistant does not guarantee zero-downtime migration through live traffic Capture and Replay when migrating from Elasticsearch 1.x or 2.x.
+Migration Assistant does not guarantee zero-downtime migration through live traffic Capture and Replay when migrating from Elasticsearch 1.x or Elasticsearch 2.x.
 :::
+
+## Choosing a Migration Path
+
+Use the [Assessment](/opensearch-migrations-eks/migration-guide/assessment/) phase to evaluate your source cluster and determine the best migration approach for your use case.
