@@ -1,117 +1,171 @@
-/* OpenSearch Migrations EKS — Starlight Theme
-   Fonts and accent colors inspired by observability.opensearch.org */
+/* OpenSearch Migration Assistant — EKS Docs
+   Clean Starlight theme overrides */
 
-/* Dark mode (default) — cyan accent */
+/* ============================================
+   1. TYPOGRAPHY
+   ============================================ */
 :root {
 	--sl-font: 'Inter', system-ui, -apple-system, sans-serif;
 	--sl-font-mono: 'Fira Code', ui-monospace, monospace;
+}
+
+/* ============================================
+   2. COLOR ACCENT — Dark (default)
+   ============================================ */
+:root {
 	--sl-color-accent-low: hsl(192, 60%, 15%);
 	--sl-color-accent: hsl(192, 100%, 50%);
 	--sl-color-accent-high: hsl(192, 80%, 80%);
 }
 
-/* Light mode — darker cyan for contrast on white */
+/* ============================================
+   3. COLOR ACCENT — Light
+   ============================================ */
 :root[data-theme='light'] {
 	--sl-color-accent-high: hsl(192, 80%, 25%);
 	--sl-color-accent: hsl(192, 100%, 36%);
 	--sl-color-accent-low: hsl(192, 60%, 90%);
 }
 
-/* R1: Better table readability */
-.sl-markdown-content table td,
-.sl-markdown-content table th {
-	padding: 0.75rem 1rem;
+/* ============================================
+   4. TABLES
+   ============================================ */
+.sl-markdown-content table th,
+.sl-markdown-content table td {
+	padding: 0.625rem 1rem;
 }
 
-/* R2: Distinct table headers */
-.sl-markdown-content table thead tr {
-	background-color: var(--sl-color-gray-6);
-}
 .sl-markdown-content table thead th {
-	font-size: 0.8rem;
+	font-size: 0.78rem;
+	font-weight: 600;
 	text-transform: uppercase;
-	letter-spacing: 0.04em;
+	letter-spacing: 0.05em;
+	background-color: var(--sl-color-gray-6);
+	border-bottom: 2px solid var(--sl-color-gray-5);
 }
 
-/* R2: Step spacing */
+.sl-markdown-content table tbody tr:nth-child(even) {
+	background-color: var(--sl-color-gray-7, rgba(0, 0, 0, 0.02));
+}
+:root[data-theme='light'] .sl-markdown-content table tbody tr:nth-child(even) {
+	background-color: rgba(0, 0, 0, 0.02);
+}
+
+/* ============================================
+   5. MIGRATION MATRIX (landing page)
+   ============================================ */
+.migration-matrix th:nth-child(2) {
+	background: rgba(34, 197, 94, 0.12);
+	color: rgb(34, 197, 94);
+	border-bottom: 2px solid rgb(34, 197, 94);
+}
+.migration-matrix th:nth-child(3) {
+	background: rgba(234, 179, 8, 0.12);
+	color: rgb(234, 179, 8);
+	border-bottom: 2px solid rgb(234, 179, 8);
+}
+.migration-matrix td:nth-child(2) {
+	background: rgba(34, 197, 94, 0.05);
+	color: rgb(34, 197, 94);
+	font-weight: 600;
+	text-align: center;
+}
+.migration-matrix td:nth-child(3) {
+	background: rgba(234, 179, 8, 0.05);
+	color: rgb(234, 179, 8);
+	font-weight: 600;
+	text-align: center;
+}
+:root[data-theme='light'] .migration-matrix th:nth-child(2) {
+	background: rgba(22, 163, 74, 0.1);
+	color: rgb(22, 163, 74);
+	border-bottom-color: rgb(22, 163, 74);
+}
+:root[data-theme='light'] .migration-matrix td:nth-child(2) {
+	background: rgba(22, 163, 74, 0.04);
+	color: rgb(22, 163, 74);
+}
+:root[data-theme='light'] .migration-matrix th:nth-child(3) {
+	background: rgba(202, 138, 4, 0.1);
+	color: rgb(161, 98, 7);
+	border-bottom-color: rgb(202, 138, 4);
+}
+:root[data-theme='light'] .migration-matrix td:nth-child(3) {
+	background: rgba(202, 138, 4, 0.04);
+	color: rgb(161, 98, 7);
+}
+
+/* ============================================
+   6. VERSION SUPPORT TABLE (landing page)
+   ============================================ */
+.version-support td:not(:first-child) {
+	text-align: center;
+	font-weight: 600;
+}
+
+/* ============================================
+   7. STEPS
+   ============================================ */
 .sl-steps > li {
-	padding-bottom: 1.25rem;
+	padding-bottom: 1rem;
 }
 .sl-steps > li:last-child {
 	padding-bottom: 0;
 }
 
-/* R2: Hero max-width on wide screens */
+/* ============================================
+   8. HERO (splash page)
+   ============================================ */
 @media (min-width: 72rem) {
 	[data-page-type='splash'] .hero {
 		max-width: 64rem;
 		margin-inline: auto;
 	}
 }
-
-/* R3: Aside breathing room */
-.sl-markdown-content .starlight-aside {
-	margin-block-start: 2rem;
+[data-page-type='splash'] .hero .tagline {
+	max-width: 42ch;
 }
 
-/* R3: Table column divider for two-column tables */
-.sl-markdown-content table td:nth-child(2) {
-	border-inline-start: 2px solid var(--sl-color-gray-5);
-	padding-inline-start: 1.5rem;
-}
-
-/* R3: Center and bold version matrix data cells */
-.sl-markdown-content table tbody td:not(:first-child) {
-	text-align: center;
-	font-weight: 600;
-}
-
-/* R1: Make cards with links feel clickable */
-.card:has(a) {
-	transition: border-color 0.15s ease;
-}
-.card:has(a):hover {
+/* ============================================
+   9. CARDS — hover effect for link cards
+   ============================================ */
+.sl-link-card:hover {
 	border-color: var(--sl-color-accent);
 }
 
-/* R5: Color-coded migration matrix */
-.migration-matrix th:nth-child(2) {
-	background: rgba(34, 197, 94, 0.1);
-	color: rgb(34, 197, 94);
-	border-bottom: 2px solid rgb(34, 197, 94);
+/* ============================================
+   10. LANDING PAGE SECTIONS
+   ============================================ */
+[data-page-type='splash'] .sl-markdown-content > h2 {
+	margin-block-start: 3rem;
 }
-.migration-matrix th:nth-child(3) {
-	background: rgba(234, 179, 8, 0.1);
-	color: rgb(234, 179, 8);
-	border-bottom: 2px solid rgb(234, 179, 8);
-}
-.migration-matrix td:nth-child(2) {
-	background: rgba(34, 197, 94, 0.04);
-	color: rgb(34, 197, 94);
-}
-.migration-matrix td:nth-child(3) {
-	background: rgba(234, 179, 8, 0.04);
-	color: rgb(234, 179, 8);
-}
-:root[data-theme='light'] .migration-matrix th:nth-child(2) {
-	background: rgba(22, 163, 74, 0.08);
-	color: rgb(22, 163, 74);
-	border-bottom-color: rgb(22, 163, 74);
-}
-:root[data-theme='light'] .migration-matrix td:nth-child(2) {
-	background: rgba(22, 163, 74, 0.03);
-	color: rgb(22, 163, 74);
-}
-:root[data-theme='light'] .migration-matrix th:nth-child(3) {
-	background: rgba(202, 138, 4, 0.08);
-	color: rgb(161, 98, 7);
-	border-bottom-color: rgb(202, 138, 4);
-}
-:root[data-theme='light'] .migration-matrix td:nth-child(3) {
-	background: rgba(202, 138, 4, 0.03);
-	color: rgb(161, 98, 7);
+[data-page-type='splash'] .sl-markdown-content > h2:first-child {
+	margin-block-start: 1rem;
 }
 
+.platform-row {
+	font-size: 0.875rem;
+	color: var(--sl-color-gray-3);
+	margin-block-start: 0.5rem;
+}
+
+/* ============================================
+   11. CODE BLOCKS
+   ============================================ */
+.sl-markdown-content .expressive-code pre {
+	padding: 1rem 1.25rem;
+}
+
+/* ============================================
+   12. ASIDES
+   ============================================ */
+.sl-markdown-content .starlight-aside {
+	margin-block: 1.5rem;
+}
+
+/* ============================================
+   13. ACCESSIBILITY — reduced motion
+   ============================================ */
 @media (prefers-reduced-motion: reduce) {
 	*,
 	*::before,

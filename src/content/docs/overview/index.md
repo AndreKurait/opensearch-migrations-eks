@@ -1,6 +1,6 @@
 ---
 title: Overview
-description: Introduction to Migration Assistant for OpenSearch.
+description: Introduction to Migration Assistant for OpenSearch — capabilities, architecture, performance, and getting started.
 ---
 
 Migration Assistant is a tool for migrating data from Elasticsearch and OpenSearch clusters to OpenSearch. It provides a **Kubernetes-native, workflow-driven approach** to orchestrate migrations using declarative YAML configuration.
@@ -15,8 +15,8 @@ The configuration schema changes between Migration Assistant versions. Do not co
 |------------|-------------|
 | **Metadata migration** | Migrate index templates, component templates, index settings, and aliases |
 | **Document backfill** | Migrate existing documents using snapshot-based reindexing (RFS) |
-| **Version compatibility** | Support for Elasticsearch 1.x–8.x and OpenSearch 1.x–2.x → OpenSearch 1.x–3.x |
-| **Amazon OpenSearch Serverless** | Supported as a migration target for document backfill and index metadata |
+| **Version compatibility** | Elasticsearch 1.x–8.x and OpenSearch 1.x–2.x → OpenSearch 1.x–3.x |
+| **Amazon OpenSearch Serverless** | Supported as a target for document backfill and index metadata |
 
 ## Architecture Overview
 
@@ -29,14 +29,24 @@ Migration Assistant runs on Kubernetes and uses Argo Workflows for orchestration
 - **Argo Workflows** — Kubernetes-native workflow engine that orchestrates migration tasks
 - **RFS (Reindex-from-Snapshot)** — High-performance document migration using Lucene segment files
 
+See [Architecture](/opensearch-migrations-eks/overview/architecture/) for the full component diagram and data flow.
+
 ## Migration Console Orientation
 
 When you connect to the Migration Console pod, you'll find:
 
-- **`console`** — Main CLI for migration operations and status
-- **`workflow`** — Configure and submit migration workflows
-- **`kubectl`** — Pre-configured for the migration namespace
-- **`aws` CLI** — Available on EKS deployments for AWS operations
+| Command | Purpose |
+|---------|---------|
+| `console` | Main CLI for migration operations and status |
+| `workflow` | Configure and submit migration workflows |
+| `kubectl` | Pre-configured for the migration namespace |
+| `aws` | Available on EKS deployments for AWS operations |
+
+Connect with:
+
+```bash
+kubectl exec -it migration-console-0 -n ma -- bash
+```
 
 ## Performance
 

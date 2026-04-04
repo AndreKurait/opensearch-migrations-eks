@@ -3,13 +3,13 @@ title: OpenSearch Migration Assistant — EKS Release
 description: Migrate to OpenSearch without downtime, without loading your source cluster, and without intermediate upgrades.
 template: splash
 hero:
-  tagline: "Keep your production cluster running. Skip intermediate upgrades. Migrate from Elasticsearch or OpenSearch to OpenSearch — on your schedule."
+  tagline: "Migrate from Elasticsearch or OpenSearch to OpenSearch — without touching your source cluster, without intermediate upgrades, and on your schedule."
   actions:
     - text: Deploy in 5 Minutes
       link: /opensearch-migrations-eks/deployment/deploying-to-eks/
       icon: right-arrow
       variant: primary
-    - text: I'm New — What Is This?
+    - text: What Is a Migration?
       link: /opensearch-migrations-eks/overview/what-is-a-migration/
       icon: open-book
     - text: GitHub
@@ -19,32 +19,6 @@ hero:
 ---
 
 import { Card, CardGrid, LinkCard, Aside, Steps } from '@astrojs/starlight/components';
-
-## What You Get
-
-<CardGrid>
-  <Card title="Keep Production Running" icon="approve-check-circle">
-    Migration reads from a snapshot in S3 — not your live cluster. After one snapshot, your source is never touched again. Zero performance impact.
-  </Card>
-  <Card title="Skip Intermediate Upgrades" icon="random">
-    Go directly from Elasticsearch 1.x to OpenSearch 3.x. No stepping through 5.x → 6.x → 7.x → OS 1.x. One migration, any version gap.
-  </Card>
-  <Card title="Scale Without Limits" icon="up-caret">
-    Each worker processes one shard independently from S3. Add workers to go faster — 590K docs/min per worker. Failed shards retry automatically.
-  </Card>
-  <Card title="Declarative Workflows" icon="puzzle">
-    Define your migration as YAML. Argo Workflows handles orchestration with parallel execution, retry logic, and approval gates before critical steps.
-  </Card>
-</CardGrid>
-
-## Before You Start
-
-:::note[Prerequisites]
-- **AWS account** with permissions to create EKS clusters, S3 buckets, and IAM roles
-- **kubectl** and **Helm 3** installed locally
-- **Source cluster** accessible from your VPC (Elasticsearch 1.x–8.x or OpenSearch 1.x–2.x)
-- A **snapshot** in S3 — or the ability to create one
-:::
 
 ## How It Works
 
@@ -58,12 +32,53 @@ import { Card, CardGrid, LinkCard, Aside, Steps } from '@astrojs/starlight/compo
 4. **Validate & Switch** (~15 min) — Verify document counts and query results, then redirect traffic to the target
 </Steps>
 
+## Why Migration Assistant
+
+<CardGrid>
+  <Card title="Zero Source Impact" icon="approve-check-circle">
+    Reads raw Lucene files from a snapshot in S3 — your source cluster is never touched after the initial snapshot. No performance hit.
+  </Card>
+  <Card title="Skip Version Gaps" icon="random">
+    Go directly from Elasticsearch 1.x to OpenSearch 3.x. No stepping through 5.x → 6.x → 7.x → OS 1.x. One migration, any gap.
+  </Card>
+  <Card title="Scale Independently" icon="up-caret">
+    Each worker processes one shard from S3. Add workers to go faster — **590K docs/min** per worker. Failed shards retry automatically.
+  </Card>
+  <Card title="Declarative Workflows" icon="puzzle">
+    Define your migration as YAML. Argo Workflows handles parallel execution, retry logic, and approval gates before critical steps.
+  </Card>
+</CardGrid>
+
 ## Choose Your Path
 
 <CardGrid>
   <LinkCard title="Backfill Only" description="Snapshot → Metadata → Backfill → Verify → Switch. Best when you can briefly pause writes." href="/opensearch-migrations-eks/migration-guide/backfill/" />
   <LinkCard title="Zero-Downtime Migration" description="Capture live traffic → Snapshot → Metadata → Backfill → Replay catches up → Verify → Switch. No write pause needed." href="/opensearch-migrations-eks/migration-guide/capture-and-replay/" />
 </CardGrid>
+
+## Before You Start
+
+:::note[Prerequisites]
+- **AWS account** with permissions to create EKS clusters, S3 buckets, and IAM roles
+- **kubectl** and **Helm 3** installed locally
+- **Source cluster** accessible from your VPC (Elasticsearch 1.x–8.x or OpenSearch 1.x–2.x)
+- A **snapshot** in S3 — or the ability to create one
+:::
+
+## Version Support
+
+<div class="version-support">
+
+| Source | → OpenSearch 1.x | → OpenSearch 2.x | → OpenSearch 3.x |
+|--------|:-:|:-:|:-:|
+| **Elasticsearch 1.x–7.x** | ✓ | ✓ | ✓ |
+| **Elasticsearch 8.x** | — | ✓ | ✓ |
+| **OpenSearch 1.x** | ✓ | ✓ | ✓ |
+| **OpenSearch 2.x** | — | ✓ | ✓ |
+
+</div>
+
+<p class="platform-row">Runs on: <strong>Amazon EKS</strong> · GKE · AKS · OpenShift · any Kubernetes 1.24+</p>
 
 ## What's Migrated
 
@@ -83,17 +98,6 @@ import { Card, CardGrid, LinkCard, Aside, Steps } from '@astrojs/starlight/compo
 | Data streams | | ✗ |
 
 </div>
-
-## Version Support
-
-| Source | → OpenSearch 1.x | → OpenSearch 2.x | → OpenSearch 3.x |
-|--------|:-:|:-:|:-:|
-| **Elasticsearch 1.x–7.x** | ✓ | ✓ | ✓ |
-| **Elasticsearch 8.x** | — | ✓ | ✓ |
-| **OpenSearch 1.x** | ✓ | ✓ | ✓ |
-| **OpenSearch 2.x** | — | ✓ | ✓ |
-
-Runs on: **Amazon EKS** · GKE · AKS · OpenShift · any Kubernetes 1.24+
 
 <Aside type="tip">
 Already deployed? Reconnect: `kubectl exec -it migration-console-0 -n ma -- bash` then run `workflow configure sample` to see the config schema for your version.

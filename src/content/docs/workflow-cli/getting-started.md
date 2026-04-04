@@ -3,6 +3,8 @@ title: Workflow CLI Getting Started
 description: Step-by-step tutorial for configuring and running your first migration workflow.
 ---
 
+import { Steps } from '@astrojs/starlight/components';
+
 This tutorial walks through configuring and running a backfill migration workflow using the Workflow CLI.
 
 ## Prerequisites
@@ -11,94 +13,100 @@ This tutorial walks through configuring and running a backfill migration workflo
 - Access to the Migration Console pod
 - Source and target clusters accessible
 
-## Step 1: Access the Migration Console
+## Tutorial
 
-```bash
-kubectl exec -it migration-console-0 -n ma -- bash
-```
+<Steps>
 
-## Step 2: Load Sample Configuration
+1. **Access the Migration Console**
 
-```bash
-workflow configure sample --load
-```
+   ```bash
+   kubectl exec -it migration-console-0 -n ma -- bash
+   ```
 
-This creates a sample YAML configuration with common defaults.
+2. **Load Sample Configuration**
 
-## Step 3: Edit Configuration
+   ```bash
+   workflow configure sample --load
+   ```
 
-```bash
-workflow configure edit
-```
+   This creates a sample YAML configuration with common defaults.
 
-Update the configuration with your source and target cluster details, authentication, and migration parameters.
+3. **Edit Configuration**
 
-Key fields to configure:
+   ```bash
+   workflow configure edit
+   ```
 
-```yaml
-source:
-  endpoint: https://source-cluster:9200
-  auth:
-    type: basic
-    
-target:
-  endpoint: https://target-cluster:9200
-  auth:
-    type: sigv4
+   Update the configuration with your source and target cluster details, authentication, and migration parameters.
 
-backfill:
-  enabled: true
-  indexAllowlist:
-    - my-index-*
-```
+   Key fields to configure:
 
-## Step 4: Create Secrets
+   ```yaml
+   source:
+     endpoint: https://source-cluster:9200
+     auth:
+       type: basic
 
-If using authentication, create the required Kubernetes secrets:
+   target:
+     endpoint: https://target-cluster:9200
+     auth:
+       type: sigv4
 
-```bash
-kubectl create secret generic source-auth -n ma \
-  --from-literal=username=admin \
-  --from-literal=password=<PASSWORD>
-```
+   backfill:
+     enabled: true
+     indexAllowlist:
+       - my-index-*
+   ```
 
-## Step 5: Submit the Workflow
+4. **Create Secrets**
 
-```bash
-workflow submit
-```
+   If using authentication, create the required Kubernetes secrets:
 
-The workflow is submitted to Argo Workflows and begins execution.
+   ```bash
+   kubectl create secret generic source-auth -n ma \
+     --from-literal=username=admin \
+     --from-literal=password=<PASSWORD>
+   ```
 
-## Step 6: Monitor Progress
+5. **Submit the Workflow**
 
-```bash
-# Check overall status
-workflow status
+   ```bash
+   workflow submit
+   ```
 
-# Interactive management TUI
-workflow manage
-```
+   The workflow is submitted to Argo Workflows and begins execution.
 
-## Step 7: Approve Gates
+6. **Monitor Progress**
 
-When the workflow reaches an approval gate, review the results and approve:
+   ```bash
+   # Check overall status
+   workflow status
 
-```bash
-workflow approve
-```
+   # Interactive management TUI
+   workflow manage
+   ```
 
-The workflow pauses at approval gates to let you verify:
-- Metadata migration results
-- Document counts
-- Any errors or warnings
+7. **Approve Gates**
 
-## Step 8: Verify Completion
+   When the workflow reaches an approval gate, review the results and approve:
 
-```bash
-workflow status
-console clusters cat-indices --target
-```
+   ```bash
+   workflow approve
+   ```
+
+   The workflow pauses at approval gates to let you verify:
+   - Metadata migration results
+   - Document counts
+   - Any errors or warnings
+
+8. **Verify Completion**
+
+   ```bash
+   workflow status
+   console clusters cat-indices --target
+   ```
+
+</Steps>
 
 ## Next Steps
 

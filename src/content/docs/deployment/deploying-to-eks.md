@@ -3,6 +3,8 @@ title: Deploying to EKS
 description: Deploy Migration Assistant to Amazon EKS using CloudFormation and the bootstrap script.
 ---
 
+import { Steps } from '@astrojs/starlight/components';
+
 This guide covers deploying Migration Assistant to Amazon Elastic Kubernetes Service (EKS) using CloudFormation and the bootstrap script.
 
 ## Prerequisites
@@ -14,20 +16,49 @@ This guide covers deploying Migration Assistant to Amazon Elastic Kubernetes Ser
 
 ## Quick Start
 
-### 1. Run the Bootstrap Script
+<Steps>
 
-The bootstrap script creates the EKS cluster, VPC, IAM roles, and S3 bucket via CloudFormation, then installs the Helm chart.
+1. **Run the Bootstrap Script**
 
-```bash
-# Create a new VPC and EKS cluster
-./aws-bootstrap.sh --stage dev --region us-east-1 --deploy-create-vpc-cfn
+   The bootstrap script creates the EKS cluster, VPC, IAM roles, and S3 bucket via CloudFormation, then installs the Helm chart.
 
-# Or import an existing VPC
-./aws-bootstrap.sh --stage dev --region us-east-1 --deploy-import-vpc-cfn \
-  --vpc-id vpc-xxxxx --private-subnet-ids subnet-aaa,subnet-bbb
-```
+   ```bash
+   # Create a new VPC and EKS cluster
+   ./aws-bootstrap.sh --stage dev --region us-east-1 --deploy-create-vpc-cfn
 
-### 2. CloudFormation Resources
+   # Or import an existing VPC
+   ./aws-bootstrap.sh --stage dev --region us-east-1 --deploy-import-vpc-cfn \
+     --vpc-id vpc-xxxxx --private-subnet-ids subnet-aaa,subnet-bbb
+   ```
+
+2. **Verify Deployment**
+
+   ```bash
+   # Configure kubectl
+   aws eks update-kubeconfig --region <REGION> --name migration-eks-cluster-<STAGE>-<REGION>
+
+   # Check pods
+   kubectl get pods -n ma
+   ```
+
+   Expected output:
+
+   ```
+   NAME                                                  READY   STATUS    RESTARTS   AGE
+   argo-workflows-server-xxxxxxxxx-xxxxx                 1/1     Running   0          5m
+   argo-workflows-workflow-controller-xxxxxxxxx-xxxxx     1/1     Running   0          5m
+   migration-console-0                                    1/1     Running   0          5m
+   ```
+
+3. **Access the Migration Console**
+
+   ```bash
+   kubectl exec -it migration-console-0 -n ma -- bash
+   ```
+
+</Steps>
+
+## CloudFormation Resources
 
 The bootstrap script creates:
 
@@ -37,31 +68,6 @@ The bootstrap script creates:
 | S3 Bucket | `migrations-default-<ACCOUNT>-<STAGE>-<REGION>` |
 | IAM Roles | Snapshot role, node role |
 | VPC | Created or imported |
-
-### 3. Verify Deployment
-
-```bash
-# Configure kubectl
-aws eks update-kubeconfig --region <REGION> --name migration-eks-cluster-<STAGE>-<REGION>
-
-# Check pods
-kubectl get pods -n ma
-```
-
-Expected output:
-
-```
-NAME                                                  READY   STATUS    RESTARTS   AGE
-argo-workflows-server-xxxxxxxxx-xxxxx                 1/1     Running   0          5m
-argo-workflows-workflow-controller-xxxxxxxxx-xxxxx     1/1     Running   0          5m
-migration-console-0                                    1/1     Running   0          5m
-```
-
-### 4. Access the Migration Console
-
-```bash
-kubectl exec -it migration-console-0 -n ma -- bash
-```
 
 ## Stage-Based Naming
 

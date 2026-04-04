@@ -62,6 +62,11 @@ kubectl get pods -n ma
 - Node pool not scaled up
 - Image pull failures
 
+**Resolution:**
+1. Check node capacity: `kubectl describe nodes | grep -A 5 "Allocated resources"`
+2. Verify images are pullable: `kubectl describe pod <POD_NAME> -n ma | grep -A 3 "Events"`
+3. Scale the node group if needed
+
 ### Workflow Step Failed
 
 ```bash
@@ -78,13 +83,22 @@ kubectl describe pod <POD_NAME> -n ma
 kubectl logs <POD_NAME> -n ma --previous
 ```
 
+**Common causes:**
+- Configuration errors (bad endpoint, invalid YAML)
+- Missing secrets
+- Out-of-memory kills (check `kubectl describe pod` for OOMKilled)
+
 ### Pods Pending (Unschedulable)
 
 ```bash
 kubectl describe pod <POD_NAME> -n ma
-# Check for resource constraints or node affinity issues
 kubectl get nodes -o wide
 ```
+
+**Common causes:**
+- Insufficient CPU or memory on nodes
+- Node affinity or taint mismatch
+- PersistentVolumeClaim not bound
 
 ## Performance Issues
 
@@ -94,10 +108,11 @@ kubectl get nodes -o wide
 - Check S3 throughput limits
 - Verify target cluster can handle the indexing rate
 - Monitor target cluster CPU and memory
+- Check for index-level throttling on the target: `GET _cat/thread_pool/write?v`
 
 ### Slow Replay
 
-- Check Kafka consumer lag
+- Check Kafka consumer lag: `console kafka describe-topics`
 - Verify target cluster performance
 - Consider adjusting the speedup factor
 - Monitor replayer pod resource usage
@@ -117,4 +132,8 @@ kubectl get pods -n ma -l workflows.argoproj.io/workflow
 kubectl logs migration-console-0 -n ma
 kubectl logs -l app=capture-proxy -n ma
 kubectl logs -l app=traffic-replayer -n ma
+
+# Resource usage
+kubectl top pods -n ma
+kubectl top nodes
 ```
