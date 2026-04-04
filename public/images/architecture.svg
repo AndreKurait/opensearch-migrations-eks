@@ -1,27 +1,33 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 540" fill="none">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 580" fill="none">
   <style>
     :root {
       color-scheme: light dark;
     }
     text { font-family: 'Inter', system-ui, -apple-system, sans-serif; }
 
-    /* Adaptive colors using light-dark() */
     .bg-main { fill: light-dark(#f8fafc, #0f1724); }
-    .border-cluster { stroke: light-dark(#cbd5e1, #1e3a5f); }
+    .border-cluster { stroke: light-dark(#93c5fd, #1e3a5f); }
+    .fill-cluster-bg { fill: light-dark(rgba(59,130,246,0.03), rgba(59,130,246,0.04)); }
     .fill-card { fill: light-dark(#ffffff, #1a2744); }
     .border-card { stroke: light-dark(#d1d9e6, #2d4a6f); }
-    .fill-card-accent { fill: light-dark(#f0f7ff, #0d2847); }
+    .fill-card-accent { fill: light-dark(#eff6ff, #0d2847); }
     .border-accent { stroke: light-dark(#3b82f6, #3b82f6); }
     .fill-external { fill: light-dark(#f9fafb, #1c1c2e); }
     .border-external { stroke: light-dark(#9ca3af, #475569); }
     .fill-managed-bg { fill: light-dark(rgba(59,130,246,0.04), rgba(0,94,184,0.06)); }
     .border-managed { stroke: light-dark(#bfdbfe, #1e3a5f); }
+    .fill-target { fill: light-dark(#f0fdf4, #0d2a1a); }
+    .border-target { stroke: light-dark(#22c55e, #16a34a); }
 
     .label { font-size: 13px; fill: light-dark(#1e293b, #e2e8f0); font-weight: 600; }
     .sublabel { font-size: 10px; fill: light-dark(#64748b, #94a3b8); }
-    .group-label { font-size: 10.5px; fill: light-dark(#6b7280, #64748b); font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; }
-    .step-num { font-size: 10px; fill: #ffffff; font-weight: 700; }
+    .group-label { font-size: 11px; fill: light-dark(#3b82f6, #60a5fa); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
+    .managed-label { font-size: 10px; fill: light-dark(#6b7280, #64748b); font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; }
+    .step-num { font-size: 9.5px; fill: #ffffff; font-weight: 700; }
     .legend-text { font-size: 10.5px; fill: light-dark(#475569, #94a3b8); }
+    .legend-title { font-size: 10.5px; fill: light-dark(#374151, #cbd5e1); font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; }
+    .flow-label { font-size: 9.5px; fill: light-dark(#2563eb, #60a5fa); font-weight: 500; }
+    .ctrl-label { font-size: 9.5px; fill: light-dark(#64748b, #64748b); font-weight: 500; }
 
     .arrow-control {
       stroke: light-dark(#94a3b8, #475569);
@@ -40,21 +46,15 @@
     .arrow-data-color { fill: light-dark(#2563eb, #3b82f6); }
 
     .shadow-card { filter: url(#card-shadow); }
-
-    /* Hover states for interactivity hint */
-    .node-group:hover .fill-card,
-    .node-group:hover .fill-card-accent,
-    .node-group:hover .fill-external {
-      filter: brightness(1.04);
-    }
+    .shadow-accent { filter: url(#accent-shadow); }
   </style>
 
   <defs>
     <marker id="ah-ctrl" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
       <path d="M0,0.5 L7,3 L0,5.5" class="arrow-ctrl-color"/>
     </marker>
-    <marker id="ah-data" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
-      <path d="M0,0.5 L7,3 L0,5.5" class="arrow-data-color"/>
+    <marker id="ah-data" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
+      <path d="M0,0.5 L8,3.5 L0,6.5" class="arrow-data-color"/>
     </marker>
 
     <linearGradient id="grad-blue" x1="0" y1="0" x2="1" y2="1">
@@ -62,173 +62,183 @@
       <stop offset="100%" stop-color="#0891b2"/>
     </linearGradient>
 
+    <linearGradient id="grad-green" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#16a34a"/>
+      <stop offset="100%" stop-color="#0d9488"/>
+    </linearGradient>
+
     <filter id="card-shadow" x="-6%" y="-6%" width="112%" height="120%">
-      <feDropShadow dx="0" dy="1" stdDeviation="3" flood-color="#000" flood-opacity="0.12"/>
+      <feDropShadow dx="0" dy="1" stdDeviation="2.5" flood-color="#000" flood-opacity="0.08"/>
+    </filter>
+
+    <filter id="accent-shadow" x="-6%" y="-6%" width="112%" height="120%">
+      <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#2563eb" flood-opacity="0.12"/>
     </filter>
   </defs>
 
   <!-- ======== BACKGROUND ======== -->
-  <rect width="920" height="540" rx="14" class="bg-main"/>
+  <rect width="960" height="580" rx="14" class="bg-main"/>
+
+  <!-- ======== KUBERNETES CLUSTER BOUNDARY ======== -->
+  <rect x="192" y="30" width="564" height="380" rx="14" class="fill-cluster-bg"/>
+  <rect x="192" y="30" width="564" height="380" rx="14" fill="none" class="border-cluster" stroke-width="2" stroke-dasharray="10 5"/>
+  <text x="212" y="52" class="group-label">Kubernetes Cluster</text>
 
   <!-- ======== CLIENTS (external, top-left) ======== -->
   <g class="node-group">
-    <rect x="32" y="72" width="116" height="48" rx="10" class="fill-external shadow-card"/>
-    <rect x="32" y="72" width="116" height="48" rx="10" class="border-external" fill="none" stroke-width="1.5"/>
-    <text x="90" y="101" class="label" text-anchor="middle">Clients</text>
+    <rect x="36" y="72" width="120" height="50" rx="10" class="fill-external shadow-card"/>
+    <rect x="36" y="72" width="120" height="50" rx="10" class="border-external" fill="none" stroke-width="1.5"/>
+    <text x="96" y="102" class="label" text-anchor="middle">Clients</text>
   </g>
 
   <!-- ======== SOURCE (external, left) ======== -->
   <g class="node-group">
-    <rect x="32" y="208" width="116" height="64" rx="10" class="fill-external shadow-card"/>
-    <rect x="32" y="208" width="116" height="64" rx="10" class="border-external" fill="none" stroke-width="1.5"/>
-    <text x="90" y="236" class="label" text-anchor="middle">Source</text>
-    <text x="90" y="252" class="sublabel" text-anchor="middle">ES / OpenSearch</text>
+    <rect x="36" y="216" width="120" height="64" rx="10" class="fill-external shadow-card"/>
+    <rect x="36" y="216" width="120" height="64" rx="10" class="border-external" fill="none" stroke-width="1.5"/>
+    <text x="96" y="244" class="label" text-anchor="middle">Source</text>
+    <text x="96" y="260" class="sublabel" text-anchor="middle">ES / OpenSearch</text>
   </g>
 
   <!-- ======== OBJECT STORAGE (external, bottom-left) ======== -->
   <g class="node-group">
-    <rect x="32" y="408" width="116" height="64" rx="10" class="fill-external shadow-card"/>
-    <rect x="32" y="408" width="116" height="64" rx="10" class="border-external" fill="none" stroke-width="1.5"/>
-    <text x="90" y="436" class="label" text-anchor="middle">Object Storage</text>
-    <text x="90" y="452" class="sublabel" text-anchor="middle">S3 / GCS / MinIO</text>
+    <rect x="36" y="430" width="120" height="64" rx="10" class="fill-external shadow-card"/>
+    <rect x="36" y="430" width="120" height="64" rx="10" class="border-external" fill="none" stroke-width="1.5"/>
+    <text x="96" y="458" class="label" text-anchor="middle">Object Storage</text>
+    <text x="96" y="474" class="sublabel" text-anchor="middle">S3 / GCS / MinIO</text>
   </g>
 
   <!-- ======== TARGET (external, right) ======== -->
   <g class="node-group">
-    <rect x="762" y="208" width="126" height="64" rx="10" class="fill-card-accent shadow-card"/>
-    <rect x="762" y="208" width="126" height="64" rx="10" fill="none" stroke="url(#grad-blue)" stroke-width="2"/>
-    <text x="825" y="236" class="label" text-anchor="middle">Target</text>
-    <text x="825" y="252" class="sublabel" text-anchor="middle">OpenSearch</text>
+    <rect x="796" y="216" width="130" height="64" rx="10" class="fill-target shadow-accent"/>
+    <rect x="796" y="216" width="130" height="64" rx="10" fill="none" stroke="url(#grad-green)" stroke-width="2"/>
+    <text x="861" y="244" class="label" text-anchor="middle">Target</text>
+    <text x="861" y="260" class="sublabel" text-anchor="middle">OpenSearch</text>
   </g>
-
-  <!-- ======== KUBERNETES CLUSTER BOUNDARY ======== -->
-  <rect x="184" y="32" width="548" height="352" rx="12" fill="none" class="border-cluster" stroke-width="1.5" stroke-dasharray="8 4"/>
-  <text x="204" y="52" class="group-label">Kubernetes Cluster</text>
 
   <!-- ======== TOP ROW: Console, Argo, Monitoring ======== -->
 
   <!-- Migration Console -->
   <g class="node-group">
-    <rect x="210" y="68" width="148" height="56" rx="10" class="fill-card shadow-card"/>
-    <rect x="210" y="68" width="148" height="56" rx="10" fill="none" class="border-card" stroke-width="1"/>
-    <text x="284" y="93" class="label" text-anchor="middle">Migration Console</text>
-    <text x="284" y="110" class="sublabel" text-anchor="middle">StatefulSet · CLI</text>
+    <rect x="218" y="70" width="150" height="56" rx="10" class="fill-card shadow-card"/>
+    <rect x="218" y="70" width="150" height="56" rx="10" fill="none" class="border-card" stroke-width="1"/>
+    <text x="293" y="94" class="label" text-anchor="middle">Migration Console</text>
+    <text x="293" y="112" class="sublabel" text-anchor="middle">StatefulSet · CLI</text>
   </g>
 
   <!-- Argo Workflows -->
   <g class="node-group">
-    <rect x="380" y="68" width="148" height="56" rx="10" class="fill-card shadow-card"/>
-    <rect x="380" y="68" width="148" height="56" rx="10" fill="none" class="border-card" stroke-width="1"/>
-    <text x="454" y="93" class="label" text-anchor="middle">Argo Workflows</text>
-    <text x="454" y="110" class="sublabel" text-anchor="middle">Server + Controller</text>
+    <rect x="392" y="70" width="150" height="56" rx="10" class="fill-card shadow-card"/>
+    <rect x="392" y="70" width="150" height="56" rx="10" fill="none" class="border-card" stroke-width="1"/>
+    <text x="467" y="94" class="label" text-anchor="middle">Argo Workflows</text>
+    <text x="467" y="112" class="sublabel" text-anchor="middle">Server + Controller</text>
   </g>
 
   <!-- Monitoring -->
   <g class="node-group">
-    <rect x="550" y="68" width="148" height="56" rx="10" class="fill-card shadow-card"/>
-    <rect x="550" y="68" width="148" height="56" rx="10" fill="none" class="border-card" stroke-width="1"/>
-    <text x="624" y="93" class="label" text-anchor="middle">Monitoring</text>
-    <text x="624" y="110" class="sublabel" text-anchor="middle">OTel · Grafana</text>
+    <rect x="566" y="70" width="150" height="56" rx="10" class="fill-card shadow-card"/>
+    <rect x="566" y="70" width="150" height="56" rx="10" fill="none" class="border-card" stroke-width="1"/>
+    <text x="641" y="94" class="label" text-anchor="middle">Monitoring</text>
+    <text x="641" y="112" class="sublabel" text-anchor="middle">OTel · Grafana</text>
   </g>
 
   <!-- Console → Argo arrow -->
-  <path d="M358,96 L380,96" class="arrow-control"/>
+  <path d="M368,98 L392,98" class="arrow-control"/>
 
   <!-- ======== MANAGED BY ARGO REGION ======== -->
-  <rect x="210" y="148" width="510" height="220" rx="10" class="fill-managed-bg border-managed" stroke-width="1" stroke-dasharray="5 3"/>
-  <text x="230" y="168" class="group-label">Managed by Argo Workflows</text>
+  <rect x="218" y="152" width="524" height="240" rx="10" class="fill-managed-bg border-managed" stroke-width="1" stroke-dasharray="5 3"/>
+  <text x="238" y="172" class="managed-label">Managed by Argo Workflows</text>
 
   <!-- RFS Workers -->
   <g class="node-group">
-    <rect x="232" y="190" width="130" height="62" rx="10" class="fill-card-accent shadow-card"/>
-    <rect x="232" y="190" width="130" height="62" rx="10" fill="none" class="border-accent" stroke-width="1.5"/>
-    <text x="297" y="216" class="label" text-anchor="middle">RFS Workers</text>
-    <text x="297" y="233" class="sublabel" text-anchor="middle">Jobs · 1 per shard</text>
+    <rect x="240" y="198" width="136" height="66" rx="10" class="fill-card-accent shadow-accent"/>
+    <rect x="240" y="198" width="136" height="66" rx="10" fill="none" class="border-accent" stroke-width="2"/>
+    <text x="308" y="226" class="label" text-anchor="middle">RFS Workers</text>
+    <text x="308" y="244" class="sublabel" text-anchor="middle">Jobs · 1 per shard</text>
   </g>
 
   <!-- Capture Proxy -->
   <g class="node-group">
-    <rect x="390" y="190" width="130" height="62" rx="10" class="fill-card-accent shadow-card"/>
-    <rect x="390" y="190" width="130" height="62" rx="10" fill="none" class="border-accent" stroke-width="1.5"/>
-    <text x="455" y="216" class="label" text-anchor="middle">Capture Proxy</text>
-    <text x="455" y="233" class="sublabel" text-anchor="middle">Deployment + Svc</text>
+    <rect x="404" y="198" width="136" height="66" rx="10" class="fill-card-accent shadow-accent"/>
+    <rect x="404" y="198" width="136" height="66" rx="10" fill="none" class="border-accent" stroke-width="2"/>
+    <text x="472" y="226" class="label" text-anchor="middle">Capture Proxy</text>
+    <text x="472" y="244" class="sublabel" text-anchor="middle">Deployment + Svc</text>
   </g>
 
   <!-- Traffic Replayer -->
   <g class="node-group">
-    <rect x="548" y="190" width="138" height="62" rx="10" class="fill-card-accent shadow-card"/>
-    <rect x="548" y="190" width="138" height="62" rx="10" fill="none" class="border-accent" stroke-width="1.5"/>
-    <text x="617" y="216" class="label" text-anchor="middle">Traffic Replayer</text>
-    <text x="617" y="233" class="sublabel" text-anchor="middle">Deployment</text>
+    <rect x="568" y="198" width="148" height="66" rx="10" class="fill-card-accent shadow-accent"/>
+    <rect x="568" y="198" width="148" height="66" rx="10" fill="none" class="border-accent" stroke-width="2"/>
+    <text x="642" y="226" class="label" text-anchor="middle">Traffic Replayer</text>
+    <text x="642" y="244" class="sublabel" text-anchor="middle">Deployment</text>
   </g>
 
   <!-- Kafka -->
   <g class="node-group">
-    <rect x="390" y="284" width="130" height="52" rx="10" class="fill-card shadow-card"/>
-    <rect x="390" y="284" width="130" height="52" rx="10" fill="none" class="border-card" stroke-width="1"/>
-    <text x="455" y="307" class="label" text-anchor="middle">Kafka</text>
-    <text x="455" y="323" class="sublabel" text-anchor="middle">Strimzi / external</text>
+    <rect x="404" y="310" width="136" height="56" rx="10" class="fill-card shadow-card"/>
+    <rect x="404" y="310" width="136" height="56" rx="10" fill="none" class="border-card" stroke-width="1"/>
+    <text x="472" y="334" class="label" text-anchor="middle">Kafka</text>
+    <text x="472" y="350" class="sublabel" text-anchor="middle">Strimzi / external</text>
   </g>
 
   <!-- ======== DATA FLOW ARROWS (blue dashed) ======== -->
 
   <!-- ① Source → Object Storage (snapshot) -->
-  <path d="M90,272 L90,408" class="arrow-data"/>
-  <text x="98" y="346" class="sublabel">snapshot</text>
-  <circle cx="90" cy="340" r="10" fill="url(#grad-blue)"/>
-  <text x="90" y="344" class="step-num" text-anchor="middle">1</text>
+  <path d="M96,280 L96,430" class="arrow-data"/>
+  <circle cx="96" cy="355" r="11" fill="url(#grad-blue)"/>
+  <text x="96" y="359" class="step-num" text-anchor="middle">1</text>
+  <text x="108" y="382" class="flow-label">snapshot</text>
 
   <!-- ② Object Storage → RFS Workers (Lucene files) -->
-  <path d="M148,440 L297,440 L297,252" class="arrow-data"/>
-  <text x="184" y="432" class="sublabel">Lucene files</text>
+  <path d="M156,462 L308,462 L308,264" class="arrow-data"/>
+  <circle cx="308" cy="370" r="11" fill="url(#grad-blue)"/>
+  <text x="308" y="374" class="step-num" text-anchor="middle">2</text>
+  <text x="200" y="454" class="flow-label">Lucene files</text>
 
   <!-- ③ RFS Workers → Target (bulk index) -->
-  <path d="M297,190 L297,170 L825,170 L825,208" class="arrow-data"/>
-  <text x="555" y="164" class="sublabel">bulk index</text>
-  <circle cx="297" cy="170" r="10" fill="url(#grad-blue)"/>
-  <text x="297" y="174" class="step-num" text-anchor="middle">2</text>
+  <path d="M376,231 L770,231 L770,248 L796,248" class="arrow-data"/>
+  <circle cx="585" cy="231" r="11" fill="url(#grad-blue)"/>
+  <text x="585" y="235" class="step-num" text-anchor="middle">3</text>
+  <text x="480" y="224" class="flow-label">bulk index</text>
 
   <!-- ======== CONTROL / LIVE FLOW ARROWS (gray solid) ======== -->
 
-  <!-- Clients → Capture Proxy (through) -->
-  <path d="M148,96 L178,96 L178,221 L390,221" class="arrow-control"/>
+  <!-- Clients → Capture Proxy -->
+  <path d="M156,97 L182,97 L182,231 L404,231" class="arrow-control"/>
+  <text x="222" y="109" class="ctrl-label">requests</text>
 
   <!-- Capture Proxy → Source (pass-through) -->
-  <path d="M455,252 L455,270 L170,270 L170,240 L148,240" class="arrow-control"/>
-  <text x="260" y="264" class="sublabel">pass-through</text>
+  <path d="M472,264 L472,288 L174,288 L174,248 L156,248" class="arrow-control"/>
+  <text x="280" y="282" class="ctrl-label">pass-through</text>
 
   <!-- Capture Proxy → Kafka -->
-  <path d="M455,252 L455,284" class="arrow-control"/>
+  <path d="M472,264 L472,310" class="arrow-control"/>
+  <text x="480" y="294" class="ctrl-label">record</text>
 
   <!-- Kafka → Traffic Replayer -->
-  <path d="M520,310 L617,310 L617,252" class="arrow-control"/>
+  <path d="M540,338 L642,338 L642,264" class="arrow-control"/>
+  <text x="558" y="332" class="ctrl-label">consume</text>
 
   <!-- Traffic Replayer → Target -->
-  <path d="M686,221 L762,221" class="arrow-control"/>
-
-  <!-- ======== STEP BADGES ======== -->
-  <!-- Step 3 on Capture Proxy path -->
-  <circle cx="455" cy="270" r="10" fill="url(#grad-blue)"/>
-  <text x="455" y="274" class="step-num" text-anchor="middle">3</text>
-
-  <!-- Step 4 on Target -->
-  <circle cx="825" cy="170" r="10" fill="url(#grad-blue)"/>
-  <text x="825" y="174" class="step-num" text-anchor="middle">4</text>
+  <path d="M716,231 L770,231" class="arrow-data"/>
+  <circle cx="743" cy="231" r="11" fill="url(#grad-blue)"/>
+  <text x="743" y="235" class="step-num" text-anchor="middle">4</text>
+  <text x="725" y="218" class="flow-label">replay</text>
 
   <!-- ======== LEGEND ======== -->
-  <g transform="translate(580, 420)">
-    <rect x="0" y="0" width="300" height="90" rx="10" class="fill-card" opacity="0.8"/>
-    <rect x="0" y="0" width="300" height="90" rx="10" fill="none" class="border-card" stroke-width="1"/>
+  <g transform="translate(580, 440)">
+    <rect x="0" y="0" width="340" height="104" rx="10" class="fill-card"/>
+    <rect x="0" y="0" width="340" height="104" rx="10" fill="none" class="border-card" stroke-width="1"/>
 
-    <text x="16" y="22" class="group-label">Legend</text>
+    <text x="16" y="22" class="legend-title">Legend</text>
 
-    <line x1="16" y1="40" x2="48" y2="40" stroke-width="2" stroke-dasharray="7 4" class="arrow-data" style="marker-end:none"/>
-    <text x="56" y="44" class="legend-text">Data flow</text>
+    <line x1="16" y1="44" x2="52" y2="44" stroke-width="2" stroke-dasharray="7 4" class="arrow-data" style="marker-end:none"/>
+    <text x="60" y="48" class="legend-text">Data flow (backfill + replay)</text>
 
-    <line x1="150" y1="40" x2="182" y2="40" stroke-width="1.5" class="arrow-control" style="marker-end:none"/>
-    <text x="190" y="44" class="legend-text">Control / live traffic</text>
+    <line x1="16" y1="64" x2="52" y2="64" stroke-width="1.5" class="arrow-control" style="marker-end:none"/>
+    <text x="60" y="68" class="legend-text">Control / live traffic</text>
 
-    <text x="16" y="68" class="sublabel">① Snapshot  ② Metadata + Backfill</text>
-    <text x="16" y="82" class="sublabel">③ Capture + Replay  ④ Bulk index to Target</text>
+    <circle cx="24" cy="88" r="8" fill="url(#grad-blue)"/>
+    <text x="24" y="92" class="step-num" text-anchor="middle">N</text>
+    <text x="40" y="92" class="legend-text">Numbered steps in migration sequence</text>
   </g>
 </svg>
