@@ -1,5 +1,5 @@
 ---
-title: OpenSearch Migration Assistant — EKS Release
+title: OpenSearch Migration Assistant
 description: Migrate from Elasticsearch to OpenSearch — zero downtime, zero source impact, zero intermediate upgrades.
 template: splash
 hero:
@@ -22,7 +22,7 @@ import { Card, CardGrid, LinkCard, Aside, Steps, Tabs, TabItem, Badge } from '@a
 
 <div style="text-align: center; margin: -1rem auto 2rem;">
   <img src="/opensearch-migrations-eks/images/icons/migration-upgrade.svg" alt="OpenSearch Migration Assistant" width="43" height="43" style="display: inline-block; vertical-align: middle; margin-right: 0.5rem;" />
-  <span style="font-size: 0.9rem; opacity: 0.7;">OpenSearch Migration Assistant — EKS Release</span>
+  <span style="font-size: 0.9rem; opacity: 0.7;">OpenSearch Migration Assistant</span>
 </div>
 
 ---
@@ -43,7 +43,7 @@ It reads raw Lucene segment files directly from a snapshot in S3. Your source cl
 
 ## How Big Is Your Migration?
 
-Pick the scenario that matches your cluster. These are real-world estimates using default worker counts on EKS.
+Pick the scenario that matches your cluster. These are real-world estimates using default worker counts on Kubernetes.
 
 <Tabs>
   <TabItem label="Small (under 100 GB)">
@@ -157,7 +157,7 @@ This is the question everyone asks first. Here's the honest answer:
 ## The Migration in 60 Seconds
 
 <Steps>
-1. **Deploy** (~10 min) — Run the bootstrap script. It creates an EKS cluster, deploys Migration Assistant, and drops you into the Migration Console.
+1. **Deploy** (~10 min) — Run the bootstrap script or Helm chart. It deploys Migration Assistant to your Kubernetes cluster and drops you into the Migration Console.
 
 2. **Configure** (~5 min) — Define your source snapshot location, target OpenSearch endpoint, and migration options in a single YAML file.
 
@@ -267,7 +267,7 @@ Runs on: **Amazon EKS** · GKE · AKS · OpenShift · any Kubernetes 1.24+
 ## Prerequisites
 
 :::note[Before you deploy]
-- **AWS account** with permissions to create EKS clusters, S3 buckets, and IAM roles
+- **Kubernetes cluster** (EKS, GKE, AKS, OpenShift, or self-managed) with permissions to deploy Helm charts
 - **kubectl** and **Helm 3** installed locally
 - **Source cluster** accessible from your VPC (Elasticsearch 1.x–8.x or OpenSearch 1.x–2.x)
 - A **snapshot in S3** — or the ability to create one ([snapshot guide](/opensearch-migrations-eks/deployment/deploying-to-eks/))
@@ -282,7 +282,7 @@ Runs on: **Amazon EKS** · GKE · AKS · OpenShift · any Kubernetes 1.24+
 ## Ready?
 
 <CardGrid>
-  <LinkCard title="Deploy in 5 Minutes" description="Bootstrap script creates the EKS cluster and drops you into the Migration Console." href="/opensearch-migrations-eks/deployment/deploying-to-eks/" />
+  <LinkCard title="Deploy in 5 Minutes" description="Helm chart works on any Kubernetes cluster. EKS bootstrap script available for AWS." href="/opensearch-migrations-eks/deployment/deploying-to-eks/" />
   <LinkCard title="Architecture Deep Dive" description="Components, data flow, how RFS works, and Argo orchestration." href="/opensearch-migrations-eks/overview/architecture/" />
   <LinkCard title="Migration Paths" description="Version matrix, platform support, and the pre-migration checklist." href="/opensearch-migrations-eks/overview/migration-paths/" />
   <LinkCard title="Troubleshooting" description="Connectivity, auth, workflow failures, and debugging." href="/opensearch-migrations-eks/reference/troubleshooting/" />

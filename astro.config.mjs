@@ -7,9 +7,9 @@ export default defineConfig({
 	base: '/opensearch-migrations-eks',
 	integrations: [
 		starlight({
-			title: 'Migration Assistant — EKS',
+			title: 'Migration Assistant',
 			description:
-				'Deploy and operate OpenSearch migrations on Amazon EKS. Kubernetes-native workflow orchestration for Elasticsearch to OpenSearch migrations.',
+				'Kubernetes-native workflow orchestration for migrating Elasticsearch and OpenSearch clusters to OpenSearch.',
 			social: [
 				{
 					icon: 'github',
