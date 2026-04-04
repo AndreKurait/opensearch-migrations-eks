@@ -17,7 +17,24 @@ export default defineConfig({
 					href: 'https://github.com/opensearch-project/opensearch-migrations',
 				},
 			],
-			customCss: ['./src/styles/custom.css'],
+			customCss: [
+				'@fontsource/inter/400.css',
+				'@fontsource/inter/500.css',
+				'@fontsource/inter/600.css',
+				'@fontsource/inter/700.css',
+				'@fontsource/fira-code/400.css',
+				'@fontsource/fira-code/500.css',
+				'./src/styles/custom.css',
+			],
+			head: [
+				{
+					tag: 'meta',
+					attrs: {
+						property: 'og:image',
+						content: '/opensearch-migrations-eks/og-image.png',
+					},
+				},
+			],
 			sidebar: [
 				{
 					label: 'Overview',

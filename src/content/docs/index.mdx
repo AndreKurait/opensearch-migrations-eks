@@ -12,20 +12,21 @@ hero:
     - text: View on GitHub
       link: https://github.com/opensearch-project/opensearch-migrations
       icon: external
+      variant: minimal
 ---
 
-import { Card, CardGrid } from '@astrojs/starlight/components';
+import { Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
 
 ## Migration Scenarios
 
 <CardGrid>
-  <Card title="Backfill Only" icon="document">
+  <Card title="Backfill Only" icon="open-book">
     Migrate existing data using Reindex-from-Snapshot (RFS). Reads raw Lucene segment files directly from S3 — zero load on the source cluster.
   </Card>
-  <Card title="Live Capture & Replay" icon="rocket">
+  <Card title="Live Capture & Replay" icon="random">
     Capture live traffic via a proxy fleet, buffer in Kafka, and replay against the target for zero-downtime migration validation.
   </Card>
-  <Card title="Combined Migration" icon="star">
+  <Card title="Combined Migration" icon="rocket">
     Run backfill and live capture together for a complete migration with historical data and real-time traffic continuity.
   </Card>
 </CardGrid>
@@ -33,16 +34,25 @@ import { Card, CardGrid } from '@astrojs/starlight/components';
 ## Why EKS?
 
 <CardGrid stagger>
-  <Card title="Workflow Orchestration" icon="setting">
+  <Card title="Workflow Orchestration" icon="puzzle">
     Argo Workflows provides parallel execution, retry logic, progress tracking, and approval gates for safe migration operations.
   </Card>
-  <Card title="Declarative Configuration" icon="pencil">
+  <Card title="Declarative Configuration" icon="list-format">
     Define your entire migration as YAML. Submit, monitor, and manage workflows from the Migration Console CLI.
   </Card>
   <Card title="Scalable Workers" icon="up-caret">
     RFS workers read from S3 — scaling up has zero impact on the source cluster. Peak throughput: 590K docs/min per 2 vCPU worker.
   </Card>
-  <Card title="Broad Compatibility" icon="approve-check">
+  <Card title="Broad Compatibility" icon="approve-check-circle">
     Migrate from Elasticsearch 1.x–8.x or OpenSearch 1.x–2.x to OpenSearch 1.x, 2.x, or 3.x.
   </Card>
+</CardGrid>
+
+## Quick Links
+
+<CardGrid>
+  <LinkCard title="Architecture" description="EKS components, Argo Workflows, and data flow" href="/opensearch-migrations-eks/overview/architecture/" />
+  <LinkCard title="Migration Paths" description="Version compatibility and platform support" href="/opensearch-migrations-eks/overview/migration-paths/" />
+  <LinkCard title="Workflow CLI" description="Declarative YAML config and CLI reference" href="/opensearch-migrations-eks/workflow-cli/overview/" />
+  <LinkCard title="Troubleshooting" description="Common issues and debugging commands" href="/opensearch-migrations-eks/reference/troubleshooting/" />
 </CardGrid>

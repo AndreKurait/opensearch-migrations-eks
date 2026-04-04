@@ -1,16 +1,16 @@
-/* OpenSearch Migrations EKS — Starlight Theme Customization
-   
-   Best practice: only override accent colors. Starlight's gray scale
-   is designed for proper contrast in both light and dark modes. */
+/* OpenSearch Migrations EKS — Starlight Theme
+   Fonts and accent colors inspired by observability.opensearch.org */
 
-/* Dark mode (default) — cyan accent inspired by observability.opensearch.org */
+/* Dark mode (default) — cyan accent */
 :root {
+	--sl-font: 'Inter', system-ui, -apple-system, sans-serif;
+	--sl-font-mono: 'Fira Code', ui-monospace, monospace;
 	--sl-color-accent-low: hsl(192, 60%, 15%);
 	--sl-color-accent: hsl(192, 100%, 50%);
 	--sl-color-accent-high: hsl(192, 80%, 80%);
 }
 
-/* Light mode — darker cyan for contrast on white backgrounds */
+/* Light mode — darker cyan for contrast on white */
 :root[data-theme='light'] {
 	--sl-color-accent-high: hsl(192, 80%, 25%);
 	--sl-color-accent: hsl(192, 100%, 36%);
