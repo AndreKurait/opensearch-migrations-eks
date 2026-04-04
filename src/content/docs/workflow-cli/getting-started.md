@@ -3,7 +3,6 @@ title: Workflow CLI Getting Started
 description: Step-by-step tutorial for configuring and running your first migration workflow.
 ---
 
-import { Steps } from '@astrojs/starlight/components';
 
 This tutorial walks through configuring and running a backfill migration workflow using the Workflow CLI.
 
@@ -15,7 +14,6 @@ This tutorial walks through configuring and running a backfill migration workflo
 
 ## Tutorial
 
-<Steps>
 
 1. **Access the Migration Console**
 
@@ -106,7 +104,6 @@ This tutorial walks through configuring and running a backfill migration workflo
    console clusters cat-indices --target
    ```
 
-</Steps>
 
 ## Next Steps
 

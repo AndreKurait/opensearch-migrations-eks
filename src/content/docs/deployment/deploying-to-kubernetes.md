@@ -3,7 +3,6 @@ title: Deploying to Kubernetes
 description: Deploy Migration Assistant to any Kubernetes cluster using Helm.
 ---
 
-import { Steps } from '@astrojs/starlight/components';
 
 This guide covers deploying Migration Assistant to a generic Kubernetes cluster (non-EKS). For Amazon EKS, see [Deploying to EKS](/opensearch-migrations-eks/deployment/deploying-to-eks/).
 
@@ -21,7 +20,6 @@ The Helm chart includes Argo Workflows CRDs and controller. If your cluster alre
 
 ## Installation
 
-<Steps>
 
 1. **Add the Helm Repository**
 
@@ -99,7 +97,6 @@ The Helm chart includes Argo Workflows CRDs and controller. If your cluster alre
    kubectl exec -it migration-console-0 -n ma -- bash
    ```
 
-</Steps>
 
 ## Helm Values
 

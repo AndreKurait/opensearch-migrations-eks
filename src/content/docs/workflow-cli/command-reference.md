@@ -3,7 +3,6 @@ title: Command Reference
 description: Complete CLI reference for console and workflow commands.
 ---
 
-import { Aside, Tabs, TabItem, LinkCard, CardGrid } from '@astrojs/starlight/components';
 
 Migration Assistant provides two command namespaces:
 
@@ -40,9 +39,9 @@ green  open   my-logs-2024.01 abc123def456           5   1    2340000           
 green  open   my-logs-2024.02 def456ghi789           5   1    1890000            0      980mb
 ```
 
-<Aside type="tip">
+:::tip
 Run `console clusters connection-check` as the first step after accessing the Migration Console. It validates both cluster endpoints and authentication.
-</Aside>
+:::
 
 ### Snapshot Operations
 
@@ -63,7 +62,7 @@ Shards:   45/120 completed (37%)
 
 <Aside>
 For detailed snapshot configuration, see [Create Snapshot](/opensearch-migrations-eks/migration-guide/create-snapshot/).
-</Aside>
+:::
 
 ### Metadata Operations
 
@@ -94,7 +93,7 @@ Result: All indices can be migrated with automatic transformations.
 
 <Aside>
 For details on metadata transformations, see [Migrate Metadata](/opensearch-migrations-eks/migration-guide/migrate-metadata/).
-</Aside>
+:::
 
 ### Backfill Operations
 
@@ -125,7 +124,7 @@ Backfill Status:
 
 <Aside>
 For backfill tuning and scaling guidance, see [Backfill](/opensearch-migrations-eks/migration-guide/backfill/).
-</Aside>
+:::
 
 ### Replay Operations
 
@@ -149,7 +148,7 @@ Replay Status:
 
 <Aside>
 For replay configuration and time-scaling, see [Capture & Replay](/opensearch-migrations-eks/migration-guide/capture-and-replay/).
-</Aside>
+:::
 
 ### Tuple Operations
 
@@ -197,9 +196,9 @@ workflow configure show                    # Print active configuration to stdou
 |------|---------|-------------|
 | `--load` | `sample` | Load sample directly instead of printing it |
 
-<Aside type="tip">
+:::tip
 Use `workflow configure show` to verify your configuration before submitting. Pipe it through a YAML validator for extra safety: `workflow configure show | python -c "import sys, yaml; yaml.safe_load(sys.stdin)"`.
-</Aside>
+:::
 
 ### Execution
 
@@ -228,9 +227,9 @@ Steps:
   ○ approval-gate-backfill   Pending
 ```
 
-<Aside type="caution">
+:::caution
 `workflow cancel` stops all running steps immediately. In-progress backfill workers will terminate. The workflow can be re-submitted and will resume where it left off due to idempotent step design.
-</Aside>
+:::
 
 ---
 
@@ -265,7 +264,7 @@ console clusters cat-indices --target
 
 ## Next Steps
 
-<CardGrid>
+
   <LinkCard
     title="Getting Started tutorial"
     description="Walk through a complete migration using these commands."
@@ -276,4 +275,4 @@ console clusters cat-indices --target
     description="Common errors and resolution steps."
     href="/opensearch-migrations-eks/reference/troubleshooting/"
   />
-</CardGrid>
+

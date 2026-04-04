@@ -3,15 +3,14 @@ title: Teardown
 description: Remove migration infrastructure after a successful migration.
 ---
 
-import { Steps, Aside } from '@astrojs/starlight/components';
 
 After a successful migration and cutover, remove the migration infrastructure to stop
 incurring compute and storage costs.
 
-<Aside type="caution">
+:::caution
 Teardown is **destructive and irreversible**. Make sure you have completed the
 pre-flight checklist below before running any delete commands.
-</Aside>
+:::
 
 ## Pre-flight Checklist
 
@@ -29,7 +28,6 @@ workflow status            # should show no active workflows
 
 ## Teardown Steps
 
-<Steps>
 
 1. **Remove the Helm release** (deletes all migration pods, services, and workflows):
 
@@ -66,11 +64,11 @@ workflow status            # should show no active workflows
 
 4. **Delete the S3 snapshot bucket:**
 
-   <Aside type="caution">
+   :::caution
    This permanently removes **all snapshots**. Confirm you no longer need the snapshot
    data before proceeding. The bucket can be several terabytes and will continue to
    incur S3 storage charges until deleted.
-   </Aside>
+   :::
 
    ```bash
    aws s3 rb s3://migrations-default-<ACCOUNT>-<STAGE>-<REGION> --force
@@ -84,7 +82,6 @@ workflow status            # should show no active workflows
    aws iam delete-role --role-name <custom-role-name>
    ```
 
-</Steps>
 
 ## Partial Teardown
 
@@ -98,7 +95,7 @@ helm uninstall migration-assistant -n ma
 This removes all migration pods, services, and CRDs while preserving the EKS cluster,
 node groups, and networking.
 
-<Aside type="tip">
+:::tip
 After a partial teardown, you can redeploy later with
 `helm install migration-assistant ./chart -n ma` without recreating the cluster.
-</Aside>
+:::

@@ -9,6 +9,7 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@astrojs/mdx": "^5.0.3",
     "@astrojs/starlight": "0.38.2",
     "@fontsource/fira-code": "^5.2.7",
     "@fontsource/inter": "^5.2.8",

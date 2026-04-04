@@ -3,18 +3,17 @@ title: Create Snapshot
 description: Create a point-in-time snapshot of the source cluster for backfill migration.
 ---
 
-import { Steps, Aside } from '@astrojs/starlight/components';
 
 A snapshot captures every index on your source cluster at a point in time.
 [Reindex-from-Snapshot (RFS)](/opensearch-migrations-eks/migration-guide/backfill/) reads raw Lucene
 segment files directly from the snapshot in S3 — the source cluster is only loaded during
 the snapshot itself.
 
-<Aside type="note">
+:::note
 You only need a snapshot if you plan to use **backfill**. If you are doing a
 live-traffic-only migration (Capture & Replay without historical data), you can
 skip this step.
-</Aside>
+:::
 
 ## Prerequisites
 
@@ -27,7 +26,6 @@ Before creating the snapshot, confirm:
 
 ## Creating a Snapshot
 
-<Steps>
 
 1. **Start the snapshot:**
 
@@ -56,12 +54,11 @@ Before creating the snapshot, confirm:
 
 3. **Wait for completion.** The snapshot is finished when `State` changes to `SUCCESS`.
 
-</Steps>
 
-<Aside type="tip">
+:::tip
 **Estimating time:** Snapshot speed depends on data size and network throughput to S3.
 A rough baseline is **~500 GB/hour** on a well-provisioned cluster with a 10 Gbps link.
-</Aside>
+:::
 
 ## Snapshot Storage
 
@@ -71,10 +68,10 @@ Snapshots are stored in the S3 bucket provisioned during deployment:
 s3://migrations-default-<ACCOUNT>-<STAGE>-<REGION>/snapshots/
 ```
 
-<Aside type="caution">
+:::caution
 This bucket is **not** automatically deleted during [Teardown](/opensearch-migrations-eks/migration-guide/teardown/).
 Delete it manually when you no longer need the snapshot data.
-</Aside>
+:::
 
 ## Troubleshooting Slow Snapshots
 

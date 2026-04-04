@@ -3,7 +3,6 @@ title: Assessment
 description: Assess your source cluster for migration readiness and identify potential issues.
 ---
 
-import { Steps, Aside, Tabs, TabItem } from '@astrojs/starlight/components';
 
 Before starting a migration, assess your source cluster to identify breaking changes,
 unsupported features, and data transformation requirements. The assessment is
@@ -11,7 +10,6 @@ non-destructive and makes no changes to either cluster.
 
 ## Running the Assessment
 
-<Steps>
 
 1. **Verify connectivity** — confirm the Migration Console can reach both clusters:
 
@@ -28,7 +26,6 @@ non-destructive and makes no changes to either cluster.
 3. **Review the report** — the evaluate command prints a summary like the one below.
    Fix or acknowledge each issue before continuing.
 
-</Steps>
 
 ### Sample output
 
@@ -49,10 +46,10 @@ Recommended actions:
   2. Review knn_vector dimension settings (see Migrate Metadata docs)
 ```
 
-<Aside type="tip">
+:::tip
 Run the assessment early — even before you plan the maintenance window.
 The report helps you size the target cluster and estimate migration time.
-</Aside>
+:::
 
 ### What the report covers
 
@@ -77,10 +74,10 @@ The table below lists the most common ones:
 | **Flattened** | `flattened` (ES 7.3+) | `flat_object` (OS 2.7+) | ✅ |
 | **Custom plugins** | Source-only plugins | — | ❌ Manual |
 
-<Aside type="caution">
+:::caution
 Items marked **❌ Manual** require you to install the equivalent plugin on the
 target cluster or rewrite the affected mappings before proceeding.
-</Aside>
+:::
 
 ## Supported Transformations
 

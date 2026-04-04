@@ -3,7 +3,6 @@ title: Migrate Metadata
 description: Migrate index settings, mappings, templates, and aliases with automatic field type transformations.
 ---
 
-import { Steps, Aside, Tabs, TabItem } from '@astrojs/starlight/components';
 
 Metadata migration transfers index settings, mappings, templates, component templates,
 and aliases from the source to the target cluster. Incompatible field types are
@@ -11,7 +10,6 @@ transformed automatically (see [Automatic Field Type Transformations](#automatic
 
 ## Running Metadata Migration
 
-<Steps>
 
 1. **Evaluate** — preview what will be migrated and flag any issues:
 
@@ -34,12 +32,11 @@ transformed automatically (see [Automatic Field Type Transformations](#automatic
    console clusters cat-indices --target
    ```
 
-</Steps>
 
-<Aside type="tip">
+:::tip
 You can re-run `metadata migrate` safely. It is idempotent — indices that already
 exist on the target are skipped.
-</Aside>
+:::
 
 ## What Gets Migrated
 
@@ -51,11 +48,11 @@ exist on the target are skipped.
 | **Component templates** | Reusable mapping/settings fragments |
 | **Aliases** | Including write-index and routing settings |
 
-<Aside type="caution">
+:::caution
 **Not migrated:** ingest pipelines, ILM/ISM policies, cluster settings, and security
 configuration. Migrate those objects manually or with the OpenSearch API before
 running backfill.
-</Aside>
+:::
 
 ## Automatic Field Type Transformations
 
@@ -103,8 +100,8 @@ No additional configuration is required.
 For cases not handled by the built-in converters you can supply a custom
 [Jolt transform](https://github.com/bazaarvoice/jolt) spec or a JavaScript script:
 
-<Tabs>
-<TabItem label="Jolt spec">
+
+#### Jolt spec
 
 ```json
 {
@@ -125,8 +122,8 @@ For cases not handled by the built-in converters you can supply a custom
 }
 ```
 
-</TabItem>
-<TabItem label="JavaScript script">
+
+#### JavaScript script
 
 ```json
 {
@@ -142,8 +139,8 @@ For cases not handled by the built-in converters you can supply a custom
 
 Place the script file in the `/shared/` volume mounted into the Migration Console pod.
 
-</TabItem>
-</Tabs>
+
+
 
 ## Compatibility Mode
 

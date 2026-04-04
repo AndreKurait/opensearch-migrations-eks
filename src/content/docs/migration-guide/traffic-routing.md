@@ -3,7 +3,6 @@ title: Traffic Routing
 description: Route traffic from the source cluster through the capture proxy and to the target cluster.
 ---
 
-import { Steps, Aside } from '@astrojs/starlight/components';
 
 Traffic routing manages the flow of client requests during migration — from the source
 cluster, through the capture proxy, and ultimately to the target cluster.
@@ -21,7 +20,6 @@ kubectl get svc -n ma capture-proxy-svc \
   -o jsonpath='{.status.loadBalancer.ingress[0].hostname}'
 ```
 
-<Steps>
 
 1. **Update your application's connection endpoint** to point to the proxy NLB.
 
@@ -34,7 +32,6 @@ kubectl get svc -n ma capture-proxy-svc \
    A rising message count on `logging-traffic-topic` confirms that requests are being
    captured.
 
-</Steps>
 
 ### Host Header Configuration
 
@@ -46,16 +43,15 @@ captureProxy:
   sourceClusterHost: source-cluster.example.com
 ```
 
-<Aside type="note">
+:::note
 Without the correct `Host` header the source cluster may return `404` or route the
 request to the wrong virtual host.
-</Aside>
+:::
 
 ## Routing to the Target
 
 When backfill is complete and replay shows an acceptable error rate, you can cut over.
 
-<Steps>
 
 1. **Verify target readiness:**
 
@@ -74,10 +70,10 @@ When backfill is complete and replay shows an acceptable error rate, you can cut
    | **AWS NLB** (DNS swap) | Update the CNAME or alias record to point to the target cluster's endpoint. |
    | **Route 53 weighted routing** | Set the target record weight to `255` and the source record weight to `0`. |
 
-   <Aside type="tip">
+   :::tip
    For a gradual cutover, shift traffic in increments (e.g., 10 % → 50 % → 100 %)
    and monitor error rates at each step.
-   </Aside>
+   :::
 
 3. **Verify traffic is hitting the target:**
 
@@ -94,13 +90,11 @@ When backfill is complete and replay shows an acceptable error rate, you can cut
    kubectl scale deployment capture-proxy -n ma --replicas=0
    ```
 
-</Steps>
 
 ## Fallback Procedure
 
 If you detect elevated error rates or data issues after cutover:
 
-<Steps>
 
 1. **Route traffic back** to the source cluster (reverse the DNS/ALB change from step 2).
 
@@ -115,13 +109,12 @@ If you detect elevated error rates or data issues after cutover:
 
 4. **Re-attempt cutover** after the fix is validated.
 
-</Steps>
 
-<Aside type="caution">
+:::caution
 If you fall back, any writes that already reached the target but not the source
 will diverge. You may need to re-run backfill for the affected indices or replay
 the captured traffic again.
-</Aside>
+:::
 
 ## Next Steps
 

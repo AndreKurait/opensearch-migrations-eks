@@ -3,7 +3,6 @@ title: Capture & Replay
 description: Capture live traffic and replay it against the target cluster for zero-downtime migration validation.
 ---
 
-import { Steps, Aside, Tabs, TabItem } from '@astrojs/starlight/components';
 
 Capture and Replay records every request that hits the source cluster and replays it
 against the target — giving you a side-by-side comparison before you cut over
@@ -30,7 +29,6 @@ Clients → Capture Proxy Fleet → Source Cluster
 
 ## Starting Capture
 
-<Steps>
 
 1. **Deploy the proxy fleet:**
 
@@ -52,16 +50,14 @@ Clients → Capture Proxy Fleet → Source Cluster
 
    You should see a non-zero message count on the `logging-traffic-topic`.
 
-</Steps>
 
-<Aside type="tip">
+:::tip
 Start capture **before** backfill completes. This ensures that any writes that arrive
 after the snapshot was taken are also delivered to the target.
-</Aside>
+:::
 
 ## Replaying Traffic
 
-<Steps>
 
 1. **Start the replayer:**
 
@@ -88,7 +84,6 @@ after the snapshot was taken are also delivered to the target.
 3. **Review tuple logs** (see [Tuple Logs](#tuple-logs)) to compare source and target
    responses.
 
-</Steps>
 
 ### Time Scaling
 
@@ -100,10 +95,10 @@ trafficReplayer:
   speedupFactor: 2.0    # Replay at 2x speed
 ```
 
-<Aside type="caution">
+:::caution
 A high speedup factor increases load on the target cluster proportionally.
 Monitor target cluster CPU and reject rate before exceeding `4.0`.
-</Aside>
+:::
 
 ## Jolt Transforms
 
@@ -147,21 +142,21 @@ console tuples show --last 50
 | `targetResponse` | Status code and latency from the target |
 | `statusMatch` | `true` if both status codes are equal |
 
-<Aside type="tip">
+:::tip
 Filter for mismatches to focus your investigation:
 `console tuples show --status-mismatch`
-</Aside>
+:::
 
 ## Document ID Requirements
 
-<Aside type="caution">
+:::caution
 Capture and Replay requires that documents have **stable IDs**. If your application
 uses auto-generated IDs (`POST /index/_doc` without an `_id`), every replayed write
 creates a duplicate document on the target.
 
 **Mitigation:** assign explicit `_id` values in your application, or use a Jolt
 transform to inject deterministic IDs during replay.
-</Aside>
+:::
 
 ## Monitoring
 
@@ -179,11 +174,11 @@ console replay stop     # Stop the replayer
 console capture stop    # Stop the proxy fleet (after traffic is routed away)
 ```
 
-<Aside type="note">
+:::note
 Stop the **replayer** first to let it drain the Kafka topic. Then stop capture
 after you have routed traffic directly to the target
 (see [Traffic Routing](/opensearch-migrations-eks/migration-guide/traffic-routing/)).
-</Aside>
+:::
 
 ## Next Steps
 

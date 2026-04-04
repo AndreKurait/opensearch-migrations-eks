@@ -3,13 +3,12 @@ title: Security Patching
 description: Procedures for updating Migration Assistant container images, node AMIs, and security configurations.
 ---
 
-import { Steps, Aside, Tabs, TabItem, LinkCard, CardGrid } from '@astrojs/starlight/components';
 
 Keep Migration Assistant components up to date with security patches and updates. This guide covers container image updates, OS-level patching, and security best practices.
 
-<Aside type="caution">
+:::caution
 Plan patching during a maintenance window. Updating container images or node AMIs will restart pods, which temporarily interrupts any running migration. Workflow state is preserved—you can resume after patching.
-</Aside>
+:::
 
 ## Updating Container Images
 
@@ -27,7 +26,6 @@ Migration Assistant includes several container images that should be updated whe
 
 ### Update Procedure
 
-<Steps>
 
 1. **Clear Docker cache** to ensure a clean build:
 
@@ -50,16 +48,16 @@ Migration Assistant includes several container images that should be updated whe
 
 3. **Push to your container registry:**
 
-   <Tabs>
-     <TabItem label="ECR (EKS)">
+   
+     #### ECR (EKS)
        ```bash
        # Mirror all images to your ECR registry
        ./deployment/k8s/charts/aggregates/migrationAssistantWithArgo/scripts/mirrorToEcr.sh
        ```
 
        The script automatically tags images and pushes to the ECR repositories created during deployment.
-     </TabItem>
-     <TabItem label="Other registries">
+     
+     #### Other registries
        ```bash
        # Tag and push each image
        docker tag migrations/migration_console:latest <REGISTRY>/migration_console:latest
@@ -67,8 +65,8 @@ Migration Assistant includes several container images that should be updated whe
 
        # Repeat for each component image
        ```
-     </TabItem>
-   </Tabs>
+     
+   
 
 4. **Update the Helm release** to pick up new images:
 
@@ -78,9 +76,9 @@ Migration Assistant includes several container images that should be updated whe
      -f values.yaml
    ```
 
-   <Aside type="tip">
+   :::tip
    If you're pinning image tags in your `values.yaml` (recommended for production), update the tags before running `helm upgrade`.
-   </Aside>
+   :::
 
 5. **Verify the update:**
 
@@ -91,7 +89,6 @@ Migration Assistant includes several container images that should be updated whe
 
    Confirm each pod shows the expected image tag.
 
-</Steps>
 
 ### Rollback
 
@@ -119,7 +116,7 @@ aws eks update-nodegroup-version \
 
 <Aside>
 EKS managed node groups perform a rolling update by default—nodes are drained and replaced one at a time. This minimizes disruption but takes longer for large node groups.
-</Aside>
+:::
 
 ### EKS Cluster Version
 
@@ -136,9 +133,9 @@ aws eks update-cluster-version \
   --kubernetes-version <NEW_VERSION>
 ```
 
-<Aside type="caution">
+:::caution
 EKS cluster version upgrades are irreversible. Test in a non-production environment first. After upgrading the control plane, update the node groups to match.
-</Aside>
+:::
 
 ## Checking Current Versions
 
@@ -187,9 +184,9 @@ aws eks describe-nodegroup \
 | Review IAM role permissions periodically | Remove unused permissions as migration progresses |
 | Use Kubernetes RBAC to restrict namespace access | Limit who can `exec` into the Migration Console pod |
 
-<Aside type="tip">
+:::tip
 For detailed IAM configuration, see [IAM & Security](/opensearch-migrations-eks/deployment/iam-and-security/).
-</Aside>
+:::
 
 ### Monitoring for Vulnerabilities
 
@@ -206,7 +203,7 @@ For detailed IAM configuration, see [IAM & Security](/opensearch-migrations-eks/
 
 ## Next Steps
 
-<CardGrid>
+
   <LinkCard
     title="IAM & Security"
     description="Configure IAM roles and security policies for your deployment."
@@ -217,4 +214,4 @@ For detailed IAM configuration, see [IAM & Security](/opensearch-migrations-eks/
     description="All Helm chart values and environment configuration."
     href="/opensearch-migrations-eks/deployment/configuration-options/"
   />
-</CardGrid>
+

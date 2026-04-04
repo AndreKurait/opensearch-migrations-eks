@@ -3,7 +3,6 @@ title: Deploying to EKS
 description: Deploy Migration Assistant to Amazon EKS using CloudFormation and the bootstrap script.
 ---
 
-import { Steps } from '@astrojs/starlight/components';
 
 This guide covers deploying Migration Assistant to Amazon Elastic Kubernetes Service (EKS) using CloudFormation and the bootstrap script.
 
@@ -16,7 +15,6 @@ This guide covers deploying Migration Assistant to Amazon Elastic Kubernetes Ser
 
 ## Quick Start
 
-<Steps>
 
 1. **Run the Bootstrap Script**
 
@@ -56,7 +54,6 @@ This guide covers deploying Migration Assistant to Amazon Elastic Kubernetes Ser
    kubectl exec -it migration-console-0 -n ma -- bash
    ```
 
-</Steps>
 
 ## CloudFormation Resources
 

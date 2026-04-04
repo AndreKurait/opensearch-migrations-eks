@@ -3,7 +3,6 @@ title: Configuration Options
 description: Helm values, workflow YAML, and tuning guidance for Migration Assistant deployment.
 ---
 
-import { Steps, Tabs, TabItem } from '@astrojs/starlight/components';
 
 Migration Assistant is configured through Helm values (cluster endpoints, authentication, infrastructure) and workflow YAML configuration (migration behavior, index scope, worker settings).
 
@@ -59,8 +58,8 @@ For Elasticsearch 7.x, use `ES_7_10` regardless of the exact minor version. Migr
 
 See [Deploying to Kubernetes](/opensearch-migrations-eks/deployment/deploying-to-kubernetes/#3-configure-authentication-secrets) for examples of creating each secret type. For EKS deployments using SigV4, see [IAM & Security](/opensearch-migrations-eks/deployment/iam-security/).
 
-<Tabs>
-<TabItem label="Basic Auth">
+
+#### Basic Auth
 ```yaml
 sourceCluster:
   auth:
@@ -68,8 +67,8 @@ sourceCluster:
     secretName: source-basic-auth
 # Secret must contain `username` and `password` keys
 ```
-</TabItem>
-<TabItem label="Mutual TLS">
+
+#### Mutual TLS
 ```yaml
 sourceCluster:
   auth:
@@ -77,8 +76,8 @@ sourceCluster:
     secretName: source-mtls
 # Secret must contain `tls.crt`, `tls.key`, and `ca.crt` keys
 ```
-</TabItem>
-<TabItem label="SigV4 (AWS)">
+
+#### SigV4 (AWS)
 ```yaml
 targetCluster:
   auth:
@@ -87,8 +86,8 @@ targetCluster:
 # Secret must contain `region` and `service` keys
 # Pod service account must have appropriate IAM role annotation
 ```
-</TabItem>
-</Tabs>
+
+
 
 ### Snapshot Configuration
 
@@ -162,8 +161,8 @@ Capture and Replay requires that clients include explicit document IDs in index 
 
 When using Capture and Replay, Kafka stores the captured traffic. The Helm chart can deploy Kafka via the bundled Strimzi operator, or you can point to an external Kafka cluster:
 
-<Tabs>
-<TabItem label="Bundled (Strimzi)">
+
+#### Bundled (Strimzi)
 ```yaml
 kafka:
   enabled: true           # Deploy Kafka via Strimzi
@@ -172,21 +171,20 @@ kafka:
     size: 100Gi           # Per-broker storage
     storageClass: gp3     # Must support ReadWriteOnce
 ```
-</TabItem>
-<TabItem label="External Kafka">
+
+#### External Kafka
 ```yaml
 kafka:
   enabled: false
   externalEndpoint: my-kafka-cluster:9092
 ```
-</TabItem>
-</Tabs>
+
+
 
 ## Workflow YAML Configuration
 
 The workflow YAML file controls migration behavior at runtime. It is separate from the Helm values and is edited on the Migration Console after deployment.
 
-<Steps>
 
 1. **Generate a sample configuration** for your installed version:
 
@@ -206,7 +204,6 @@ The workflow YAML file controls migration behavior at runtime. It is separate fr
    workflow configure show
    ```
 
-</Steps>
 
 The workflow configuration includes settings for each migration phase. Here is an annotated example of the structure (your installed version may differ):
 

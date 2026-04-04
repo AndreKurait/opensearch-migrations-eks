@@ -3,7 +3,6 @@ title: IAM & Security
 description: IAM roles, security groups, and authentication configuration for EKS deployments.
 ---
 
-import { Steps, Tabs, TabItem } from '@astrojs/starlight/components';
 
 :::note
 This page covers AWS-specific IAM and security configuration for EKS deployments. For generic Kubernetes deployments, authentication is handled through Kubernetes secrets — see [Deploying to Kubernetes](/opensearch-migrations-eks/deployment/deploying-to-kubernetes/#3-configure-authentication-secrets).
@@ -96,7 +95,6 @@ The bootstrap script configures [IAM Roles for Service Accounts (IRSA)](https://
 
 The setup involves:
 
-<Steps>
 
 1. **OIDC provider** — The bootstrap script creates an IAM OIDC identity provider for the EKS cluster.
 
@@ -130,7 +128,6 @@ The setup involves:
      -o jsonpath='{.metadata.annotations.eks\.amazonaws\.com/role-arn}'
    ```
 
-</Steps>
 
 :::note
 If you deployed with the bootstrap script, IRSA is configured automatically. You only need to set this up manually if you created the EKS cluster independently.
@@ -200,8 +197,8 @@ Migration Assistant supports four authentication methods for connecting to sourc
 
 ### Creating Authentication Secrets
 
-<Tabs>
-<TabItem label="Basic Auth">
+
+#### Basic Auth
 
 ```bash
 kubectl create secret generic source-auth -n ma \
@@ -213,8 +210,8 @@ kubectl create secret generic target-auth -n ma \
   --from-literal=password='<PASSWORD>'
 ```
 
-</TabItem>
-<TabItem label="Mutual TLS">
+
+#### Mutual TLS
 
 ```bash
 kubectl create secret generic source-auth -n ma \
@@ -223,8 +220,8 @@ kubectl create secret generic source-auth -n ma \
   --from-file=ca.crt=/path/to/ca.crt
 ```
 
-</TabItem>
-<TabItem label="SigV4">
+
+#### SigV4
 
 For EKS deployments using SigV4 with Amazon OpenSearch Service, authentication is handled through IRSA — no secret is needed. Configure the Helm values:
 
@@ -245,8 +242,8 @@ kubectl get serviceaccount migration-console -n ma \
   -o jsonpath='{.metadata.annotations.eks\.amazonaws\.com/role-arn}'
 ```
 
-</TabItem>
-<TabItem label="No Auth">
+
+#### No Auth
 
 ```yaml
 sourceCluster:
@@ -258,14 +255,13 @@ sourceCluster:
 Only use `none` for development or testing. Production clusters should always require authentication.
 :::
 
-</TabItem>
-</Tabs>
+
+
 
 ### SigV4 Authentication Flow (EKS)
 
 When using SigV4 authentication with Amazon OpenSearch Service:
 
-<Steps>
 
 1. The Migration Console pod's service account is annotated with the Migration Console IAM Role ARN (configured by the bootstrap script or manually via IRSA).
 
@@ -273,4 +269,3 @@ When using SigV4 authentication with Amazon OpenSearch Service:
 
 3. The Snapshot role must be registered as a snapshot repository role on the source cluster.
 
-</Steps>
