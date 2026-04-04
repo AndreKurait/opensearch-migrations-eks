@@ -4,7 +4,7 @@ import starlight from '@astrojs/starlight';
 
 // https://astro.build/config
 export default defineConfig({
-	site: 'https://opensearch-project.github.io',
+	site: 'https://andrekurait.github.io',
 	base: '/opensearch-migrations-eks',
 	integrations: [
 		starlight({
