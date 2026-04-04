@@ -3,67 +3,102 @@ title: Teardown
 description: Remove migration infrastructure after a successful migration.
 ---
 
-After a successful migration and cutover, remove the migration infrastructure to avoid unnecessary costs.
+import { Steps, Aside } from '@astrojs/starlight/components';
+
+After a successful migration and cutover, remove the migration infrastructure to stop
+incurring compute and storage costs.
+
+<Aside type="caution">
+Teardown is **destructive and irreversible**. Make sure you have completed the
+pre-flight checklist below before running any delete commands.
+</Aside>
+
+## Pre-flight Checklist
+
+Before removing anything, confirm:
+
+- ✅ All indices are migrated and document counts match.
+- ✅ Production traffic is flowing exclusively to the target cluster.
+- ✅ No active backfill or replay workflows are running.
+
+```bash
+console backfill status    # should show COMPLETED or STOPPED
+console replay status      # should show STOPPED
+workflow status            # should show no active workflows
+```
 
 ## Teardown Steps
 
-### 1. Verify Migration Complete
+<Steps>
 
-Before removing infrastructure, confirm:
+1. **Remove the Helm release** (deletes all migration pods, services, and workflows):
 
-- All indices are migrated and validated
-- Traffic is flowing to the target cluster
-- No active workflows are running
+   ```bash
+   helm uninstall migration-assistant -n ma
+   ```
 
-```bash
-console backfill status
-console replay status
-workflow status
-```
+   Verify:
 
-### 2. Remove EKS Resources
+   ```bash
+   kubectl get pods -n ma    # should return "No resources found"
+   ```
 
-For EKS deployments created with the bootstrap script:
+2. **Delete the Kubernetes namespace:**
 
-```bash
-# Delete the Helm release
-helm uninstall migration-assistant -n ma
+   ```bash
+   kubectl delete namespace ma
+   ```
 
-# Delete the namespace
-kubectl delete namespace ma
-```
+3. **Delete the CloudFormation stack** (EKS cluster, VPC, IAM roles created by the
+   bootstrap script):
 
-### 3. Remove CloudFormation Stacks
+   ```bash
+   aws cloudformation delete-stack \
+     --stack-name migration-eks-<STAGE>-<REGION>
+   ```
 
-```bash
-# Delete the CloudFormation stack
-aws cloudformation delete-stack \
-  --stack-name migration-eks-<STAGE>-<REGION>
-```
+   Monitor progress:
 
-### 4. Clean Up S3
+   ```bash
+   aws cloudformation wait stack-delete-complete \
+     --stack-name migration-eks-<STAGE>-<REGION>
+   ```
 
-The S3 bucket containing snapshots is not automatically deleted. Remove it manually if no longer needed:
+4. **Delete the S3 snapshot bucket:**
 
-```bash
-# Empty and delete the bucket
-aws s3 rb s3://migrations-default-<ACCOUNT>-<STAGE>-<REGION> --force
-```
+   <Aside type="caution">
+   This permanently removes **all snapshots**. Confirm you no longer need the snapshot
+   data before proceeding. The bucket can be several terabytes and will continue to
+   incur S3 storage charges until deleted.
+   </Aside>
 
-:::caution
-Deleting the S3 bucket permanently removes all snapshots. Ensure you no longer need the snapshot data before proceeding.
-:::
+   ```bash
+   aws s3 rb s3://migrations-default-<ACCOUNT>-<STAGE>-<REGION> --force
+   ```
 
-### 5. Remove IAM Roles
+5. **Remove manually-created IAM roles** (if any). Roles created by the CloudFormation
+   stack are deleted automatically in step 3. Any roles you created outside the stack
+   must be removed separately:
 
-If the IAM roles were created by the bootstrap script, they are deleted with the CloudFormation stack. Manually created roles must be removed separately.
+   ```bash
+   aws iam delete-role --role-name <custom-role-name>
+   ```
+
+</Steps>
 
 ## Partial Teardown
 
-If you want to keep the EKS cluster for future migrations but remove the migration workloads:
+If you want to keep the EKS cluster for future migrations but remove only the migration
+workloads:
 
 ```bash
 helm uninstall migration-assistant -n ma
 ```
 
-This removes all migration pods, services, and workflows while preserving the EKS cluster.
+This removes all migration pods, services, and CRDs while preserving the EKS cluster,
+node groups, and networking.
+
+<Aside type="tip">
+After a partial teardown, you can redeploy later with
+`helm install migration-assistant ./chart -n ma` without recreating the cluster.
+</Aside>
