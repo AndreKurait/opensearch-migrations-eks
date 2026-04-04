@@ -23,6 +23,32 @@
 	padding: 0.75rem 1rem;
 }
 
+/* R2: Distinct table headers */
+.sl-markdown-content table thead tr {
+	background-color: var(--sl-color-gray-6);
+}
+.sl-markdown-content table thead th {
+	font-size: 0.8rem;
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
+}
+
+/* R2: Step spacing */
+.sl-steps > li {
+	padding-bottom: 1.25rem;
+}
+.sl-steps > li:last-child {
+	padding-bottom: 0;
+}
+
+/* R2: Hero max-width on wide screens */
+@media (min-width: 72rem) {
+	[data-page-type='splash'] .hero {
+		max-width: 64rem;
+		margin-inline: auto;
+	}
+}
+
 /* R1: Make cards with links feel clickable */
 .card:has(a) {
 	transition: border-color 0.15s ease;
