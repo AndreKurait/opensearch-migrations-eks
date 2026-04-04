@@ -25,7 +25,7 @@ jobs:
         uses: actions/configure-pages@v4
 
       - name: Build with Astro
-        uses: withastro/action@v3
+        uses: withastro/action@v6.1.0
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
