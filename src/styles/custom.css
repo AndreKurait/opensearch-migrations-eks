@@ -824,3 +824,436 @@ starlight-toc a[aria-current='true'] {
 		scroll-behavior: auto !important;
 	}
 }
+/* ==========================================================================
+   1. TYPOGRAPHY RHYTHM & MEASURE
+   
+   Problem: Our body text is too wide, line-height is too tight, and heading
+   spacing doesn't create clear visual hierarchy. Vercel and Tailwind both
+   use ~65-75ch measure, generous line-height (1.7-1.8 for body), and
+   carefully graduated heading margins that create breathing room.
+   
+   Inspired by: Tailwind (body measure + line-height), Vercel (heading spacing)
+   ========================================================================== */
+
+:root {
+  --sl-text-body-line-height: 1.75;
+  --sl-content-width: 72ch;
+}
+
+starlight-content-container {
+  --sl-content-width: 72ch;
+}
+
+.sl-markdown-content {
+  font-size: 1rem;
+  line-height: 1.75;
+  letter-spacing: -0.01em;
+}
+
+.sl-markdown-content :is(h1, h2, h3, h4, h5, h6) {
+  letter-spacing: -0.025em;
+  line-height: 1.2;
+}
+
+.sl-markdown-content h1 {
+  font-size: 2.25rem;
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  letter-spacing: -0.035em;
+  font-weight: 700;
+}
+
+.sl-markdown-content h2 {
+  font-size: 1.5rem;
+  margin-top: 3rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--sl-color-gray-6);
+  font-weight: 650;
+}
+
+.sl-markdown-content h3 {
+  font-size: 1.25rem;
+  margin-top: 2.25rem;
+  margin-bottom: 0.75rem;
+  font-weight: 600;
+}
+
+.sl-markdown-content h4 {
+  font-size: 1.1rem;
+  margin-top: 1.75rem;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.sl-markdown-content :is(p, ul, ol, blockquote, table, .expressive-code) {
+  margin-bottom: 1.25rem;
+}
+
+.sl-markdown-content li {
+  margin-bottom: 0.375rem;
+}
+
+.sl-markdown-content li > p {
+  margin-bottom: 0.5rem;
+}
+
+/* Tighter paragraph spacing when consecutive */
+.sl-markdown-content p + p {
+  margin-top: -0.125rem;
+}
+
+
+/* ==========================================================================
+   2. SIDEBAR REFINEMENT
+   
+   Problem: Our sidebar items are dense and feel clunky — active state is a 
+   heavy full-width highlight block, text is tightly packed, group labels
+   don't stand apart enough. Vercel uses subtle left-border accents with
+   muted backgrounds. Tailwind uses clean whitespace and a thin left accent.
+   
+   Inspired by: Vercel (active state left-border), Tailwind (spacing + groups)
+   ========================================================================== */
+
+nav.sidebar {
+  --sl-sidebar-padding-x: 1rem;
+}
+
+/* Tighten & refine sidebar items */
+nav.sidebar .top-level > li + li {
+  margin-top: 0.25rem;
+}
+
+nav.sidebar ul ul {
+  margin-left: 0;
+  padding-left: 0.75rem;
+  border-left: 1px solid var(--sl-color-gray-6);
+}
+
+/* Group labels */
+nav.sidebar .top-level > li > details > summary > div > span,
+nav.sidebar .top-level > li > div > span,
+.sidebar-content .top-level > li > details > summary {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--sl-color-white);
+  padding: 0.375rem 0;
+}
+
+/* All sidebar links */
+nav.sidebar a {
+  font-size: 0.875rem;
+  padding: 0.3125rem 0.625rem;
+  border-radius: 0.375rem;
+  color: var(--sl-color-gray-3);
+  transition: color 0.15s ease, background-color 0.15s ease;
+  text-decoration: none;
+  display: block;
+  line-height: 1.5;
+}
+
+nav.sidebar a:hover {
+  color: var(--sl-color-white);
+  background-color: var(--sl-color-gray-6);
+  text-decoration: none;
+}
+
+/* Active/current page — subtle accent instead of heavy block */
+nav.sidebar a[aria-current="page"],
+nav.sidebar a[aria-current="true"] {
+  color: var(--sl-color-text-accent);
+  background-color: transparent;
+  font-weight: 500;
+  position: relative;
+}
+
+nav.sidebar a[aria-current="page"]::before,
+nav.sidebar a[aria-current="true"]::before {
+  content: "";
+  position: absolute;
+  left: -0.75rem;
+  top: 0.25rem;
+  bottom: 0.25rem;
+  width: 2px;
+  background-color: var(--sl-color-text-accent);
+  border-radius: 1px;
+}
+
+/* Remove Starlight's default heavy active background if present */
+nav.sidebar [aria-current="page"],
+nav.sidebar [aria-current="true"] {
+  background: transparent !important;
+}
+
+
+/* ==========================================================================
+   3. TABLE POLISH
+   
+   Problem: Our tables (which are prominent in the migration docs) look 
+   utilitarian — blocky cells, no hover states, headers don't pop. Both
+   Vercel and Tailwind use subtle row hovers, refined cell padding, and
+   lighter grid lines that make tables scannable without feeling heavy.
+   
+   Inspired by: Vercel (table styling), Tailwind (subtle borders)
+   ========================================================================== */
+
+.sl-markdown-content table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+  border: 1px solid var(--sl-color-gray-6);
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.sl-markdown-content table thead th {
+  background-color: var(--sl-color-gray-7, var(--sl-color-gray-6));
+  font-size: 0.8125rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--sl-color-gray-2);
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--sl-color-gray-5);
+  text-align: left;
+  white-space: nowrap;
+}
+
+.sl-markdown-content table tbody td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--sl-color-gray-6);
+  vertical-align: top;
+  color: var(--sl-color-gray-2);
+}
+
+.sl-markdown-content table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.sl-markdown-content table tbody tr {
+  transition: background-color 0.15s ease;
+}
+
+.sl-markdown-content table tbody tr:hover {
+  background-color: var(--sl-color-gray-7, rgba(255, 255, 255, 0.02));
+}
+
+/* Bold first column for definition-style tables (like our migration aspects table) */
+.sl-markdown-content table tbody td:first-child {
+  font-weight: 600;
+  color: var(--sl-color-white);
+  white-space: nowrap;
+}
+
+/* Light theme table adjustments */
+[data-theme="light"] .sl-markdown-content table tbody tr:hover {
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+[data-theme="light"] .sl-markdown-content table thead th {
+  background-color: var(--sl-color-gray-7, #f8f9fa);
+}
+
+
+/* ==========================================================================
+   4. CODE BLOCKS & INLINE CODE
+   
+   Problem: Code blocks feel flat — no breathing room around them, inline
+   code doesn't visually separate from body text well enough. Tailwind's
+   code blocks have generous padding, rounded corners, clear filename tabs,
+   and inline code uses a distinct background pill. Vercel does similar with
+   slightly more contrast on inline code.
+   
+   Inspired by: Tailwind (code block spacing + inline code pills)
+   ========================================================================== */
+
+/* Inline code */
+.sl-markdown-content :not(pre) > code {
+  font-size: 0.875em;
+  padding: 0.175em 0.4em;
+  border-radius: 0.3125rem;
+  background-color: var(--sl-color-gray-6);
+  color: var(--sl-color-text-accent);
+  font-weight: 450;
+  border: 1px solid var(--sl-color-gray-5);
+  word-break: break-word;
+}
+
+[data-theme="light"] .sl-markdown-content :not(pre) > code {
+  background-color: var(--sl-color-gray-7, #f1f5f9);
+  border-color: var(--sl-color-gray-6, #e2e8f0);
+}
+
+/* Code block wrappers (Expressive Code / Starlight) */
+.sl-markdown-content .expressive-code {
+  margin-top: 1.25rem;
+  margin-bottom: 1.75rem;
+}
+
+.sl-markdown-content .expressive-code .frame {
+  border-radius: 0.625rem;
+  border: 1px solid var(--sl-color-gray-5);
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+}
+
+.sl-markdown-content .expressive-code pre {
+  padding: 1rem 1.25rem;
+  font-size: 0.875rem;
+  line-height: 1.7;
+}
+
+/* Code block header / filename tab refinement */
+.sl-markdown-content .expressive-code .header {
+  font-size: 0.8125rem;
+  letter-spacing: 0.01em;
+  padding: 0.5rem 1rem;
+  border-bottom: 1px solid var(--sl-color-gray-5);
+}
+
+/* Copy button refinement */
+.sl-markdown-content .expressive-code .copy button {
+  border-radius: 0.375rem;
+  opacity: 0;
+  transition: opacity 0.2s ease, background-color 0.15s ease;
+}
+
+.sl-markdown-content .expressive-code:hover .copy button {
+  opacity: 0.7;
+}
+
+.sl-markdown-content .expressive-code .copy button:hover {
+  opacity: 1;
+  background-color: var(--sl-color-gray-5);
+}
+
+
+/* ==========================================================================
+   5. MICRO-INTERACTIONS, FOCUS STATES & POLISH
+   
+   Problem: No transitions on interactive elements, focus states use browser
+   defaults (ugly blue outlines), links don't have subtle hover feedback.
+   Both Vercel and Tailwind have buttery-smooth transitions everywhere,
+   custom focus-visible rings that match the design system, and links that
+   shift color cleanly.
+   
+   Inspired by: Both (focus rings), Tailwind (link transitions), Vercel (smooth UI)
+   ========================================================================== */
+
+/* Global smooth transitions for interactive elements */
+a,
+button,
+summary,
+input,
+select,
+textarea,
+[role="button"],
+[tabindex] {
+  transition: color 0.15s ease, background-color 0.15s ease,
+    border-color 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+}
+
+/* Consistent focus-visible ring across the entire site */
+:focus-visible {
+  outline: 2px solid var(--sl-color-text-accent);
+  outline-offset: 2px;
+  border-radius: 0.25rem;
+}
+
+/* Remove default focus for mouse users */
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Content links — Tailwind-style subtle underline + color shift */
+.sl-markdown-content a:not([class]) {
+  color: var(--sl-color-text-accent);
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--sl-color-text-accent) 40%, transparent);
+  text-underline-offset: 0.2em;
+  text-decoration-thickness: 1px;
+  transition: color 0.15s ease, text-decoration-color 0.2s ease;
+}
+
+.sl-markdown-content a:not([class]):hover {
+  text-decoration-color: var(--sl-color-text-accent);
+}
+
+/* "On this page" / right sidebar hover states */
+starlight-toc a {
+  color: var(--sl-color-gray-3);
+  transition: color 0.15s ease;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+}
+
+starlight-toc a:hover {
+  color: var(--sl-color-white);
+}
+
+starlight-toc a[aria-current="true"] {
+  color: var(--sl-color-text-accent);
+  font-weight: 500;
+}
+
+/* Header / top nav — subtle bottom border for grounding */
+header.header {
+  border-bottom: 1px solid var(--sl-color-gray-6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* Pagination (prev/next) links at bottom of pages */
+.pagination-links a {
+  border: 1px solid var(--sl-color-gray-5);
+  border-radius: 0.5rem;
+  padding: 1rem 1.25rem;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.pagination-links a:hover {
+  border-color: var(--sl-color-text-accent);
+  background-color: var(--sl-color-gray-7, rgba(255, 255, 255, 0.02));
+}
+
+/* Smooth scrolling for anchor links */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
+}
+
+/* Selection color matching the accent */
+::selection {
+  background-color: color-mix(in srgb, var(--sl-color-text-accent) 25%, transparent);
+  color: var(--sl-color-white);
+}
+
+/* Scrollbar styling (Webkit) — subtle, like Tailwind/Vercel */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--sl-color-gray-5);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--sl-color-gray-4);
+}
+
+/* Firefox scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--sl-color-gray-5) transparent;
+}
