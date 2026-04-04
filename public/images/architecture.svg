@@ -1,8 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 580" fill="none">
   <style>
-    :root {
-      color-scheme: light dark;
-    }
+    :root { color-scheme: light dark; }
     text { font-family: 'Inter', system-ui, -apple-system, sans-serif; }
 
     .bg-main { fill: light-dark(#f8fafc, #0f1724); }
@@ -56,185 +54,183 @@
     <marker id="ah-data" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
       <path d="M0,0.5 L8,3.5 L0,6.5" class="arrow-data-color"/>
     </marker>
-
     <linearGradient id="grad-blue" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0%" stop-color="#2563eb"/>
       <stop offset="100%" stop-color="#0891b2"/>
     </linearGradient>
-
     <linearGradient id="grad-green" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0%" stop-color="#16a34a"/>
       <stop offset="100%" stop-color="#0d9488"/>
     </linearGradient>
-
     <filter id="card-shadow" x="-6%" y="-6%" width="112%" height="120%">
       <feDropShadow dx="0" dy="1" stdDeviation="2.5" flood-color="#000" flood-opacity="0.08"/>
     </filter>
-
     <filter id="accent-shadow" x="-6%" y="-6%" width="112%" height="120%">
       <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#2563eb" flood-opacity="0.12"/>
     </filter>
   </defs>
 
-  <!-- ======== BACKGROUND ======== -->
+  <!-- BACKGROUND -->
   <rect width="960" height="580" rx="14" class="bg-main"/>
 
-  <!-- ======== KUBERNETES CLUSTER BOUNDARY ======== -->
-  <rect x="192" y="30" width="564" height="380" rx="14" class="fill-cluster-bg"/>
-  <rect x="192" y="30" width="564" height="380" rx="14" fill="none" class="border-cluster" stroke-width="2" stroke-dasharray="10 5"/>
+  <!-- KUBERNETES CLUSTER BOUNDARY -->
+  <rect x="192" y="30" width="575" height="402" rx="14" class="fill-cluster-bg"/>
+  <rect x="192" y="30" width="575" height="402" rx="14" fill="none" class="border-cluster" stroke-width="2" stroke-dasharray="10 5"/>
   <text x="212" y="52" class="group-label">Kubernetes Cluster</text>
 
-  <!-- ======== CLIENTS (external, top-left) ======== -->
-  <g class="node-group">
+  <!-- ======== EXTERNAL NODES ======== -->
+
+  <!-- Clients -->
+  <g>
     <rect x="36" y="72" width="120" height="50" rx="10" class="fill-external shadow-card"/>
     <rect x="36" y="72" width="120" height="50" rx="10" class="border-external" fill="none" stroke-width="1.5"/>
     <text x="96" y="102" class="label" text-anchor="middle">Clients</text>
   </g>
 
-  <!-- ======== SOURCE (external, left) ======== -->
-  <g class="node-group">
-    <rect x="36" y="216" width="120" height="64" rx="10" class="fill-external shadow-card"/>
-    <rect x="36" y="216" width="120" height="64" rx="10" class="border-external" fill="none" stroke-width="1.5"/>
-    <text x="96" y="244" class="label" text-anchor="middle">Source</text>
-    <text x="96" y="260" class="sublabel" text-anchor="middle">ES / OpenSearch</text>
+  <!-- Source -->
+  <g>
+    <rect x="36" y="230" width="120" height="64" rx="10" class="fill-external shadow-card"/>
+    <rect x="36" y="230" width="120" height="64" rx="10" class="border-external" fill="none" stroke-width="1.5"/>
+    <text x="96" y="258" class="label" text-anchor="middle">Source</text>
+    <text x="96" y="274" class="sublabel" text-anchor="middle">ES / OpenSearch</text>
   </g>
 
-  <!-- ======== OBJECT STORAGE (external, bottom-left) ======== -->
-  <g class="node-group">
-    <rect x="36" y="430" width="120" height="64" rx="10" class="fill-external shadow-card"/>
-    <rect x="36" y="430" width="120" height="64" rx="10" class="border-external" fill="none" stroke-width="1.5"/>
-    <text x="96" y="458" class="label" text-anchor="middle">Object Storage</text>
-    <text x="96" y="474" class="sublabel" text-anchor="middle">S3 / GCS / MinIO</text>
+  <!-- Object Storage -->
+  <g>
+    <rect x="36" y="460" width="120" height="64" rx="10" class="fill-external shadow-card"/>
+    <rect x="36" y="460" width="120" height="64" rx="10" class="border-external" fill="none" stroke-width="1.5"/>
+    <text x="96" y="488" class="label" text-anchor="middle">Object Storage</text>
+    <text x="96" y="504" class="sublabel" text-anchor="middle">S3 / GCS / MinIO</text>
   </g>
 
-  <!-- ======== TARGET (external, right) ======== -->
-  <g class="node-group">
-    <rect x="796" y="216" width="130" height="64" rx="10" class="fill-target shadow-accent"/>
-    <rect x="796" y="216" width="130" height="64" rx="10" fill="none" stroke="url(#grad-green)" stroke-width="2"/>
-    <text x="861" y="244" class="label" text-anchor="middle">Target</text>
-    <text x="861" y="260" class="sublabel" text-anchor="middle">OpenSearch</text>
+  <!-- Target -->
+  <g>
+    <rect x="800" y="188" width="130" height="64" rx="10" class="fill-target shadow-accent"/>
+    <rect x="800" y="188" width="130" height="64" rx="10" fill="none" stroke="url(#grad-green)" stroke-width="2"/>
+    <text x="865" y="216" class="label" text-anchor="middle">Target</text>
+    <text x="865" y="232" class="sublabel" text-anchor="middle">OpenSearch</text>
   </g>
 
   <!-- ======== TOP ROW: Console, Argo, Monitoring ======== -->
 
   <!-- Migration Console -->
-  <g class="node-group">
-    <rect x="218" y="70" width="150" height="56" rx="10" class="fill-card shadow-card"/>
-    <rect x="218" y="70" width="150" height="56" rx="10" fill="none" class="border-card" stroke-width="1"/>
-    <text x="293" y="94" class="label" text-anchor="middle">Migration Console</text>
-    <text x="293" y="112" class="sublabel" text-anchor="middle">StatefulSet · CLI</text>
+  <g>
+    <rect x="218" y="68" width="150" height="56" rx="10" class="fill-card shadow-card"/>
+    <rect x="218" y="68" width="150" height="56" rx="10" fill="none" class="border-card" stroke-width="1"/>
+    <text x="293" y="92" class="label" text-anchor="middle">Migration Console</text>
+    <text x="293" y="110" class="sublabel" text-anchor="middle">StatefulSet · CLI</text>
   </g>
 
   <!-- Argo Workflows -->
-  <g class="node-group">
-    <rect x="392" y="70" width="150" height="56" rx="10" class="fill-card shadow-card"/>
-    <rect x="392" y="70" width="150" height="56" rx="10" fill="none" class="border-card" stroke-width="1"/>
-    <text x="467" y="94" class="label" text-anchor="middle">Argo Workflows</text>
-    <text x="467" y="112" class="sublabel" text-anchor="middle">Server + Controller</text>
+  <g>
+    <rect x="396" y="68" width="150" height="56" rx="10" class="fill-card shadow-card"/>
+    <rect x="396" y="68" width="150" height="56" rx="10" fill="none" class="border-card" stroke-width="1"/>
+    <text x="471" y="92" class="label" text-anchor="middle">Argo Workflows</text>
+    <text x="471" y="110" class="sublabel" text-anchor="middle">Server + Controller</text>
   </g>
 
   <!-- Monitoring -->
-  <g class="node-group">
-    <rect x="566" y="70" width="150" height="56" rx="10" class="fill-card shadow-card"/>
-    <rect x="566" y="70" width="150" height="56" rx="10" fill="none" class="border-card" stroke-width="1"/>
-    <text x="641" y="94" class="label" text-anchor="middle">Monitoring</text>
-    <text x="641" y="112" class="sublabel" text-anchor="middle">OTel · Grafana</text>
+  <g>
+    <rect x="574" y="68" width="150" height="56" rx="10" class="fill-card shadow-card"/>
+    <rect x="574" y="68" width="150" height="56" rx="10" fill="none" class="border-card" stroke-width="1"/>
+    <text x="649" y="92" class="label" text-anchor="middle">Monitoring</text>
+    <text x="649" y="110" class="sublabel" text-anchor="middle">OTel · Grafana</text>
   </g>
 
-  <!-- Console → Argo arrow -->
-  <path d="M368,98 L392,98" class="arrow-control"/>
+  <!-- Console → Argo -->
+  <path d="M368,96 L396,96" class="arrow-control"/>
 
   <!-- ======== MANAGED BY ARGO REGION ======== -->
-  <rect x="218" y="152" width="524" height="240" rx="10" class="fill-managed-bg border-managed" stroke-width="1" stroke-dasharray="5 3"/>
-  <text x="238" y="172" class="managed-label">Managed by Argo Workflows</text>
+  <rect x="218" y="150" width="530" height="264" rx="10" class="fill-managed-bg border-managed" stroke-width="1" stroke-dasharray="5 3"/>
+  <text x="238" y="170" class="managed-label">Managed by Argo Workflows</text>
 
   <!-- RFS Workers -->
-  <g class="node-group">
-    <rect x="240" y="198" width="136" height="66" rx="10" class="fill-card-accent shadow-accent"/>
-    <rect x="240" y="198" width="136" height="66" rx="10" fill="none" class="border-accent" stroke-width="2"/>
-    <text x="308" y="226" class="label" text-anchor="middle">RFS Workers</text>
-    <text x="308" y="244" class="sublabel" text-anchor="middle">Jobs · 1 per shard</text>
+  <g>
+    <rect x="240" y="192" width="136" height="66" rx="10" class="fill-card-accent shadow-accent"/>
+    <rect x="240" y="192" width="136" height="66" rx="10" fill="none" class="border-accent" stroke-width="2"/>
+    <text x="308" y="220" class="label" text-anchor="middle">RFS Workers</text>
+    <text x="308" y="238" class="sublabel" text-anchor="middle">Jobs · 1 per shard</text>
   </g>
 
   <!-- Capture Proxy -->
-  <g class="node-group">
-    <rect x="404" y="198" width="136" height="66" rx="10" class="fill-card-accent shadow-accent"/>
-    <rect x="404" y="198" width="136" height="66" rx="10" fill="none" class="border-accent" stroke-width="2"/>
-    <text x="472" y="226" class="label" text-anchor="middle">Capture Proxy</text>
-    <text x="472" y="244" class="sublabel" text-anchor="middle">Deployment + Svc</text>
+  <g>
+    <rect x="240" y="290" width="136" height="66" rx="10" class="fill-card-accent shadow-accent"/>
+    <rect x="240" y="290" width="136" height="66" rx="10" fill="none" class="border-accent" stroke-width="2"/>
+    <text x="308" y="318" class="label" text-anchor="middle">Capture Proxy</text>
+    <text x="308" y="336" class="sublabel" text-anchor="middle">Deployment + Svc</text>
   </g>
 
   <!-- Traffic Replayer -->
-  <g class="node-group">
-    <rect x="568" y="198" width="148" height="66" rx="10" class="fill-card-accent shadow-accent"/>
-    <rect x="568" y="198" width="148" height="66" rx="10" fill="none" class="border-accent" stroke-width="2"/>
-    <text x="642" y="226" class="label" text-anchor="middle">Traffic Replayer</text>
-    <text x="642" y="244" class="sublabel" text-anchor="middle">Deployment</text>
+  <g>
+    <rect x="556" y="290" width="148" height="66" rx="10" class="fill-card-accent shadow-accent"/>
+    <rect x="556" y="290" width="148" height="66" rx="10" fill="none" class="border-accent" stroke-width="2"/>
+    <text x="630" y="318" class="label" text-anchor="middle">Traffic Replayer</text>
+    <text x="630" y="336" class="sublabel" text-anchor="middle">Deployment</text>
   </g>
 
   <!-- Kafka -->
-  <g class="node-group">
-    <rect x="404" y="310" width="136" height="56" rx="10" class="fill-card shadow-card"/>
-    <rect x="404" y="310" width="136" height="56" rx="10" fill="none" class="border-card" stroke-width="1"/>
-    <text x="472" y="334" class="label" text-anchor="middle">Kafka</text>
-    <text x="472" y="350" class="sublabel" text-anchor="middle">Strimzi / external</text>
+  <g>
+    <rect x="400" y="290" width="130" height="66" rx="10" class="fill-card shadow-card"/>
+    <rect x="400" y="290" width="130" height="66" rx="10" fill="none" class="border-card" stroke-width="1"/>
+    <text x="465" y="318" class="label" text-anchor="middle">Kafka</text>
+    <text x="465" y="336" class="sublabel" text-anchor="middle">Strimzi / external</text>
   </g>
 
   <!-- ======== DATA FLOW ARROWS (blue dashed) ======== -->
 
   <!-- ① Source → Object Storage (snapshot) -->
-  <path d="M96,280 L96,430" class="arrow-data"/>
-  <circle cx="96" cy="355" r="11" fill="url(#grad-blue)"/>
-  <text x="96" y="359" class="step-num" text-anchor="middle">1</text>
-  <text x="108" y="382" class="flow-label">snapshot</text>
+  <path d="M96,294 L96,460" class="arrow-data"/>
+  <circle cx="96" cy="380" r="11" fill="url(#grad-blue)"/>
+  <text x="96" y="384" class="step-num" text-anchor="middle">1</text>
+  <text x="110" y="406" class="flow-label">snapshot</text>
 
-  <!-- ② Object Storage → RFS Workers (Lucene files) -->
-  <path d="M156,462 L308,462 L308,264" class="arrow-data"/>
-  <circle cx="308" cy="370" r="11" fill="url(#grad-blue)"/>
-  <text x="308" y="374" class="step-num" text-anchor="middle">2</text>
-  <text x="200" y="454" class="flow-label">Lucene files</text>
+  <!-- ② Object Storage → RFS Workers -->
+  <path d="M156,492 L220,492 L220,440 L308,440 L308,258" class="arrow-data"/>
+  <circle cx="308" cy="440" r="11" fill="url(#grad-blue)"/>
+  <text x="308" y="444" class="step-num" text-anchor="middle">2</text>
+  <text x="240" y="485" class="flow-label">Lucene files</text>
 
   <!-- ③ RFS Workers → Target (bulk index) -->
-  <path d="M376,231 L770,231 L770,248 L796,248" class="arrow-data"/>
-  <circle cx="585" cy="231" r="11" fill="url(#grad-blue)"/>
-  <text x="585" y="235" class="step-num" text-anchor="middle">3</text>
-  <text x="480" y="224" class="flow-label">bulk index</text>
+  <path d="M376,220 L800,220" class="arrow-data"/>
+  <circle cx="588" cy="220" r="11" fill="url(#grad-blue)"/>
+  <text x="588" y="224" class="step-num" text-anchor="middle">3</text>
+  <text x="500" y="212" class="flow-label">bulk index</text>
+
+  <!-- ④ Traffic Replayer → Target (replay) -->
+  <path d="M704,323 L770,323 L770,236 L800,236" class="arrow-data"/>
+  <circle cx="770" cy="280" r="11" fill="url(#grad-blue)"/>
+  <text x="770" y="284" class="step-num" text-anchor="middle">4</text>
+  <text x="740" y="268" class="flow-label">replay</text>
 
   <!-- ======== CONTROL / LIVE FLOW ARROWS (gray solid) ======== -->
 
   <!-- Clients → Capture Proxy -->
-  <path d="M156,97 L182,97 L182,231 L404,231" class="arrow-control"/>
-  <text x="222" y="109" class="ctrl-label">requests</text>
+  <path d="M156,97 L186,97 L186,323 L240,323" class="arrow-control"/>
+  <text x="191" y="210" class="ctrl-label">requests</text>
 
   <!-- Capture Proxy → Source (pass-through) -->
-  <path d="M472,264 L472,288 L174,288 L174,248 L156,248" class="arrow-control"/>
-  <text x="280" y="282" class="ctrl-label">pass-through</text>
+  <path d="M308,356 L308,386 L170,386 L170,262 L156,262" class="arrow-control"/>
+  <text x="190" y="379" class="ctrl-label">pass-through</text>
 
-  <!-- Capture Proxy → Kafka -->
-  <path d="M472,264 L472,310" class="arrow-control"/>
-  <text x="480" y="294" class="ctrl-label">record</text>
+  <!-- Capture Proxy → Kafka (record) -->
+  <path d="M376,323 L400,323" class="arrow-control"/>
+  <text x="380" y="316" class="ctrl-label">record</text>
 
-  <!-- Kafka → Traffic Replayer -->
-  <path d="M540,338 L642,338 L642,264" class="arrow-control"/>
-  <text x="558" y="332" class="ctrl-label">consume</text>
-
-  <!-- Traffic Replayer → Target -->
-  <path d="M716,231 L770,231" class="arrow-data"/>
-  <circle cx="743" cy="231" r="11" fill="url(#grad-blue)"/>
-  <text x="743" y="235" class="step-num" text-anchor="middle">4</text>
-  <text x="725" y="218" class="flow-label">replay</text>
+  <!-- Kafka → Traffic Replayer (consume) -->
+  <path d="M530,323 L556,323" class="arrow-control"/>
+  <text x="534" y="316" class="ctrl-label">consume</text>
 
   <!-- ======== LEGEND ======== -->
-  <g transform="translate(580, 440)">
-    <rect x="0" y="0" width="340" height="104" rx="10" class="fill-card"/>
-    <rect x="0" y="0" width="340" height="104" rx="10" fill="none" class="border-card" stroke-width="1"/>
+  <g transform="translate(580, 448)">
+    <rect x="0" y="0" width="348" height="104" rx="10" class="fill-card"/>
+    <rect x="0" y="0" width="348" height="104" rx="10" fill="none" class="border-card" stroke-width="1"/>
 
     <text x="16" y="22" class="legend-title">Legend</text>
 
-    <line x1="16" y1="44" x2="52" y2="44" stroke-width="2" stroke-dasharray="7 4" class="arrow-data" style="marker-end:none"/>
+    <line x1="16" y1="44" x2="52" y2="44" stroke-width="2" stroke-dasharray="7 4" stroke="light-dark(#2563eb, #3b82f6)" fill="none"/>
     <text x="60" y="48" class="legend-text">Data flow (backfill + replay)</text>
 
-    <line x1="16" y1="64" x2="52" y2="64" stroke-width="1.5" class="arrow-control" style="marker-end:none"/>
+    <line x1="16" y1="64" x2="52" y2="64" stroke-width="1.5" stroke="light-dark(#94a3b8, #475569)" fill="none"/>
     <text x="60" y="68" class="legend-text">Control / live traffic</text>
 
     <circle cx="24" cy="88" r="8" fill="url(#grad-blue)"/>
