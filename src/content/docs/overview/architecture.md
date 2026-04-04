@@ -1,61 +1,106 @@
 ---
 title: Architecture
-description: EKS architecture, component overview, and Argo Workflows orchestration.
+description: Kubernetes architecture, component overview, and Argo Workflows orchestration.
 ---
 
-Migration Assistant runs on Kubernetes and uses Argo Workflows for orchestration. The architecture below shows the deployment on AWS EKS, but Migration Assistant works equivalently on any Kubernetes distribution.
+Migration Assistant runs on Kubernetes and uses Argo Workflows for orchestration. It works on any Kubernetes distribution — Amazon EKS, GKE, AKS, OpenShift, or self-managed clusters.
 
-## EKS Architecture
+## Architecture Overview
 
 ```
-AWS EKS Cluster (namespace: ma)
-├── argo-workflows-server          (Deployment)
-├── argo-workflows-workflow-controller (Deployment)
-├── migration-console-0            (StatefulSet)
-├── capture-proxy                  (Deployment + NLB Service)
-├── traffic-replayer               (Deployment)
-├── rfs-workers                    (Jobs managed by Argo)
-└── kafka (Strimzi)                (StatefulSet)
+┌─────────────────────────────────────────────────────────────────────┐
+│                        Kubernetes Cluster                           │
+│  ┌───────────────────────────────────────────────────────────────┐  │
+│  │                    Namespace: ma                               │  │
+│  │                                                               │  │
+│  │  ┌─────────────────┐  ┌──────────────────┐  ┌─────────────┐  │  │
+│  │  │ Migration Console│  │  Argo Workflows  │  │  Monitoring │  │  │
+│  │  │  (StatefulSet)   │  │ Server+Controller│  │ OTel+Grafana│  │  │
+│  │  └────────┬─────────┘  └────────┬─────────┘  └─────────────┘  │  │
+│  │           │                     │                              │  │
+│  │  ┌────────┴─────────────────────┴──────────────────────────┐  │  │
+│  │  │              Managed by Argo Workflows                   │  │  │
+│  │  │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  │  │  │
+│  │  │  │  RFS Workers │  │Capture Proxy │  │   Traffic    │  │  │  │
+│  │  │  │   (Jobs)     │  │ (Deployment) │  │  Replayer    │  │  │  │
+│  │  │  │  1 per shard │  │  + Service   │  │ (Deployment) │  │  │  │
+│  │  │  └──────┬───────┘  └──────┬───────┘  └──────┬───────┘  │  │  │
+│  │  └─────────┼─────────────────┼─────────────────┼───────────┘  │  │
+│  └────────────┼─────────────────┼─────────────────┼──────────────┘  │
+└───────────────┼─────────────────┼─────────────────┼─────────────────┘
+                │                 │                 │
+        ┌───────┴───────┐  ┌─────┴─────┐  ┌───────┴───────┐
+        │  Object Store │  │   Kafka    │  │ Target Cluster│
+        │  (S3 / GCS /  │  │ (Strimzi / │  │  (OpenSearch) │
+        │   MinIO)      │  │  external) │  │               │
+        └───────┬───────┘  └─────┬─────┘  └───────────────┘
+                │                │
+        ┌───────┴───────┐  ┌────┴────────────┐
+        │    Snapshot    │  │  Source Cluster  │
+        │  (from source)│  │ (ES / OpenSearch)│
+        └───────────────┘  └─────────────────┘
 ```
 
-## Component Overview
+## Data Flow
 
-| Component | Description | K8s Resource |
-|-----------|-------------|--------------|
-| **Migration Console** | CLI for all migration operations (`console` and `workflow` commands) | StatefulSet |
-| **Argo Workflows** | K8s-native workflow engine with parallel execution, retry logic, approval gates | Deployment (server + controller) |
-| **Capture Proxy** | HTTP proxy fleet forwarding to source while recording to Kafka | Deployment with Service (NLB on EKS) |
-| **Traffic Replayer** | Reads from Kafka, replays against target with transforms and speedup factor | Deployment |
-| **RFS Workers** | Document migration via raw Lucene segment files from S3 snapshots (1 worker/shard max) | Jobs managed by Argo |
-| **Kafka (Strimzi)** | Durable message queue for traffic capture | Strimzi operator or external |
-| **Metadata Migration Tool** | Migrates index settings, mappings, templates, aliases with auto field type transforms | Runs inside Migration Console |
+### Step 1: Prepare
 
-## Workflow Orchestration
+Decide how to handle ongoing writes — pause them (simplest) or capture them via the proxy fleet for zero-downtime migration.
 
-Configure and submit a migration workflow from the Migration Console:
+### Step 2: Configure and Submit
+
+From the Migration Console, configure your migration in YAML and submit it to Argo Workflows:
 
 ```bash
 workflow configure edit    # Edit configuration
 workflow submit            # Submit to Argo Workflows
 ```
 
-The workflow orchestrates:
+### Step 3: Monitor
 
-1. Point-in-time snapshot of the source cluster
-2. Metadata migration (indexes, templates, component templates, aliases)
-3. **Approval gate** — workflow pauses for user confirmation before document migration
-4. Resource provisioning for Reindex-from-Snapshot (RFS) backfill
-5. Resource scale-down when backfill completes
+The workflow orchestrates each phase with approval gates:
 
-## Data Flow
+1. **Snapshot** — Point-in-time snapshot of the source cluster → object storage
+2. **Metadata** — Index settings, mappings, templates, aliases → target cluster
+3. **⏸ Approval gate** — Review metadata results before proceeding
+4. **Backfill** — RFS workers read Lucene files from snapshot → bulk index on target
+5. **Scale-down** — Workers removed when backfill completes
 
-### Backfill Path
+```bash
+workflow status            # Check progress
+workflow manage            # Interactive TUI
+workflow approve           # Approve a gate
+```
+
+### Step 4: Flush (if using external queue)
+
+If you queued writes externally during migration, flush them to the target now.
+
+### Step 5: Validate and Switch
+
+Compare document counts and queries between source and target. When satisfied, redirect traffic.
+
+## Component Details
+
+| Component | K8s Resource | Description |
+|-----------|-------------|-------------|
+| **Migration Console** | StatefulSet | CLI for all migration operations (`console` + `workflow` commands) |
+| **Argo Workflows** | Deployment (server + controller) | Orchestrates migration phases with parallel execution, retry, approval gates |
+| **RFS Workers** | Jobs (managed by Argo) | Read Lucene segment files from snapshot in object storage. 1 worker per shard max. |
+| **Capture Proxy** | Deployment + Service | Forwards requests to source while recording to Kafka. Stateless, horizontally scalable. |
+| **Traffic Replayer** | Deployment | Reads from Kafka, replays against target with transforms and speedup factor. |
+| **Kafka** | Strimzi operator or external | Durable message queue for traffic capture. Auto-managed or bring-your-own. |
+| **Monitoring** | OTel Collector + Grafana | Metrics and dashboards for migration progress. CloudWatch on EKS. |
+
+## Backfill Data Flow
 
 ```
-Source Cluster → Snapshot (S3) → RFS Workers → Target Cluster
+Source Cluster → Snapshot → Object Storage (S3/GCS/MinIO) → RFS Workers → Target Cluster
 ```
 
-### Capture and Replay Path
+RFS workers read raw Lucene segment files directly from the snapshot — the source cluster is never queried after the snapshot is taken.
+
+## Capture and Replay Data Flow
 
 ```
 Clients → Capture Proxy → Source Cluster
@@ -64,3 +109,14 @@ Clients → Capture Proxy → Source Cluster
                 ↓
          Traffic Replayer → Target Cluster
 ```
+
+The capture proxy is deployed as a separate fleet. The source cluster is never modified — traffic is routed to the proxy via DNS, load balancer, or Kubernetes Service changes.
+
+## Platform-Specific Notes
+
+| Platform | Notes |
+|----------|-------|
+| **Amazon EKS** | Bootstrap script automates cluster creation via CloudFormation. NLB for proxy service. S3 for snapshots. CloudWatch for monitoring. |
+| **GKE / AKS** | Deploy via Helm chart. Use GCS or Azure Blob for snapshots. Standard LoadBalancer for proxy. |
+| **OpenShift** | Deploy via Helm chart with appropriate SecurityContextConstraints. |
+| **Self-managed** | Deploy via Helm chart. MinIO or any S3-compatible storage for snapshots. |
