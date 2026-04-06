@@ -9,6 +9,7 @@ Before configuring a migration, identify your source cluster version:
 
 ```bash
 # Query the cluster directly
+
 curl -s <source-endpoint>/ | jq '.version.number'
 ```
 

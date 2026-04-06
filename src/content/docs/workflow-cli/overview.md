@@ -39,10 +39,12 @@ The Workflow CLI runs inside the Migration Console pod:
 
 ```bash
 # On EKS
+
 aws eks update-kubeconfig --region <REGION> --name migration-eks-cluster-<STAGE>-<REGION>
 kubectl exec -it migration-console-0 -n ma -- bash
 
 # Then run workflow commands
+
 workflow status
 ```
 

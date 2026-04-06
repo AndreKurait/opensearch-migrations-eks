@@ -2,8 +2,6 @@
 title: Command Reference
 description: Complete CLI reference for console and workflow commands.
 ---
-
-
 Migration Assistant provides two command namespaces:
 
 - **`console`** — Direct, imperative operations for immediate execution against clusters and infrastructure
@@ -23,8 +21,11 @@ Verify connectivity and inspect cluster state. Run these before starting any mig
 
 ```bash
 console clusters connection-check          # Test connectivity to source and target
+
 console clusters cat-indices               # List indices on source
+
 console clusters cat-indices --target      # List indices on target
+
 ```
 
 | Flag | Command | Description |
@@ -34,6 +35,7 @@ console clusters cat-indices --target      # List indices on target
 **Example output for `cat-indices`:**
 
 ```
+
 health status index           uuid                   pri rep docs.count docs.deleted store.size
 green  open   my-logs-2024.01 abc123def456           5   1    2340000            0      1.2gb
 green  open   my-logs-2024.02 def456ghi789           5   1    1890000            0      980mb
@@ -49,12 +51,15 @@ Create and monitor snapshots of the source cluster. Snapshots are stored in S3 a
 
 ```bash
 console snapshot create                    # Create a snapshot of the source cluster
+
 console snapshot status                    # Check snapshot progress
+
 ```
 
 **Example output for `snapshot status`:**
 
 ```
+
 Snapshot: migration-snapshot-20240115
 State:    IN_PROGRESS
 Shards:   45/120 completed (37%)
@@ -70,7 +75,9 @@ Evaluate compatibility and migrate index settings, mappings, templates, and alia
 
 ```bash
 console metadata evaluate                  # Evaluate metadata for compatibility issues
+
 console metadata migrate                   # Migrate metadata to the target cluster
+
 ```
 
 The `evaluate` command reports incompatibilities without making changes. Always run it before `migrate`.
@@ -78,6 +85,7 @@ The `evaluate` command reports incompatibilities without making changes. Always 
 **Example output for `metadata evaluate`:**
 
 ```
+
 Evaluating 12 indices, 3 templates, 2 aliases...
 
 Warnings:
@@ -101,11 +109,17 @@ Control the Reindex-from-Snapshot document migration process.
 
 ```bash
 console backfill start                     # Start RFS backfill workers
+
 console backfill status                    # Check backfill progress
+
 console backfill scale <COUNT>             # Scale worker count (up to 1 per shard)
+
 console backfill pause                     # Pause backfill (workers stop pulling new work)
+
 console backfill resume                    # Resume a paused backfill
+
 console backfill stop                      # Stop and remove all backfill workers
+
 ```
 
 | Flag / Argument | Command | Description |
@@ -115,6 +129,7 @@ console backfill stop                      # Stop and remove all backfill worker
 **Example output for `backfill status`:**
 
 ```
+
 Backfill Status:
   Workers:    4/4 running
   Progress:   67,234,000 / 98,500,000 docs (68.3%)
@@ -132,13 +147,17 @@ Control traffic replay from captured Kafka topics to the target cluster.
 
 ```bash
 console replay start                       # Start traffic replay
+
 console replay status                      # Check replay progress and lag
+
 console replay stop                        # Stop traffic replay
+
 ```
 
 **Example output for `replay status`:**
 
 ```
+
 Replay Status:
   State:        Running
   Kafka Lag:    12,450 messages
@@ -156,6 +175,7 @@ Inspect captured request/response pairs for debugging replay issues.
 
 ```bash
 console tuples show                        # Show recent request/response tuple logs
+
 ```
 
 Tuple logs contain the original source request and the replayed target response side-by-side, useful for identifying transformation or compatibility issues.
@@ -166,11 +186,13 @@ Inspect the Kafka topics used for traffic capture.
 
 ```bash
 console kafka describe-topics              # List Kafka topics, partitions, and consumer lag
+
 ```
 
 **Example output:**
 
 ```
+
 Topic: logging-traffic-topic
   Partitions: 6
   Total Messages: 4,567,890
@@ -187,9 +209,13 @@ Manage the YAML configuration that defines your migration workflow.
 
 ```bash
 workflow configure sample                  # Print sample configuration to stdout
+
 workflow configure sample --load           # Load sample as the active configuration
+
 workflow configure edit                    # Open active configuration in $EDITOR
+
 workflow configure show                    # Print active configuration to stdout
+
 ```
 
 | Flag | Command | Description |
@@ -206,15 +232,21 @@ Submit, monitor, and manage Argo-orchestrated workflows.
 
 ```bash
 workflow submit                            # Submit the workflow to Argo Workflows
+
 workflow status                            # Check workflow status and step progress
+
 workflow manage                            # Launch interactive TUI for management
+
 workflow approve                           # Approve a paused approval gate
+
 workflow cancel                            # Cancel a running workflow
+
 ```
 
 **Example output for `workflow status`:**
 
 ```
+
 Workflow: migration-20240115-143022
 Status:  Running
 Phase:   backfill-start
@@ -251,7 +283,9 @@ workflow configure edit
 workflow submit
 workflow status
 workflow approve          # at each gate
+
 workflow status           # verify completion
+
 ```
 
 ### Debugging a failed workflow
@@ -263,7 +297,6 @@ console clusters cat-indices --target
 ```
 
 ## Next Steps
-
 
   <LinkCard
     title="Getting Started tutorial"

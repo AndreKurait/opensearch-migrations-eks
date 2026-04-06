@@ -2,8 +2,6 @@
 title: Traffic Routing
 description: Route traffic from the source cluster through the capture proxy and to the target cluster.
 ---
-
-
 Traffic routing manages the flow of client requests during migration — from the source
 cluster, through the capture proxy, and ultimately to the target cluster.
 
@@ -20,7 +18,6 @@ kubectl get svc -n ma capture-proxy-svc \
   -o jsonpath='{.status.loadBalancer.ingress[0].hostname}'
 ```
 
-
 1. **Update your application's connection endpoint** to point to the proxy NLB.
 
 2. **Verify traffic is flowing through the proxy:**
@@ -31,8 +28,6 @@ kubectl get svc -n ma capture-proxy-svc \
 
    A rising message count on `logging-traffic-topic` confirms that requests are being
    captured.
-
-
 ### Host Header Configuration
 
 If the source cluster uses host-based routing (for example, behind an ALB with
@@ -51,8 +46,6 @@ request to the wrong virtual host.
 ## Routing to the Target
 
 When backfill is complete and replay shows an acceptable error rate, you can cut over.
-
-
 1. **Verify target readiness:**
 
    ```bash
@@ -79,6 +72,7 @@ When backfill is complete and replay shows an acceptable error rate, you can cut
 
    ```bash
    # On the target cluster
+
    curl -s https://<target-cluster>:9200/_cat/nodes?v
    ```
 
@@ -90,12 +84,9 @@ When backfill is complete and replay shows an acceptable error rate, you can cut
    kubectl scale deployment capture-proxy -n ma --replicas=0
    ```
 
-
 ## Fallback Procedure
 
 If you detect elevated error rates or data issues after cutover:
-
-
 1. **Route traffic back** to the source cluster (reverse the DNS/ALB change from step 2).
 
 2. **Investigate** using tuple logs and CloudWatch metrics:
@@ -108,8 +99,6 @@ If you detect elevated error rates or data issues after cutover:
    syntax, or security-plugin rejections.
 
 4. **Re-attempt cutover** after the fix is validated.
-
-
 :::caution
 If you fall back, any writes that already reached the target but not the source
 will diverge. You may need to re-run backfill for the affected indices or replay

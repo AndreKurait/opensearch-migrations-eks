@@ -2,14 +2,11 @@
 title: Assessment
 description: Assess your source cluster for migration readiness and identify potential issues.
 ---
-
-
 Before starting a migration, assess your source cluster to identify breaking changes,
 unsupported features, and data transformation requirements. The assessment is
 non-destructive and makes no changes to either cluster.
 
 ## Running the Assessment
-
 
 1. **Verify connectivity** — confirm the Migration Console can reach both clusters:
 
@@ -25,8 +22,6 @@ non-destructive and makes no changes to either cluster.
 
 3. **Review the report** — the evaluate command prints a summary like the one below.
    Fix or acknowledge each issue before continuing.
-
-
 ### Sample output
 
 ```text

@@ -2,8 +2,6 @@
 title: Teardown
 description: Remove migration infrastructure after a successful migration.
 ---
-
-
 After a successful migration and cutover, remove the migration infrastructure to stop
 incurring compute and storage costs.
 
@@ -22,12 +20,14 @@ Before removing anything, confirm:
 
 ```bash
 console backfill status    # should show COMPLETED or STOPPED
+
 console replay status      # should show STOPPED
+
 workflow status            # should show no active workflows
+
 ```
 
 ## Teardown Steps
-
 
 1. **Remove the Helm release** (deletes all migration pods, services, and workflows):
 
@@ -39,6 +39,7 @@ workflow status            # should show no active workflows
 
    ```bash
    kubectl get pods -n ma    # should return "No resources found"
+
    ```
 
 2. **Delete the Kubernetes namespace:**
@@ -81,7 +82,6 @@ workflow status            # should show no active workflows
    ```bash
    aws iam delete-role --role-name <custom-role-name>
    ```
-
 
 ## Partial Teardown
 

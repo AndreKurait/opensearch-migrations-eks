@@ -2,8 +2,6 @@
 title: Security Patching
 description: Procedures for updating Migration Assistant container images, node AMIs, and security configurations.
 ---
-
-
 Keep Migration Assistant components up to date with security patches and updates. This guide covers container image updates, OS-level patching, and security best practices.
 
 :::caution
@@ -26,7 +24,6 @@ Migration Assistant includes several container images that should be updated whe
 
 ### Update Procedure
 
-
 1. **Clear Docker cache** to ensure a clean build:
 
    ```bash
@@ -37,36 +34,41 @@ Migration Assistant includes several container images that should be updated whe
 
    ```bash
    # Pull latest source
+
    git pull origin main
 
    # Clean build artifacts
+
    ./gradlew clean
 
    # Rebuild all images
+
    ./gradlew buildDockerImages
    ```
 
 3. **Push to your container registry:**
 
-   
-     #### ECR (EKS)
+#### ECR (EKS)
+
        ```bash
        # Mirror all images to your ECR registry
+
        ./deployment/k8s/charts/aggregates/migrationAssistantWithArgo/scripts/mirrorToEcr.sh
        ```
 
        The script automatically tags images and pushes to the ECR repositories created during deployment.
-     
-     #### Other registries
+
+#### Other registries
+
        ```bash
        # Tag and push each image
+
        docker tag migrations/migration_console:latest <REGISTRY>/migration_console:latest
        docker push <REGISTRY>/migration_console:latest
 
        # Repeat for each component image
+
        ```
-     
-   
 
 4. **Update the Helm release** to pick up new images:
 
@@ -80,25 +82,26 @@ Migration Assistant includes several container images that should be updated whe
    If you're pinning image tags in your `values.yaml` (recommended for production), update the tags before running `helm upgrade`.
    :::
 
-5. **Verify the update:**
+1. **Verify the update:**
 
    ```bash
    # Check that pods restarted with new images
+
    kubectl get pods -n ma -o jsonpath='{range .items[*]}{.metadata.name}{"\t"}{.spec.containers[*].image}{"\n"}{end}'
    ```
 
    Confirm each pod shows the expected image tag.
-
-
 ### Rollback
 
 If an update causes issues, roll back the Helm release:
 
 ```bash
 # List release history
+
 helm history migration-assistant -n ma
 
 # Rollback to previous revision
+
 helm rollback migration-assistant <REVISION_NUMBER> -n ma
 ```
 
@@ -124,10 +127,12 @@ Keep the EKS control plane up to date with supported Kubernetes versions:
 
 ```bash
 # Check current version
+
 aws eks describe-cluster --name migration-eks-cluster-<STAGE>-<REGION> \
   --query 'cluster.version' --output text
 
 # Update (plan carefully—this is a one-way operation)
+
 aws eks update-cluster-version \
   --name migration-eks-cluster-<STAGE>-<REGION> \
   --kubernetes-version <NEW_VERSION>
@@ -141,17 +146,21 @@ EKS cluster version upgrades are irreversible. Test in a non-production environm
 
 ```bash
 # All running image versions
+
 kubectl get pods -n ma \
   -o jsonpath='{range .items[*]}{.metadata.name}{"\t"}{.spec.containers[*].image}{"\n"}{end}'
 
 # Helm chart version
+
 helm list -n ma
 
 # EKS cluster version
+
 aws eks describe-cluster --name migration-eks-cluster-<STAGE>-<REGION> \
   --query 'cluster.version' --output text
 
 # Node AMI versions
+
 aws eks describe-nodegroup \
   --cluster-name migration-eks-cluster-<STAGE>-<REGION> \
   --nodegroup-name <NODEGROUP_NAME> \
@@ -196,13 +205,13 @@ For detailed IAM configuration, see [IAM & Security](/opensearch-migrations-eks/
 
   ```bash
   # Trigger ECR scan for a specific image
+
   aws ecr start-image-scan \
     --repository-name migration_console \
     --image-id imageTag=latest
   ```
 
 ## Next Steps
-
 
   <LinkCard
     title="IAM & Security"

@@ -1,0 +1,40 @@
+name: PR Checks
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint-and-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Markdown lint
+        run: npm run lint:md
+
+      - name: ESLint
+        run: npm run lint:js
+
+      - name: Build
+        run: npm run build
+
+      - name: HTML lint
+        run: npm run lint:html
+
+      - name: Link check
+        run: npm run check:links
+
+      - name: Accessibility check (pa11y)
+        run: |
+          npx serve dist -l 4321 -s &
+          sleep 3
+          npm run check:a11y
+          kill %1

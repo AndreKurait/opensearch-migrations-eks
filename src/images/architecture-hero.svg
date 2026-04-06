@@ -1,110 +1,150 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 460">
   <style>
     text { font-family: Inter, system-ui, sans-serif; }
-    .title { font-size: 15px; font-weight: 600; fill: #1a2744; }
-    .sub { font-size: 11.5px; fill: #5a6a7e; }
-    .group { font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; fill: #3a5070; }
-    .legend-text { font-size: 11px; fill: #5a6a7e; }
-    .flow-label { font-size: 11px; fill: #005eb8; font-weight: 500; }
+    .title { font-size: 15px; font-weight: 600; }
+    .sub { font-size: 11.5px; }
+    .group { font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; }
+    .legend-text { font-size: 11px; }
+    .flow-label { font-size: 11px; font-weight: 500; }
+
+    /* Light mode (default) */
+    .bg { fill: #f8fafc; }
+    .title { fill: #1a2744; }
+    .sub { fill: #5a6a7e; }
+    .group { fill: #3a5070; }
+    .legend-text { fill: #5a6a7e; }
+    .flow-label { fill: #005eb8; }
+    .cluster-bg { fill: #f0f4f8; stroke: #c0d0e0; }
+    .argo-zone { fill: #e8f0fe; stroke: #b0c8e8; }
+    .argo-label { fill: #3a6090; }
+    .box { fill: #fff; stroke: #d0d8e4; }
+    .box-accent { fill: #fff; stroke: #005eb8; }
+    .box-external { fill: #fff; stroke: #a0b0c0; }
+    .box-target { fill: #e8f0fe; stroke: #005eb8; }
+    .arrow-gray { stroke: #8898a8; }
+    .arrow-blue { stroke: #005eb8; }
+    .ah-gray { fill: #8898a8; }
+    .ah-blue { fill: #005eb8; }
+
+    /* Dark mode */
+    @media (prefers-color-scheme: dark) {
+      .bg { fill: #1a1f2e; }
+      .title { fill: #e0e6ed; }
+      .sub { fill: #8899aa; }
+      .group { fill: #7eb8e0; }
+      .legend-text { fill: #8899aa; }
+      .flow-label { fill: #4da6e8; }
+      .cluster-bg { fill: #1e2538; stroke: #3a4a60; }
+      .argo-zone { fill: #1a2a40; stroke: #2a4a6a; }
+      .argo-label { fill: #5a9ad0; }
+      .box { fill: #242b3d; stroke: #3a4a60; }
+      .box-accent { fill: #1a2a40; stroke: #3a8ad0; }
+      .box-external { fill: #242b3d; stroke: #4a5a6a; }
+      .box-target { fill: #1a2a40; stroke: #3a8ad0; }
+      .arrow-gray { stroke: #5a6a7a; }
+      .arrow-blue { stroke: #4da6e8; }
+      .ah-gray { fill: #5a6a7a; }
+      .ah-blue { fill: #4da6e8; }
+    }
   </style>
 
   <!-- Background -->
-  <rect width="800" height="460" rx="12" fill="#f8fafc"/>
+  <rect class="bg" width="800" height="460" rx="12"/>
 
   <!-- Kubernetes Cluster -->
-  <rect x="145" y="16" width="510" height="320" rx="12" fill="#f0f4f8" stroke="#c0d0e0" stroke-width="1.5" stroke-dasharray="8 4"/>
+  <rect class="cluster-bg" x="145" y="16" width="510" height="320" rx="12" stroke-width="1.5" stroke-dasharray="8 4"/>
   <text x="168" y="38" class="group">Kubernetes Cluster · namespace: ma</text>
 
   <!-- Top row -->
-  <rect x="165" y="52" width="140" height="50" rx="8" fill="#fff" stroke="#d0d8e4" stroke-width="1.2"/>
+  <rect class="box" x="165" y="52" width="140" height="50" rx="8" stroke-width="1.2"/>
   <text x="235" y="74" class="title" text-anchor="middle">Migration Console</text>
   <text x="235" y="90" class="sub" text-anchor="middle">StatefulSet</text>
 
-  <rect x="325" y="52" width="140" height="50" rx="8" fill="#fff" stroke="#d0d8e4" stroke-width="1.2"/>
+  <rect class="box" x="325" y="52" width="140" height="50" rx="8" stroke-width="1.2"/>
   <text x="395" y="74" class="title" text-anchor="middle">Argo Workflows</text>
   <text x="395" y="90" class="sub" text-anchor="middle">Server + Controller</text>
 
-  <rect x="485" y="52" width="150" height="50" rx="8" fill="#fff" stroke="#d0d8e4" stroke-width="1.2"/>
+  <rect class="box" x="485" y="52" width="150" height="50" rx="8" stroke-width="1.2"/>
   <text x="560" y="74" class="title" text-anchor="middle">Monitoring</text>
   <text x="560" y="90" class="sub" text-anchor="middle">OTel · Grafana</text>
 
   <!-- Argo-managed zone -->
-  <rect x="165" y="120" width="470" height="196" rx="8" fill="#e8f0fe" stroke="#b0c8e8" stroke-width="1" stroke-dasharray="4 3"/>
-  <text x="185" y="138" class="group" style="fill:#3a6090">Managed by Argo Workflows</text>
+  <rect class="argo-zone" x="165" y="120" width="470" height="196" rx="8" stroke-width="1" stroke-dasharray="4 3"/>
+  <text x="185" y="138" class="group argo-label">Managed by Argo Workflows</text>
 
   <!-- Worker boxes — blue accent -->
-  <rect x="180" y="155" width="130" height="52" rx="8" fill="#fff" stroke="#005eb8" stroke-width="1.5"/>
+  <rect class="box-accent" x="180" y="155" width="130" height="52" rx="8" stroke-width="1.5"/>
   <text x="245" y="178" class="title" text-anchor="middle">RFS Workers</text>
   <text x="245" y="194" class="sub" text-anchor="middle">Jobs · 1 per shard</text>
 
-  <rect x="335" y="155" width="130" height="52" rx="8" fill="#fff" stroke="#005eb8" stroke-width="1.5"/>
+  <rect class="box-accent" x="335" y="155" width="130" height="52" rx="8" stroke-width="1.5"/>
   <text x="400" y="178" class="title" text-anchor="middle">Capture Proxy</text>
   <text x="400" y="194" class="sub" text-anchor="middle">Deployment + Svc</text>
 
-  <rect x="490" y="155" width="130" height="52" rx="8" fill="#fff" stroke="#005eb8" stroke-width="1.5"/>
+  <rect class="box-accent" x="490" y="155" width="130" height="52" rx="8" stroke-width="1.5"/>
   <text x="555" y="178" class="title" text-anchor="middle">Traffic Replayer</text>
   <text x="555" y="194" class="sub" text-anchor="middle">Deployment</text>
 
   <!-- Kafka -->
-  <rect x="335" y="240" width="130" height="48" rx="8" fill="#fff" stroke="#d0d8e4" stroke-width="1.2"/>
+  <rect class="box" x="335" y="240" width="130" height="48" rx="8" stroke-width="1.2"/>
   <text x="400" y="262" class="title" text-anchor="middle">Kafka</text>
   <text x="400" y="278" class="sub" text-anchor="middle">Strimzi / external</text>
 
   <!-- External: Clients -->
-  <rect x="20" y="50" width="100" height="42" rx="8" fill="#fff" stroke="#a0b0c0" stroke-width="1.2"/>
+  <rect class="box-external" x="20" y="50" width="100" height="42" rx="8" stroke-width="1.2"/>
   <text x="70" y="76" class="title" text-anchor="middle">Clients</text>
 
   <!-- External: Source -->
-  <rect x="20" y="158" width="100" height="48" rx="8" fill="#fff" stroke="#a0b0c0" stroke-width="1.2"/>
+  <rect class="box-external" x="20" y="158" width="100" height="48" rx="8" stroke-width="1.2"/>
   <text x="70" y="180" class="title" text-anchor="middle">Source</text>
   <text x="70" y="195" class="sub" text-anchor="middle">ES / OpenSearch</text>
 
   <!-- External: Object Storage -->
-  <rect x="20" y="360" width="100" height="48" rx="8" fill="#fff" stroke="#a0b0c0" stroke-width="1.2"/>
+  <rect class="box-external" x="20" y="360" width="100" height="48" rx="8" stroke-width="1.2"/>
   <text x="70" y="382" class="title" text-anchor="middle">Object Storage</text>
   <text x="70" y="397" class="sub" text-anchor="middle">S3 / GCS / MinIO</text>
 
   <!-- External: Target -->
-  <rect x="680" y="158" width="100" height="48" rx="8" fill="#e8f0fe" stroke="#005eb8" stroke-width="2"/>
+  <rect class="box-target" x="680" y="158" width="100" height="48" rx="8" stroke-width="2"/>
   <text x="730" y="180" class="title" text-anchor="middle">Target</text>
   <text x="730" y="195" class="sub" text-anchor="middle">OpenSearch</text>
 
   <!-- ARROWS -->
   <defs>
-    <marker id="ah-gray" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#8898a8"/></marker>
-    <marker id="ah-blue" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#005eb8"/></marker>
+    <marker id="ah-gray" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" class="ah-gray"/></marker>
+    <marker id="ah-blue" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" class="ah-blue"/></marker>
   </defs>
 
-  <!-- Clients → Proxy (control) -->
-  <path d="M120,71 L260,71 L335,175" fill="none" stroke="#8898a8" stroke-width="1.5" marker-end="url(#ah-gray)"/>
+  <!-- Clients → Proxy -->
+  <path d="M120,71 L260,71 L335,175" fill="none" class="arrow-gray" stroke-width="1.5" marker-end="url(#ah-gray)"/>
 
-  <!-- Proxy → Source (control) -->
-  <path d="M335,188 L120,182" fill="none" stroke="#8898a8" stroke-width="1.5" marker-end="url(#ah-gray)"/>
+  <!-- Proxy → Source -->
+  <path d="M335,188 L120,182" fill="none" class="arrow-gray" stroke-width="1.5" marker-end="url(#ah-gray)"/>
 
-  <!-- Proxy → Kafka (control) -->
-  <path d="M400,207 L400,240" fill="none" stroke="#8898a8" stroke-width="1.5" marker-end="url(#ah-gray)"/>
+  <!-- Proxy → Kafka -->
+  <path d="M400,207 L400,240" fill="none" class="arrow-gray" stroke-width="1.5" marker-end="url(#ah-gray)"/>
 
-  <!-- Kafka → Replayer (control) -->
-  <path d="M465,264 L555,207" fill="none" stroke="#8898a8" stroke-width="1.5" marker-end="url(#ah-gray)"/>
+  <!-- Kafka → Replayer -->
+  <path d="M465,264 L555,207" fill="none" class="arrow-gray" stroke-width="1.5" marker-end="url(#ah-gray)"/>
 
-  <!-- Replayer → Target (control) -->
-  <path d="M620,180 L680,180" fill="none" stroke="#8898a8" stroke-width="1.5" marker-end="url(#ah-gray)"/>
+  <!-- Replayer → Target -->
+  <path d="M620,180 L680,180" fill="none" class="arrow-gray" stroke-width="1.5" marker-end="url(#ah-gray)"/>
 
-  <!-- Source → Object Storage (data: snapshot) -->
-  <path d="M70,206 L70,360" fill="none" stroke="#005eb8" stroke-width="2" stroke-dasharray="6 3" marker-end="url(#ah-blue)"/>
+  <!-- Source → Object Storage -->
+  <path d="M70,206 L70,360" fill="none" class="arrow-blue" stroke-width="2" stroke-dasharray="6 3" marker-end="url(#ah-blue)"/>
   <text x="80" y="290" class="flow-label" transform="rotate(-90 80 290)">snapshot</text>
 
-  <!-- Object Storage → RFS (data: Lucene files) -->
-  <path d="M120,384 L245,384 L245,207" fill="none" stroke="#005eb8" stroke-width="2" stroke-dasharray="6 3" marker-end="url(#ah-blue)"/>
+  <!-- Object Storage → RFS -->
+  <path d="M120,384 L245,384 L245,207" fill="none" class="arrow-blue" stroke-width="2" stroke-dasharray="6 3" marker-end="url(#ah-blue)"/>
   <text x="155" y="376" class="flow-label">Lucene files</text>
 
-  <!-- RFS → Target (data: bulk index) -->
-  <path d="M310,175 L680,175" fill="none" stroke="#005eb8" stroke-width="2" stroke-dasharray="6 3" marker-end="url(#ah-blue)"/>
+  <!-- RFS → Target -->
+  <path d="M310,175 L680,175" fill="none" class="arrow-blue" stroke-width="2" stroke-dasharray="6 3" marker-end="url(#ah-blue)"/>
   <text x="480" y="168" class="flow-label">bulk index</text>
 
   <!-- Legend -->
-  <line x1="680" y1="400" x2="715" y2="400" stroke="#005eb8" stroke-width="2" stroke-dasharray="6 3"/>
+  <line class="arrow-blue" x1="680" y1="400" x2="715" y2="400" stroke-width="2" stroke-dasharray="6 3"/>
   <text x="722" y="404" class="legend-text">Data flow</text>
-  <line x1="680" y1="420" x2="715" y2="420" stroke="#8898a8" stroke-width="1.5"/>
+  <line class="arrow-gray" x1="680" y1="420" x2="715" y2="420" stroke-width="1.5"/>
   <text x="722" y="424" class="legend-text">Control flow</text>
 </svg>

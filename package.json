@@ -6,7 +6,15 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "lint:md": "markdownlint-cli2",
+    "lint:js": "eslint astro.config.mjs",
+    "lint:html": "htmlhint dist/**/*.html --config .htmlhintrc",
+    "check:links": "linkinator dist --recurse --skip \"^(?!file://)\" --format csv",
+    "check:a11y": "node scripts/a11y-check.mjs",
+    "lint": "npm run lint:md && npm run lint:js",
+    "check": "npm run build && npm run lint:html && npm run check:links",
+    "test": "playwright test"
   },
   "dependencies": {
     "@astrojs/mdx": "^5.0.3",
@@ -19,6 +27,13 @@
   },
   "devDependencies": {
     "@aws-sdk/client-bedrock-runtime": "^3.1024.0",
+    "@eslint/js": "^10.0.1",
+    "@playwright/test": "^1.59.1",
+    "eslint": "^10.2.0",
+    "htmlhint": "^1.9.2",
+    "linkinator": "^7.6.1",
+    "markdownlint-cli2": "^0.22.0",
+    "pa11y-ci": "^4.1.0",
     "playwright": "^1.59.1"
   }
 }

@@ -45,6 +45,7 @@ See [Workflow CLI Getting Started](/opensearch-migrations-eks/workflow-cli/getti
 ## Backfill Data Flow
 
 ```
+
 Source Cluster                                          Target Cluster
      │                                                       ▲
      │ (one-time)                                            │ (bulk index)
@@ -58,6 +59,7 @@ RFS workers read raw Lucene segment files directly from the snapshot — the sou
 ## Capture and Replay Data Flow
 
 ```
+
 Clients ──► Capture Proxy ──► Source Cluster
                  │
                  │ (record)

@@ -2,14 +2,11 @@
 title: Migrate Metadata
 description: Migrate index settings, mappings, templates, and aliases with automatic field type transformations.
 ---
-
-
 Metadata migration transfers index settings, mappings, templates, component templates,
 and aliases from the source to the target cluster. Incompatible field types are
 transformed automatically (see [Automatic Field Type Transformations](#automatic-field-type-transformations)).
 
 ## Running Metadata Migration
-
 
 1. **Evaluate** — preview what will be migrated and flag any issues:
 
@@ -31,7 +28,6 @@ transformed automatically (see [Automatic Field Type Transformations](#automatic
    ```bash
    console clusters cat-indices --target
    ```
-
 
 :::tip
 You can re-run `metadata migrate` safely. It is idempotent — indices that already
@@ -99,8 +95,6 @@ No additional configuration is required.
 
 For cases not handled by the built-in converters you can supply a custom
 [Jolt transform](https://github.com/bazaarvoice/jolt) spec or a JavaScript script:
-
-
 #### Jolt spec
 
 ```json
@@ -122,7 +116,6 @@ For cases not handled by the built-in converters you can supply a custom
 }
 ```
 
-
 #### JavaScript script
 
 ```json
@@ -138,10 +131,6 @@ For cases not handled by the built-in converters you can supply a custom
 ```
 
 Place the script file in the `/shared/` volume mounted into the Migration Console pod.
-
-
-
-
 ## Compatibility Mode
 
 If the target OpenSearch cluster has `compatibility.override_main_response_version: true`,

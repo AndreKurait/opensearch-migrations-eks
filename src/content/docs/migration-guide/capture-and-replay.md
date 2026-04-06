@@ -2,8 +2,6 @@
 title: Capture & Replay
 description: Capture live traffic and replay it against the target cluster for zero-downtime migration validation.
 ---
-
-
 Capture and Replay records every request that hits the source cluster and replays it
 against the target — giving you a side-by-side comparison before you cut over
 production traffic.
@@ -29,7 +27,6 @@ Clients → Capture Proxy Fleet → Source Cluster
 
 ## Starting Capture
 
-
 1. **Deploy the proxy fleet:**
 
    ```bash
@@ -49,15 +46,12 @@ Clients → Capture Proxy Fleet → Source Cluster
    ```
 
    You should see a non-zero message count on the `logging-traffic-topic`.
-
-
 :::tip
 Start capture **before** backfill completes. This ensures that any writes that arrive
 after the snapshot was taken are also delivered to the target.
 :::
 
 ## Replaying Traffic
-
 
 1. **Start the replayer:**
 
@@ -83,8 +77,6 @@ after the snapshot was taken are also delivered to the target.
 
 3. **Review tuple logs** (see [Tuple Logs](#tuple-logs)) to compare source and target
    responses.
-
-
 ### Time Scaling
 
 The replayer supports a speedup factor to replay traffic faster than real-time.
@@ -93,6 +85,7 @@ This is useful for catching up after a long capture period:
 ```yaml title="replayer-config.yaml"
 trafficReplayer:
   speedupFactor: 2.0    # Replay at 2x speed
+
 ```
 
 :::caution
@@ -171,7 +164,9 @@ transform to inject deterministic IDs during replay.
 
 ```bash
 console replay stop     # Stop the replayer
+
 console capture stop    # Stop the proxy fleet (after traffic is routed away)
+
 ```
 
 :::note

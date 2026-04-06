@@ -1,0 +1,4 @@
+{
+  "globs": ["src/content/docs/**/*.md"],
+  "ignores": ["node_modules"]
+}

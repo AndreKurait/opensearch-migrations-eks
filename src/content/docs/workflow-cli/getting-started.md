@@ -2,8 +2,6 @@
 title: Workflow CLI Getting Started
 description: Step-by-step tutorial for configuring and running your first migration workflow.
 ---
-
-
 This tutorial walks through configuring and running a backfill migration workflow using the Workflow CLI.
 
 ## Prerequisites
@@ -13,7 +11,6 @@ This tutorial walks through configuring and running a backfill migration workflo
 - Source and target clusters accessible
 
 ## Tutorial
-
 
 1. **Access the Migration Console**
 
@@ -78,9 +75,11 @@ This tutorial walks through configuring and running a backfill migration workflo
 
    ```bash
    # Check overall status
+
    workflow status
 
    # Interactive management TUI
+
    workflow manage
    ```
 
@@ -103,7 +102,6 @@ This tutorial walks through configuring and running a backfill migration workflo
    workflow status
    console clusters cat-indices --target
    ```
-
 
 ## Next Steps
 

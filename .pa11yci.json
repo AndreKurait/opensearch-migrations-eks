@@ -1,0 +1,20 @@
+{
+  "defaults": {
+    "standard": "WCAG2AA",
+    "timeout": 10000,
+    "wait": 1000,
+    "chromeLaunchConfig": {
+      "args": ["--no-sandbox"]
+    }
+  },
+  "urls": [
+    "http://localhost:4321/opensearch-migrations-eks/",
+    "http://localhost:4321/opensearch-migrations-eks/overview/",
+    "http://localhost:4321/opensearch-migrations-eks/overview/what-is-a-migration/",
+    "http://localhost:4321/opensearch-migrations-eks/deployment/deploying-to-eks/",
+    "http://localhost:4321/opensearch-migrations-eks/migration-guide/assessment/",
+    "http://localhost:4321/opensearch-migrations-eks/migration-guide/backfill/",
+    "http://localhost:4321/opensearch-migrations-eks/workflow-cli/getting-started/",
+    "http://localhost:4321/opensearch-migrations-eks/reference/troubleshooting/"
+  ]
+}

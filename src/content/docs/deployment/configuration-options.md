@@ -2,8 +2,6 @@
 title: Configuration Options
 description: Helm values, workflow YAML, and tuning guidance for Migration Assistant deployment.
 ---
-
-
 Migration Assistant is configured through Helm values (cluster endpoints, authentication, infrastructure) and workflow YAML configuration (migration behavior, index scope, worker settings).
 
 :::caution
@@ -19,6 +17,7 @@ sourceCluster:
   endpoint: https://source-cluster:9200
   auth:
     type: basic       # basic, mtls, sigv4, or none
+
     secretName: source-auth
   version: ES_7_10    # Source version identifier
 
@@ -57,27 +56,30 @@ For Elasticsearch 7.x, use `ES_7_10` regardless of the exact minor version. Migr
 | `sigv4` | AWS Signature V4 | `region`, `service` |
 
 See [Deploying to Kubernetes](/opensearch-migrations-eks/deployment/deploying-to-kubernetes/#3-configure-authentication-secrets) for examples of creating each secret type. For EKS deployments using SigV4, see [IAM & Security](/opensearch-migrations-eks/deployment/iam-security/).
-
-
 #### Basic Auth
+
 ```yaml
 sourceCluster:
   auth:
     type: basic
     secretName: source-basic-auth
 # Secret must contain `username` and `password` keys
+
 ```
 
 #### Mutual TLS
+
 ```yaml
 sourceCluster:
   auth:
     type: mtls
     secretName: source-mtls
 # Secret must contain `tls.crt`, `tls.key`, and `ca.crt` keys
+
 ```
 
 #### SigV4 (AWS)
+
 ```yaml
 targetCluster:
   auth:
@@ -85,9 +87,8 @@ targetCluster:
     secretName: target-sigv4
 # Secret must contain `region` and `service` keys
 # Pod service account must have appropriate IAM role annotation
+
 ```
-
-
 
 ### Snapshot Configuration
 
@@ -114,8 +115,11 @@ snapshot:
 ```yaml
 rfs:
   workers: 4              # Number of parallel workers
+
   maxShardSizeGb: 80      # Max shard size to process
+
   indexAllowlist:          # Optional: only migrate specific indexes
+
     - my-index-*
     - other-index
 ```
@@ -141,7 +145,9 @@ captureProxy:
 trafficReplayer:
   replicas: 1
   speedupFactor: 1.0      # Replay speed multiplier
+
   joltTransforms: []      # Optional request transforms
+
 ```
 
 **Tuning guidance:**
@@ -160,32 +166,31 @@ Capture and Replay requires that clients include explicit document IDs in index 
 ### Kafka Configuration (Capture and Replay)
 
 When using Capture and Replay, Kafka stores the captured traffic. The Helm chart can deploy Kafka via the bundled Strimzi operator, or you can point to an external Kafka cluster:
-
-
 #### Bundled (Strimzi)
+
 ```yaml
 kafka:
   enabled: true           # Deploy Kafka via Strimzi
+
   replicas: 3
   storage:
     size: 100Gi           # Per-broker storage
+
     storageClass: gp3     # Must support ReadWriteOnce
+
 ```
 
 #### External Kafka
+
 ```yaml
 kafka:
   enabled: false
   externalEndpoint: my-kafka-cluster:9092
 ```
 
-
-
 ## Workflow YAML Configuration
 
 The workflow YAML file controls migration behavior at runtime. It is separate from the Helm values and is edited on the Migration Console after deployment.
-
-
 1. **Generate a sample configuration** for your installed version:
 
    ```bash
@@ -204,33 +209,39 @@ The workflow YAML file controls migration behavior at runtime. It is separate fr
    workflow configure show
    ```
 
-
 The workflow configuration includes settings for each migration phase. Here is an annotated example of the structure (your installed version may differ):
 
 ```yaml
 # Snapshot phase
+
 snapshot:
   otel_endpoint: ""       # Optional: OpenTelemetry collector endpoint
 
 # Metadata migration phase
+
 metadata:
   otel_endpoint: ""
   config:
     index_allowlist:       # Same glob syntax as Helm indexAllowlist
+
       - "my-index-*"
     index_denylist:        # Exclude specific indexes from metadata migration
+
       - ".kibana*"
       - ".security*"
       - ".tasks"
 
 # Backfill phase
+
 backfill:
   otel_endpoint: ""
   reindex_from_snapshot:
     local:
       workers: 4           # Overrides Helm rfs.workers at runtime
+
       documents_per_bulk_request: 1000
       max_connections: 20   # Max concurrent connections to target per worker
+
 ```
 
 :::note

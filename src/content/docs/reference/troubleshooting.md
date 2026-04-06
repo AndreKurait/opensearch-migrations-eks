@@ -71,6 +71,7 @@ kubectl get pods -n ma
 
 ```bash
 # Check Argo workflow logs
+
 kubectl logs -n ma -l workflows.argoproj.io/workflow=<WORKFLOW_NAME>
 ```
 
@@ -121,19 +122,23 @@ kubectl get nodes -o wide
 
 ```bash
 # Cluster status
+
 kubectl get pods -n ma
 kubectl get events -n ma --sort-by='.lastTimestamp'
 
 # Argo workflows
+
 kubectl get workflows -n ma
 kubectl get pods -n ma -l workflows.argoproj.io/workflow
 
 # Logs
+
 kubectl logs migration-console-0 -n ma
 kubectl logs -l app=capture-proxy -n ma
 kubectl logs -l app=traffic-replayer -n ma
 
 # Resource usage
+
 kubectl top pods -n ma
 kubectl top nodes
 ```

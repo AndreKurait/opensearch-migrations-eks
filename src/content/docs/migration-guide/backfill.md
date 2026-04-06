@@ -11,8 +11,11 @@ Backfill migrates existing documents from the source cluster to the target using
 
 ```bash
 workflow configure sample --load   # Load sample config
+
 workflow configure edit            # Edit backfill settings
+
 workflow submit                    # Submit to Argo Workflows
+
 ```
 
 ### Using Console Commands
@@ -35,10 +38,13 @@ RFS workers read from S3, not the source cluster. Scaling up workers has **zero 
 
 ```yaml
 # In workflow configuration
+
 rfs:
   workers: 8              # Increase parallel workers
+
   indexAllowlist:
     - my-large-index-*    # Optional: target specific indices
+
 ```
 
 :::note
@@ -66,9 +72,11 @@ After backfill completes, validate document counts:
 
 ```bash
 # Check source document count
+
 console clusters cat-indices --source
 
 # Check target document count
+
 console clusters cat-indices --target
 ```
 

@@ -85,6 +85,7 @@ Capture and Replay requires that clients provide explicit document IDs for index
 Best when you can tolerate a brief write pause or replay writes from an external queue.
 
 ```
+
 Snapshot source → Migrate metadata → Backfill documents → Verify → Switch traffic
 ```
 
@@ -93,6 +94,7 @@ Snapshot source → Migrate metadata → Backfill documents → Verify → Switc
 Best when data is small enough that live replay alone can synchronize the target, or when you only need to validate target behavior.
 
 ```
+
 Start capturing → Migrate metadata → Replay traffic → Verify → Switch traffic
 ```
 
@@ -101,6 +103,7 @@ Start capturing → Migrate metadata → Replay traffic → Verify → Switch tr
 The most comprehensive approach. Capture begins first so no writes are lost.
 
 ```
+
 Start capturing → Snapshot source → Migrate metadata → Backfill → Replay catches up → Verify → Switch traffic
 ```
 
@@ -124,6 +127,7 @@ Use index allowlists to migrate a small representative set of indexes before doi
 ### The Iterative Cycle
 
 ```
+
 Configure → Submit → Monitor → Validate → Adjust → Repeat
 ```
 

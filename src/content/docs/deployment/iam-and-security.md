@@ -2,8 +2,6 @@
 title: IAM & Security
 description: IAM roles, security groups, and authentication configuration for EKS deployments.
 ---
-
-
 :::note
 This page covers AWS-specific IAM and security configuration for EKS deployments. For generic Kubernetes deployments, authentication is handled through Kubernetes secrets — see [Deploying to Kubernetes](/opensearch-migrations-eks/deployment/deploying-to-kubernetes/#3-configure-authentication-secrets).
 :::
@@ -94,8 +92,6 @@ Scope the `OpenSearchAccess` statement to specific domain ARNs in production rat
 The bootstrap script configures [IAM Roles for Service Accounts (IRSA)](https://docs.aws.amazon.com/eks/latest/userguide/iam-roles-for-service-accounts.html) so that pods authenticate to AWS using scoped IAM roles instead of node-level credentials. This is the EKS best practice for least-privilege access.
 
 The setup involves:
-
-
 1. **OIDC provider** — The bootstrap script creates an IAM OIDC identity provider for the EKS cluster.
 
 2. **IAM role trust policy** — Each role includes a trust policy that allows the Kubernetes service account to assume it:
@@ -124,10 +120,10 @@ The setup involves:
 
    ```bash
    # Verify the IRSA annotation
+
    kubectl get serviceaccount migration-console -n ma \
      -o jsonpath='{.metadata.annotations.eks\.amazonaws\.com/role-arn}'
    ```
-
 
 :::note
 If you deployed with the bootstrap script, IRSA is configured automatically. You only need to set this up manually if you created the EKS cluster independently.
@@ -149,6 +145,7 @@ The EKS cluster security group must allow the following network access:
 
 ```bash
 # Look up the cluster security group
+
 aws eks describe-cluster --name migration-eks-cluster-<STAGE>-<REGION> \
   --query 'cluster.resourcesVpcConfig.clusterSecurityGroupId' --output text
 ```
@@ -181,6 +178,7 @@ If using fine-grained access control, also map the Migration Console role to an 
 
 ```bash
 # On the target OpenSearch cluster, map the IAM role to the all_access backend role
+
 curl -XPUT "https://<TARGET_ENDPOINT>/_plugins/_security/api/rolesmapping/all_access" \
   -H 'Content-Type: application/json' \
   -u admin:<PASSWORD> \
@@ -196,8 +194,6 @@ curl -XPUT "https://<TARGET_ENDPOINT>/_plugins/_security/api/rolesmapping/all_ac
 Migration Assistant supports four authentication methods for connecting to source and target clusters. See [Configuration Options](/opensearch-migrations-eks/deployment/configuration-options/#authentication-types) for the full configuration reference.
 
 ### Creating Authentication Secrets
-
-
 #### Basic Auth
 
 ```bash
@@ -210,7 +206,6 @@ kubectl create secret generic target-auth -n ma \
   --from-literal=password='<PASSWORD>'
 ```
 
-
 #### Mutual TLS
 
 ```bash
@@ -219,7 +214,6 @@ kubectl create secret generic source-auth -n ma \
   --from-file=tls.key=/path/to/client.key \
   --from-file=ca.crt=/path/to/ca.crt
 ```
-
 
 #### SigV4
 
@@ -230,6 +224,7 @@ sourceCluster:
   auth:
     type: sigv4
     # No secretName required — IRSA provides credentials
+
 targetCluster:
   auth:
     type: sigv4
@@ -242,7 +237,6 @@ kubectl get serviceaccount migration-console -n ma \
   -o jsonpath='{.metadata.annotations.eks\.amazonaws\.com/role-arn}'
 ```
 
-
 #### No Auth
 
 ```yaml
@@ -254,15 +248,9 @@ sourceCluster:
 :::caution
 Only use `none` for development or testing. Production clusters should always require authentication.
 :::
-
-
-
-
 ### SigV4 Authentication Flow (EKS)
 
 When using SigV4 authentication with Amazon OpenSearch Service:
-
-
 1. The Migration Console pod's service account is annotated with the Migration Console IAM Role ARN (configured by the bootstrap script or manually via IRSA).
 
 2. The IAM role must be mapped to an OpenSearch backend role in the target domain's security configuration (see [OpenSearch Service Configuration](#opensearch-service-configuration) above).

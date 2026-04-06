@@ -2,8 +2,6 @@
 title: Deploying to Kubernetes
 description: Deploy Migration Assistant to any Kubernetes cluster using Helm.
 ---
-
-
 This guide covers deploying Migration Assistant to a generic Kubernetes cluster (non-EKS). For Amazon EKS, see [Deploying to EKS](/opensearch-migrations-eks/deployment/deploying-to-eks/).
 
 ## Prerequisites
@@ -19,7 +17,6 @@ The Helm chart includes Argo Workflows CRDs and controller. If your cluster alre
 :::
 
 ## Installation
-
 
 1. **Add the Helm Repository**
 
@@ -40,6 +37,7 @@ The Helm chart includes Argo Workflows CRDs and controller. If your cluster alre
 
    ```bash
    # Basic auth
+
    kubectl create secret generic source-auth -n ma \
      --from-literal=username=admin \
      --from-literal=password=<PASSWORD>
@@ -51,6 +49,7 @@ The Helm chart includes Argo Workflows CRDs and controller. If your cluster alre
 
    ```bash
    # mTLS
+
    kubectl create secret generic source-tls -n ma \
      --from-file=tls.crt=client.crt \
      --from-file=tls.key=client.key \
@@ -59,6 +58,7 @@ The Helm chart includes Argo Workflows CRDs and controller. If your cluster alre
 
    ```bash
    # SigV4 (AWS)
+
    kubectl create secret generic source-sigv4 -n ma \
      --from-literal=region=us-east-1 \
      --from-literal=service=es
@@ -85,6 +85,7 @@ The Helm chart includes Argo Workflows CRDs and controller. If your cluster alre
    Expected output:
 
    ```
+
    NAME                                                  READY   STATUS    RESTARTS   AGE
    argo-workflows-server-xxxxxxxxx-xxxxx                 1/1     Running   0          5m
    argo-workflows-workflow-controller-xxxxxxxxx-xxxxx     1/1     Running   0          5m
@@ -97,7 +98,6 @@ The Helm chart includes Argo Workflows CRDs and controller. If your cluster alre
    kubectl exec -it migration-console-0 -n ma -- bash
    ```
 
-
 ## Helm Values
 
 Key values to configure in your `values.yaml`:
@@ -107,6 +107,7 @@ sourceCluster:
   endpoint: https://source-cluster:9200
   auth:
     type: basic          # basic, mtls, sigv4, or none
+
     secretName: source-auth
   version: ES_7_10       # See Migration Paths for version strings
 
@@ -121,7 +122,9 @@ s3:
   bucket: my-migration-bucket
   region: us-east-1
   # For non-AWS S3-compatible storage (e.g., MinIO):
+
   # endpoint: https://minio.example.com:9000
+
 ```
 
 See [Configuration Options](/opensearch-migrations-eks/deployment/configuration-options/) for the full list of Helm values including RFS worker count, capture proxy replicas, and Kafka configuration.
@@ -138,6 +141,7 @@ The Migration Console is deployed as a StatefulSet and requires a PersistentVolu
 migrationConsole:
   storage:
     storageClass: standard    # Your cluster's StorageClass name
+
     size: 1Gi
 ```
 
@@ -173,9 +177,11 @@ If pods are stuck in `Pending`, check for resource or storage issues:
 
 ```bash
 # Check pod events
+
 kubectl describe pod <pod-name> -n ma
 
 # Check PVC status (Migration Console requires a PVC)
+
 kubectl get pvc -n ma
 ```
 
