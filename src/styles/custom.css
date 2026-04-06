@@ -401,13 +401,13 @@
    10. HERO (splash page) — MD3 display typography
    ============================================ */
 @media (min-width: 72rem) {
-	[data-page-type='splash'] .hero {
+	:has(> .hero) .hero {
 		max-width: 64rem;
 		margin-inline: auto;
 	}
 }
 
-[data-page-type='splash'] .hero .tagline {
+:has(> .hero) .hero .tagline {
 	max-width: 42ch;
 	font-size: var(--md3-title-large);
 	line-height: 1.5;
@@ -415,7 +415,7 @@
 }
 
 /* Hero heading — uses display-large */
-[data-page-type='splash'] .hero h1 {
+:has(> .hero) .hero h1 {
 	font-size: clamp(2.5rem, 5vw, var(--md3-display-large));
 	font-weight: 700;
 	letter-spacing: -0.02em;
@@ -427,10 +427,10 @@
 }
 
 /* Hero actions — MD3 buttons */
-[data-page-type='splash'] .hero .action {
+:has(> .hero) .hero .action {
 	border-radius: var(--md3-shape-full);
 }
-[data-page-type='splash'] .hero .action.primary {
+:has(> .hero) .hero .action.primary {
 	background: var(--os-primary);
 	border-color: var(--os-primary);
 	color: #fff;
@@ -442,7 +442,7 @@
 	position: relative;
 	overflow: hidden;
 }
-[data-page-type='splash'] .hero .action.primary::after {
+:has(> .hero) .hero .action.primary::after {
 	content: '';
 	position: absolute;
 	inset: 0;
@@ -450,23 +450,23 @@
 	transition: background var(--md3-motion-duration-short4) var(--md3-motion-easing-standard);
 	border-radius: inherit;
 }
-[data-page-type='splash'] .hero .action.primary:hover {
+:has(> .hero) .hero .action.primary:hover {
 	box-shadow: var(--md3-elevation-2);
 	transform: translateY(-1px);
 }
-[data-page-type='splash'] .hero .action.primary:hover::after {
+:has(> .hero) .hero .action.primary:hover::after {
 	background: rgba(255, 255, 255, var(--md3-state-hover));
 }
-[data-page-type='splash'] .hero .action.primary:active {
+:has(> .hero) .hero .action.primary:active {
 	box-shadow: var(--md3-elevation-0);
 	transform: translateY(0);
 }
-[data-page-type='splash'] .hero .action.primary:active::after {
+:has(> .hero) .hero .action.primary:active::after {
 	background: rgba(255, 255, 255, var(--md3-state-pressed));
 }
 
 /* Secondary button — MD3 tonal / outlined */
-[data-page-type='splash'] .hero .action:not(.primary):not(.minimal) {
+:has(> .hero) .hero .action:not(.primary):not(.minimal) {
 	border-color: var(--sl-color-accent);
 	color: var(--sl-color-accent-high);
 	background: transparent;
@@ -475,16 +475,16 @@
 		border-color var(--md3-motion-duration-short4) var(--md3-motion-easing-standard),
 		color var(--md3-motion-duration-short4) var(--md3-motion-easing-standard);
 }
-[data-page-type='splash'] .hero .action:not(.primary):not(.minimal):hover {
+:has(> .hero) .hero .action:not(.primary):not(.minimal):hover {
 	background: rgba(var(--os-primary-rgb), var(--md3-state-hover));
 }
 
 /* Minimal (text) button */
-[data-page-type='splash'] .hero .action.minimal {
+:has(> .hero) .hero .action.minimal {
 	color: var(--sl-color-accent-high);
 	transition: color var(--md3-motion-duration-short4) var(--md3-motion-easing-standard);
 }
-[data-page-type='splash'] .hero .action.minimal:hover {
+:has(> .hero) .hero .action.minimal:hover {
 	color: var(--sl-color-accent);
 }
 
@@ -492,14 +492,14 @@
 /* ============================================
    11. LANDING PAGE SECTIONS
    ============================================ */
-[data-page-type='splash'] .sl-markdown-content > h2 {
+:has(> .hero) .sl-markdown-content > h2 {
 	margin-block-start: 3.5rem;
 	padding-block-end: 0.5rem;
 	border-bottom: none;
 	position: relative;
 }
 
-[data-page-type='splash'] .sl-markdown-content > h2::after {
+:has(> .hero) .sl-markdown-content > h2::after {
 	content: '';
 	position: absolute;
 	bottom: 0;
@@ -510,7 +510,7 @@
 	border-radius: var(--md3-shape-full);
 }
 
-[data-page-type='splash'] .sl-markdown-content > h2:first-child {
+:has(> .hero) .sl-markdown-content > h2:first-child {
 	margin-block-start: 1rem;
 }
 
@@ -778,7 +778,7 @@ starlight-toc a[aria-current='true'] {
 		font-size: 1.25rem;
 	}
 
-	[data-page-type='splash'] .hero h1 {
+	:has(> .hero) .hero h1 {
 		font-size: 2.25rem;
 	}
 
@@ -1263,16 +1263,16 @@ html {
    ========================================================================== */
 
 /* Fix dead zone between hero and content — tighten splash page spacing */
-[data-page-type='splash'] .hero {
+:has(> .hero) .hero {
 	padding-bottom: 1rem;
 }
-[data-page-type='splash'] .sl-markdown-content > hr:first-child,
-[data-page-type='splash'] .sl-markdown-content > hr {
+:has(> .hero) .sl-markdown-content > hr:first-child,
+:has(> .hero) .sl-markdown-content > hr {
 	display: none;
 }
 
 /* Hero architecture image — constrain and polish */
-[data-page-type='splash'] .hero img {
+:has(> .hero) .hero img {
 	border-radius: 12px;
 	box-shadow: 0 4px 24px rgba(0, 53, 81, 0.3);
 	max-width: 420px;
@@ -1293,6 +1293,6 @@ nav.sidebar {
 }
 
 /* Light mode hero — subtle gradient background */
-:root[data-theme='light'] [data-page-type='splash'] .hero {
+:root[data-theme='light'] :has(> .hero) .hero {
 	background: linear-gradient(180deg, rgba(0, 94, 184, 0.03) 0%, transparent 100%);
 }

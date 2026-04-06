@@ -22,8 +22,6 @@ hero:
 
 import { Card, CardGrid, LinkCard, Aside, Steps, Tabs, TabItem, Badge } from '@astrojs/starlight/components';
 
----
-
 ## Your Elasticsearch migration doesn't have to be terrifying.
 
 Every team puts it off. The version gap is too wide. The cluster is in production. Nobody wants to be the one who takes search down for a week. And the official upgrade path says you need to hop through three intermediate versions just to get current.
@@ -35,8 +33,6 @@ It reads raw Lucene segment files directly from a snapshot in S3. Your source cl
 <Aside type="tip" title="The key insight">
   Traditional migrations reindex through the source cluster — hammering it with read load during the most critical moment. Migration Assistant bypasses this entirely. It reads the snapshot files at the storage layer, transforms them, and writes directly to your new OpenSearch cluster. **Zero source impact. Zero production risk.**
 </Aside>
-
----
 
 ## How Big Is Your Migration?
 
@@ -90,8 +86,6 @@ Pick the scenario that matches your cluster. These are real-world estimates usin
   </TabItem>
 </Tabs>
 
----
-
 ## What Scares You Most?
 
 We built Migration Assistant to address the exact fears that keep teams stuck on aging Elasticsearch clusters.
@@ -110,8 +104,6 @@ We built Migration Assistant to address the exact fears that keep teams stuck on
     Every shard is an independent unit of work. If a shard fails, it retries automatically. If the whole workflow fails, resume from the last checkpoint — it won't re-migrate shards that already succeeded. Argo Workflows tracks every step with approval gates before destructive actions.
   </Card>
 </CardGrid>
-
----
 
 ## What Happens If Something Goes Wrong?
 
@@ -133,8 +125,6 @@ This is the question everyone asks first. Here's the honest answer:
   If you're using the **zero-downtime path**, the traffic capture proxy sits in the request path. Test it in staging first to validate latency overhead. The proxy adds single-digit millisecond latency in typical deployments, but your SLAs are yours to validate.
 </Aside>
 
----
-
 ## Why Now?
 
 <CardGrid>
@@ -149,8 +139,6 @@ This is the question everyone asks first. Here's the honest answer:
   </Card>
 </CardGrid>
 
----
-
 ## The Migration in 60 Seconds
 
 <Steps>
@@ -162,8 +150,6 @@ This is the question everyone asks first. Here's the honest answer:
 
 4. **Validate & Switch** (~15 min) — Compare document counts and query results. When you're satisfied, redirect traffic to the target.
 </Steps>
-
----
 
 ## Which Path Is Right for You?
 
@@ -198,8 +184,6 @@ This is the question everyone asks first. Here's the honest answer:
   </TabItem>
 </Tabs>
 
----
-
 ## Performance at Scale
 
 Migration speed scales linearly with workers. Each worker independently processes one shard from the S3 snapshot.
@@ -215,8 +199,6 @@ Migration speed scales linearly with workers. Each worker independently processe
   Based on **~590K docs/min per worker** with average document sizes. Your throughput depends on document size, mapping complexity, and target cluster write capacity. Failed shards retry automatically — no manual intervention needed.
 </Aside>
 
----
-
 ## Version Compatibility
 
 Migration Assistant handles the version transformation for you. No intermediate upgrades required.
@@ -229,8 +211,6 @@ Migration Assistant handles the version transformation for you. No intermediate 
 | **OpenSearch 2.x** | — | ✓ | ✓ |
 
 Runs on: **Amazon EKS** · GKE · AKS · OpenShift · any Kubernetes 1.24+
-
----
 
 ## What Gets Migrated
 
@@ -259,8 +239,6 @@ Runs on: **Amazon EKS** · GKE · AKS · OpenShift · any Kubernetes 1.24+
   </TabItem>
 </Tabs>
 
----
-
 ## Prerequisites
 
 :::note[Before you deploy]
@@ -273,8 +251,6 @@ Runs on: **Amazon EKS** · GKE · AKS · OpenShift · any Kubernetes 1.24+
 <Aside type="tip" title="Already deployed?">
   Reconnect to your Migration Console: `kubectl exec -it migration-console-0 -n ma -- bash` then run `workflow configure sample` to see the config schema for your version.
 </Aside>
-
----
 
 ## Ready?
 
