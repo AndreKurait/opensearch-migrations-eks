@@ -161,6 +161,10 @@
   <text x="280" y="252" class="title" text-anchor="middle">Object Storage</text>
   <text x="280" y="268" class="sub" text-anchor="middle">S3 / GCS / MinIO</text>
 
+  <!-- Argo zone for RFS -->
+  <rect class="argo-zone" x="408" y="218" width="174" height="76" rx="10" stroke-width="1" stroke-dasharray="4 3"/>
+  <text x="420" y="234" class="group argo-label" style="font-size:9px">Argo</text>
+
   <!-- RFS Workers -->
   <rect class="box-accent" x="420" y="230" width="150" height="52" rx="8" stroke-width="1.5"/>
   <text x="495" y="253" class="title" text-anchor="middle">RFS Workers</text>
