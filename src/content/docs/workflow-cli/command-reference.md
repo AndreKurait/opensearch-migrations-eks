@@ -199,8 +199,6 @@ Topic: logging-traffic-topic
   Consumer Lag:   12,450
 ```
 
----
-
 ## Workflow Commands
 
 ### Configuration
@@ -262,8 +260,6 @@ Steps:
 :::caution
 `workflow cancel` stops all running steps immediately. In-progress backfill workers will terminate. The workflow can be re-submitted and will resume where it left off due to idempotent step design.
 :::
-
----
 
 ## Quick Reference
 

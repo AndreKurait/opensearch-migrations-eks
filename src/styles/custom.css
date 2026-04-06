@@ -9,72 +9,41 @@
 	--sl-font: 'Inter', 'Open Sans', system-ui, -apple-system, sans-serif;
 	--sl-font-mono: 'Fira Code', ui-monospace, monospace;
 
-	/* MD3 Type Scale */
+	/* MD3 Type Scale (only vars still referenced) */
 	--md3-display-large: 3.5rem;
-	--md3-display-medium: 2.75rem;
-	--md3-headline-large: 2rem;
-	--md3-headline-medium: 1.75rem;
 	--md3-title-large: 1.375rem;
-	--md3-title-medium: 1rem;
-	--md3-body-large: 1.125rem;
 	--md3-body-medium: 0.875rem;
 	--md3-label-large: 0.875rem;
-	--md3-label-medium: 0.75rem;
 
-	/* MD3 Shape Scale */
-	--md3-shape-none: 0;
-	--md3-shape-extra-small: 4px;
+	/* MD3 Shape Scale (only vars still referenced) */
 	--md3-shape-small: 8px;
 	--md3-shape-medium: 12px;
 	--md3-shape-large: 16px;
-	--md3-shape-extra-large: 28px;
 	--md3-shape-full: 9999px;
 
-	/* MD3 Elevation (dark theme defaults, using OpenSearch navy tint) */
+	/* MD3 Elevation (only vars still referenced) */
 	--md3-elevation-0: none;
 	--md3-elevation-1: 0 1px 3px 1px rgba(0, 53, 81, 0.15), 0 1px 2px 0 rgba(0, 53, 81, 0.3);
 	--md3-elevation-2: 0 2px 6px 2px rgba(0, 53, 81, 0.15), 0 1px 2px 0 rgba(0, 53, 81, 0.3);
-	--md3-elevation-3: 0 4px 8px 3px rgba(0, 53, 81, 0.15), 0 1px 3px 0 rgba(0, 53, 81, 0.3);
-	--md3-elevation-4: 0 6px 10px 4px rgba(0, 53, 81, 0.15), 0 2px 3px 0 rgba(0, 53, 81, 0.3);
-	--md3-elevation-5: 0 8px 12px 6px rgba(0, 53, 81, 0.15), 0 4px 4px 0 rgba(0, 53, 81, 0.3);
 
-	/* MD3 State Layer Opacities */
+	/* MD3 State Layer Opacities (only vars still referenced) */
 	--md3-state-hover: 0.08;
 	--md3-state-focus: 0.12;
 	--md3-state-pressed: 0.12;
-	--md3-state-dragged: 0.16;
 
-	/* MD3 Motion (duration + easing) */
-	--md3-motion-duration-short1: 50ms;
-	--md3-motion-duration-short2: 100ms;
-	--md3-motion-duration-short3: 150ms;
+	/* MD3 Motion (only vars still referenced) */
 	--md3-motion-duration-short4: 200ms;
 	--md3-motion-duration-medium1: 250ms;
 	--md3-motion-duration-medium2: 300ms;
-	--md3-motion-duration-medium3: 350ms;
-	--md3-motion-duration-medium4: 400ms;
-	--md3-motion-duration-long1: 450ms;
-	--md3-motion-duration-long2: 500ms;
 	--md3-motion-easing-standard: cubic-bezier(0.2, 0, 0, 1);
-	--md3-motion-easing-standard-decelerate: cubic-bezier(0, 0, 0, 1);
-	--md3-motion-easing-standard-accelerate: cubic-bezier(0.3, 0, 1, 1);
 	--md3-motion-easing-emphasized: cubic-bezier(0.2, 0, 0, 1);
-	--md3-motion-easing-emphasized-decelerate: cubic-bezier(0.05, 0.7, 0.1, 1);
-	--md3-motion-easing-emphasized-accelerate: cubic-bezier(0.3, 0, 0.8, 0.15);
 
-	/* OpenSearch Brand Colors */
+	/* OpenSearch Brand Colors (only vars still referenced) */
 	--os-primary: #005eb8;
 	--os-primary-rgb: 0, 94, 184;
 	--os-accent: #057eb6;
 	--os-accent-rgb: 5, 126, 182;
-	--os-secondary: #0085b8;
 	--os-secondary-rgb: 0, 133, 184;
-	--os-navy: #003551;
-	--os-navy-rgb: 0, 53, 81;
-	--os-dark-text: #00121a;
-	--os-heading: #003b5c;
-	--os-link: #14a8ff;
-	--os-link-rgb: 20, 168, 255;
 	--os-gradient: linear-gradient(to right, #005eb8, #0085b8);
 }
 
@@ -91,9 +60,6 @@
 	/* MD3 surface tint colors for dark theme */
 	--md3-surface-tint: rgba(var(--os-accent-rgb), 0.05);
 	--md3-surface-tint-2: rgba(var(--os-accent-rgb), 0.08);
-	--md3-surface-tint-3: rgba(var(--os-accent-rgb), 0.11);
-	--md3-surface-tint-4: rgba(var(--os-accent-rgb), 0.14);
-	--md3-surface-tint-5: rgba(var(--os-accent-rgb), 0.18);
 
 	/* Override Starlight gray with slightly blue-tinted grays for dark */
 	--sl-color-gray-1: hsl(210, 10%, 85%);
@@ -117,16 +83,10 @@
 	/* MD3 surface tint colors for light theme */
 	--md3-surface-tint: rgba(var(--os-primary-rgb), 0.04);
 	--md3-surface-tint-2: rgba(var(--os-primary-rgb), 0.06);
-	--md3-surface-tint-3: rgba(var(--os-primary-rgb), 0.08);
-	--md3-surface-tint-4: rgba(var(--os-primary-rgb), 0.10);
-	--md3-surface-tint-5: rgba(var(--os-primary-rgb), 0.14);
 
 	/* Light elevation uses softer, blue-tinted shadows */
 	--md3-elevation-1: 0 1px 2px rgba(0, 53, 81, 0.1), 0 1px 3px 1px rgba(0, 53, 81, 0.08);
 	--md3-elevation-2: 0 1px 2px rgba(0, 53, 81, 0.1), 0 2px 6px 2px rgba(0, 53, 81, 0.08);
-	--md3-elevation-3: 0 1px 3px rgba(0, 53, 81, 0.1), 0 4px 8px 3px rgba(0, 53, 81, 0.08);
-	--md3-elevation-4: 0 2px 3px rgba(0, 53, 81, 0.1), 0 6px 10px 4px rgba(0, 53, 81, 0.08);
-	--md3-elevation-5: 0 4px 4px rgba(0, 53, 81, 0.1), 0 8px 12px 6px rgba(0, 53, 81, 0.08);
 
 	/* Override Starlight gray with slightly blue-tinted grays for light */
 	--sl-color-gray-1: hsl(210, 15%, 25%);
@@ -139,60 +99,7 @@
 }
 
 
-/* ============================================
-   4. GLOBAL ELEMENT STYLING (MD3)
-   ============================================ */
-
-/* Body text sizing matching OpenSearch's 18px/32px */
-.sl-markdown-content {
-	font-size: var(--md3-body-large);
-	line-height: 1.75;
-}
-
-/* Headings — MD3 type scale with OpenSearch heading color */
-.sl-markdown-content h1 {
-	font-size: var(--md3-display-large);
-	font-weight: 700;
-	letter-spacing: -0.02em;
-	line-height: 1.1;
-}
-
-.sl-markdown-content h2 {
-	font-size: var(--md3-headline-large);
-	font-weight: 700;
-	letter-spacing: -0.01em;
-	line-height: 1.2;
-}
-
-.sl-markdown-content h3 {
-	font-size: var(--md3-headline-medium);
-	font-weight: 600;
-	line-height: 1.3;
-}
-
-.sl-markdown-content h4 {
-	font-size: var(--md3-title-large);
-	font-weight: 600;
-	line-height: 1.35;
-}
-
-/* Links — MD3 state layers + OpenSearch link color */
-.sl-markdown-content a:not([class]) {
-	color: var(--sl-color-accent);
-	text-decoration: underline;
-	text-decoration-color: transparent;
-	text-underline-offset: 0.15em;
-	transition:
-		text-decoration-color var(--md3-motion-duration-short4) var(--md3-motion-easing-standard),
-		color var(--md3-motion-duration-short4) var(--md3-motion-easing-standard);
-}
-.sl-markdown-content a:not([class]):hover {
-	text-decoration-color: currentColor;
-	color: var(--sl-color-accent-high);
-}
-:root[data-theme='light'] .sl-markdown-content a:not([class]):hover {
-	color: var(--os-primary);
-}
+/* Section 4 (typography) removed — replaced by World-Class typography section below */
 
 
 /* ============================================
@@ -277,54 +184,7 @@
 }
 
 
-/* ============================================
-   6. TABLES — MD3 surface treatment
-   ============================================ */
-.sl-markdown-content table {
-	border-radius: var(--md3-shape-medium);
-	overflow: hidden;
-	border: 1px solid var(--sl-color-gray-5);
-	border-collapse: separate;
-	border-spacing: 0;
-	width: 100%;
-}
-
-.sl-markdown-content table th,
-.sl-markdown-content table td {
-	padding: 0.75rem 1rem;
-	border-bottom: 1px solid var(--sl-color-gray-5);
-}
-
-.sl-markdown-content table thead th {
-	font-size: var(--md3-label-large);
-	font-weight: 600;
-	text-transform: uppercase;
-	letter-spacing: 0.05em;
-	background-color: var(--sl-color-gray-6);
-	border-bottom: 2px solid var(--sl-color-gray-4);
-	color: var(--sl-color-gray-1);
-}
-
-.sl-markdown-content table tbody tr {
-	transition: background-color var(--md3-motion-duration-short3) var(--md3-motion-easing-standard);
-}
-
-.sl-markdown-content table tbody tr:nth-child(even) {
-	background-color: var(--md3-surface-tint);
-}
-
-.sl-markdown-content table tbody tr:hover {
-	background-color: var(--md3-surface-tint-3);
-}
-
-.sl-markdown-content table tbody tr:last-child td {
-	border-bottom: none;
-}
-
-/* First column bold treatment for tables with row headers */
-.sl-markdown-content table td:first-child {
-	font-weight: 500;
-}
+/* Section 6 (tables) removed — replaced by World-Class table section below */
 
 
 /* ============================================
@@ -405,6 +265,20 @@
 		max-width: 64rem;
 		margin-inline: auto;
 	}
+}
+
+:has(> .hero) .hero {
+	padding-bottom: 1rem;
+}
+
+:has(> .hero) .sl-markdown-content > hr {
+	display: none;
+}
+
+:has(> .hero) .hero img {
+	border-radius: 12px;
+	box-shadow: 0 4px 24px rgba(0, 53, 81, 0.3);
+	max-width: 420px;
 }
 
 :has(> .hero) .hero .tagline {
@@ -488,6 +362,10 @@
 	color: var(--sl-color-accent);
 }
 
+:root[data-theme='light'] :has(> .hero) .hero {
+	background: linear-gradient(180deg, rgba(0, 94, 184, 0.03) 0%, transparent 100%);
+}
+
 
 /* ============================================
    11. LANDING PAGE SECTIONS
@@ -530,28 +408,7 @@
 	box-shadow: var(--md3-elevation-2);
 }
 
-/* ============================================
-   12. CODE BLOCKS — MD3 surface container
-   ============================================ */
-.sl-markdown-content .expressive-code {
-	border-radius: var(--md3-shape-medium);
-	overflow: hidden;
-	box-shadow: var(--md3-elevation-1);
-}
-
-.sl-markdown-content .expressive-code pre {
-	padding: 1rem 1.25rem;
-	border-radius: var(--md3-shape-medium);
-}
-
-/* Inline code — MD3 small shape */
-.sl-markdown-content :not(pre) > code {
-	border-radius: var(--md3-shape-extra-small);
-	padding: 0.125em 0.375em;
-	font-size: 0.9em;
-	background: var(--md3-surface-tint-2);
-	border: 1px solid var(--sl-color-gray-5);
-}
+/* Section 12 (code blocks) removed — replaced by World-Class code section below */
 
 
 /* ============================================
@@ -593,25 +450,7 @@
 }
 
 
-/* ============================================
-   14. SIDEBAR — MD3 navigation rail styling
-   ============================================ */
-
-/* Sidebar links — MD3 state layers */
-nav.sidebar-content a {
-	border-radius: var(--md3-shape-full);
-	transition:
-		background var(--md3-motion-duration-short4) var(--md3-motion-easing-standard),
-		color var(--md3-motion-duration-short4) var(--md3-motion-easing-standard);
-}
-nav.sidebar-content a:hover {
-	background: rgba(var(--os-primary-rgb), var(--md3-state-hover));
-}
-nav.sidebar-content a[aria-current='page'] {
-	background: rgba(var(--os-primary-rgb), 0.12);
-	color: var(--sl-color-accent);
-	font-weight: 600;
-}
+/* Section 14 (sidebar) removed — replaced by World-Class sidebar section below */
 
 
 /* ============================================
@@ -628,53 +467,10 @@ site-search button {
 }
 
 
-/* ============================================
-   16. TABLE OF CONTENTS — MD3 typography
-   ============================================ */
-starlight-toc a {
-	font-size: var(--md3-body-medium);
-	border-radius: var(--md3-shape-extra-small);
-	transition:
-		color var(--md3-motion-duration-short4) var(--md3-motion-easing-standard),
-		background var(--md3-motion-duration-short4) var(--md3-motion-easing-standard);
-}
-starlight-toc a:hover {
-	background: rgba(var(--os-primary-rgb), var(--md3-state-hover));
-}
-starlight-toc a[aria-current='true'] {
-	color: var(--sl-color-accent);
-	font-weight: 600;
-}
+/* Section 16 (TOC) removed — replaced by World-Class micro-interactions section below */
 
 
-/* ============================================
-   17. PAGINATION — MD3 outlined button
-   ============================================ */
-.pagination-links a {
-	border-radius: var(--md3-shape-medium) !important;
-	border: 1px solid var(--sl-color-gray-5);
-	transition:
-		border-color var(--md3-motion-duration-medium2) var(--md3-motion-easing-standard),
-		box-shadow var(--md3-motion-duration-medium2) var(--md3-motion-easing-standard),
-		background var(--md3-motion-duration-medium2) var(--md3-motion-easing-standard);
-	position: relative;
-	overflow: hidden;
-}
-.pagination-links a::before {
-	content: '';
-	position: absolute;
-	inset: 0;
-	background: transparent;
-	transition: background var(--md3-motion-duration-short4) var(--md3-motion-easing-standard);
-	pointer-events: none;
-}
-.pagination-links a:hover {
-	border-color: var(--sl-color-accent);
-	box-shadow: var(--md3-elevation-1);
-}
-.pagination-links a:hover::before {
-	background: rgba(var(--os-primary-rgb), var(--md3-state-hover));
-}
+/* Section 17 (pagination) removed — replaced by World-Class micro-interactions section below */
 
 
 /* ============================================
@@ -685,35 +481,13 @@ starlight-toc a[aria-current='true'] {
 }
 
 
-/* ============================================
-   19. SCROLL BAR — subtle OpenSearch-tinted
-   ============================================ */
-:root {
-	scrollbar-color: var(--sl-color-gray-4) transparent;
-	scrollbar-width: thin;
-}
+/* Section 19 (scrollbar) removed — replaced by World-Class micro-interactions section below */
 
 
-/* ============================================
-   20. FOCUS VISIBLE — MD3 focus ring
-   ============================================ */
-:focus-visible {
-	outline: 2px solid var(--sl-color-accent);
-	outline-offset: 2px;
-	border-radius: var(--md3-shape-extra-small);
-}
+/* Section 20 (focus) removed — replaced by World-Class micro-interactions section below */
 
 
-/* ============================================
-   21. SELECTION — OpenSearch brand
-   ============================================ */
-::selection {
-	background: rgba(var(--os-primary-rgb), 0.25);
-	color: inherit;
-}
-:root[data-theme='light'] ::selection {
-	background: rgba(var(--os-primary-rgb), 0.2);
-}
+/* Section 21 (selection) removed — replaced by World-Class micro-interactions section below */
 
 
 /* ============================================
@@ -799,9 +573,6 @@ starlight-toc a[aria-current='true'] {
 	:root {
 		--md3-elevation-1: none;
 		--md3-elevation-2: none;
-		--md3-elevation-3: none;
-		--md3-elevation-4: none;
-		--md3-elevation-5: none;
 	}
 	.card,
 	.sl-link-card {
@@ -824,16 +595,9 @@ starlight-toc a[aria-current='true'] {
 		scroll-behavior: auto !important;
 	}
 }
-/* ==========================================================================
-   1. TYPOGRAPHY RHYTHM & MEASURE
-   
-   Problem: Our body text is too wide, line-height is too tight, and heading
-   spacing doesn't create clear visual hierarchy. Vercel and Tailwind both
-   use ~65-75ch measure, generous line-height (1.7-1.8 for body), and
-   carefully graduated heading margins that create breathing room.
-   
-   Inspired by: Tailwind (body measure + line-height), Vercel (heading spacing)
-   ========================================================================== */
+/* ============================================
+   TYPOGRAPHY — rhythm, measure & hierarchy
+   ============================================ */
 
 :root {
   --sl-text-body-line-height: 1.75;
@@ -904,24 +668,25 @@ starlight-content-container {
 }
 
 
-/* ==========================================================================
-   2. SIDEBAR REFINEMENT
-   
-   Problem: Our sidebar items are dense and feel clunky — active state is a 
-   heavy full-width highlight block, text is tightly packed, group labels
-   don't stand apart enough. Vercel uses subtle left-border accents with
-   muted backgrounds. Tailwind uses clean whitespace and a thin left accent.
-   
-   Inspired by: Vercel (active state left-border), Tailwind (spacing + groups)
-   ========================================================================== */
+/* ============================================
+   SIDEBAR — navigation refinement
+   ============================================ */
 
 nav.sidebar {
   --sl-sidebar-padding-x: 1rem;
+  padding-left: 0.5rem;
+}
+
+/* Sidebar section spacing */
+nav.sidebar .top-level > li {
+  margin-bottom: 0.5rem;
 }
 
 /* Tighten & refine sidebar items */
 nav.sidebar .top-level > li + li {
   margin-top: 0.25rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--sl-color-gray-6);
 }
 
 nav.sidebar ul ul {
@@ -988,16 +753,9 @@ nav.sidebar [aria-current="true"] {
 }
 
 
-/* ==========================================================================
-   3. TABLE POLISH
-   
-   Problem: Our tables (which are prominent in the migration docs) look 
-   utilitarian — blocky cells, no hover states, headers don't pop. Both
-   Vercel and Tailwind use subtle row hovers, refined cell padding, and
-   lighter grid lines that make tables scannable without feeling heavy.
-   
-   Inspired by: Vercel (table styling), Tailwind (subtle borders)
-   ========================================================================== */
+/* ============================================
+   TABLES — refined styling
+   ============================================ */
 
 .sl-markdown-content table {
   width: 100%;
@@ -1061,17 +819,9 @@ nav.sidebar [aria-current="true"] {
 }
 
 
-/* ==========================================================================
-   4. CODE BLOCKS & INLINE CODE
-   
-   Problem: Code blocks feel flat — no breathing room around them, inline
-   code doesn't visually separate from body text well enough. Tailwind's
-   code blocks have generous padding, rounded corners, clear filename tabs,
-   and inline code uses a distinct background pill. Vercel does similar with
-   slightly more contrast on inline code.
-   
-   Inspired by: Tailwind (code block spacing + inline code pills)
-   ========================================================================== */
+/* ============================================
+   CODE BLOCKS & INLINE CODE
+   ============================================ */
 
 /* Inline code */
 .sl-markdown-content :not(pre) > code {
@@ -1133,17 +883,9 @@ nav.sidebar [aria-current="true"] {
 }
 
 
-/* ==========================================================================
-   5. MICRO-INTERACTIONS, FOCUS STATES & POLISH
-   
-   Problem: No transitions on interactive elements, focus states use browser
-   defaults (ugly blue outlines), links don't have subtle hover feedback.
-   Both Vercel and Tailwind have buttery-smooth transitions everywhere,
-   custom focus-visible rings that match the design system, and links that
-   shift color cleanly.
-   
-   Inspired by: Both (focus rings), Tailwind (link transitions), Vercel (smooth UI)
-   ========================================================================== */
+/* ============================================
+   MICRO-INTERACTIONS, FOCUS & POLISH
+   ============================================ */
 
 /* Global smooth transitions for interactive elements */
 a,
@@ -1256,43 +998,4 @@ html {
 * {
   scrollbar-width: thin;
   scrollbar-color: var(--sl-color-gray-5) transparent;
-}
-
-/* ==========================================================================
-   WORLD-CLASS FIXES — Round 2
-   ========================================================================== */
-
-/* Fix dead zone between hero and content — tighten splash page spacing */
-:has(> .hero) .hero {
-	padding-bottom: 1rem;
-}
-:has(> .hero) .sl-markdown-content > hr:first-child,
-:has(> .hero) .sl-markdown-content > hr {
-	display: none;
-}
-
-/* Hero architecture image — constrain and polish */
-:has(> .hero) .hero img {
-	border-radius: 12px;
-	box-shadow: 0 4px 24px rgba(0, 53, 81, 0.3);
-	max-width: 420px;
-}
-
-/* Sidebar section spacing — more gap between groups */
-nav.sidebar .top-level > li {
-	margin-bottom: 0.5rem;
-}
-nav.sidebar .top-level > li + li {
-	padding-top: 0.5rem;
-	border-top: 1px solid var(--sl-color-gray-6);
-}
-
-/* Sidebar left padding */
-nav.sidebar {
-	padding-left: 0.5rem;
-}
-
-/* Light mode hero — subtle gradient background */
-:root[data-theme='light'] :has(> .hero) .hero {
-	background: linear-gradient(180deg, rgba(0, 94, 184, 0.03) 0%, transparent 100%);
 }
