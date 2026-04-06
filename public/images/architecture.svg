@@ -124,19 +124,19 @@
   <text x="835" y="168" class="title" text-anchor="middle">Target</text>
   <text x="835" y="184" class="sub" text-anchor="middle">OpenSearch</text>
 
-  <!-- Lane 1 arrows -->
-  <line x1="162" y1="98" x2="226" y2="98" class="arrow-ctrl" stroke-width="1.5" marker-end="url(#ac)"/>
+  <!-- Lane 1 arrows — all carry request/document data -->
+  <line x1="162" y1="98" x2="226" y2="98" class="arrow-data" stroke-width="2" stroke-dasharray="6 3" marker-end="url(#ad)"/>
 
-  <path d="M293,120 L293,164 L162,164" fill="none" class="arrow-ctrl" stroke-width="1.5" marker-end="url(#ac)"/>
-  <text x="215" y="157" class="flow-label-gray">forward</text>
+  <path d="M293,120 L293,164 L162,164" fill="none" class="arrow-data" stroke-width="2" stroke-dasharray="6 3" marker-end="url(#ad)"/>
+  <text x="215" y="157" class="flow-label">forward</text>
 
-  <line x1="358" y1="98" x2="416" y2="98" class="arrow-ctrl" stroke-width="1.5" marker-end="url(#ac)"/>
-  <text x="372" y="91" class="flow-label-gray">record</text>
+  <line x1="358" y1="98" x2="416" y2="98" class="arrow-data" stroke-width="2" stroke-dasharray="6 3" marker-end="url(#ad)"/>
+  <text x="372" y="91" class="flow-label">record</text>
 
-  <line x1="538" y1="98" x2="596" y2="98" class="arrow-ctrl" stroke-width="1.5" marker-end="url(#ac)"/>
+  <line x1="538" y1="98" x2="596" y2="98" class="arrow-data" stroke-width="2" stroke-dasharray="6 3" marker-end="url(#ad)"/>
 
-  <path d="M718,98 L765,98 L765,120 L788,120" fill="none" class="arrow-ctrl" stroke-width="1.5" marker-end="url(#ac)"/>
-  <text x="730" y="91" class="flow-label-gray">replay</text>
+  <path d="M718,98 L765,98 L765,120 L788,120" fill="none" class="arrow-data" stroke-width="2" stroke-dasharray="6 3" marker-end="url(#ad)"/>
+  <text x="730" y="91" class="flow-label">replay</text>
 
   <!-- ── Divider ── -->
   <line class="divider" x1="28" y1="202" x2="770" y2="202" stroke-width="1" stroke-dasharray="3 3"/>
@@ -199,10 +199,10 @@
 
   <!-- Row 1: Line types -->
   <line x1="52" y1="474" x2="88" y2="474" class="arrow-data" stroke-width="2" stroke-dasharray="6 3" marker-end="url(#ad)"/>
-  <text x="96" y="478" class="legend-text">Data flow (snapshot, Lucene, bulk index)</text>
+  <text x="96" y="478" class="legend-text">Data flow (requests, snapshots, documents)</text>
 
   <line x1="380" y1="474" x2="416" y2="474" class="arrow-ctrl" stroke-width="1.5" marker-end="url(#ac)"/>
-  <text x="424" y="478" class="legend-text">Control flow (traffic, orchestration)</text>
+  <text x="424" y="478" class="legend-text">Control flow (orchestration)</text>
 
   <!-- Row 2: Box types -->
   <rect class="box-accent" x="52" y="492" width="28" height="18" rx="4" stroke-width="1.5"/>
