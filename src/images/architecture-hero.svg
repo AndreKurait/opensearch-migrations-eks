@@ -1,187 +1,219 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 520">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 540">
   <style>
     text { font-family: Inter, system-ui, sans-serif; }
     .title { font-size: 14px; font-weight: 600; }
     .sub { font-size: 11px; }
     .group { font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; }
-    .legend-text { font-size: 12px; }
-    .flow-label { font-size: 12px; font-weight: 600; }
-    .lane-label { font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; }
+    .flow-label { font-size: 11.5px; font-weight: 600; }
+    .flow-label-gray { font-size: 11.5px; font-weight: 600; }
+    .lane-title { font-size: 13px; font-weight: 700; letter-spacing: 0.03em; }
+    .lane-num { font-size: 20px; font-weight: 700; }
+    .legend-title { font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; }
+    .legend-text { font-size: 11px; }
 
-    /* Light mode */
+    /* Light */
     .bg { fill: #f8fafc; }
     .title { fill: #1a2744; }
     .sub { fill: #5a6a7e; }
     .group { fill: #3a5070; }
-    .legend-text { fill: #5a6a7e; }
     .flow-label { fill: #005eb8; }
-    .flow-label-gray { fill: #5a6a7e; font-size: 12px; font-weight: 600; }
-    .lane-label { fill: #8898a8; }
+    .flow-label-gray { fill: #5a6a7e; }
+    .lane-title { fill: #1a2744; }
+    .lane-num { fill: #005eb8; opacity: 0.25; }
+    .legend-title { fill: #3a5070; }
+    .legend-text { fill: #5a6a7e; }
     .cluster-bg { fill: #f0f4f8; stroke: #c0d0e0; }
     .argo-zone { fill: #e8f0fe; stroke: #b0c8e8; }
     .argo-label { fill: #3a6090; }
     .box { fill: #fff; stroke: #d0d8e4; }
     .box-accent { fill: #fff; stroke: #005eb8; }
-    .box-external { fill: #fff; stroke: #a0b0c0; }
+    .box-ext { fill: #fff; stroke: #a0b0c0; }
     .box-target { fill: #e8f0fe; stroke: #005eb8; }
-    .box-storage { fill: #fff; stroke: #a0b0c0; }
-    .arrow-gray { stroke: #8898a8; }
-    .arrow-blue { stroke: #005eb8; }
-    .ah-gray { fill: #8898a8; }
-    .ah-blue { fill: #005eb8; }
-    .divider { stroke: #d0d8e0; }
+    .arrow-ctrl { stroke: #8898a8; }
+    .arrow-data { stroke: #005eb8; }
+    .ah-ctrl { fill: #8898a8; }
+    .ah-data { fill: #005eb8; }
+    .divider { stroke: #d8e0e8; }
+    .legend-bg { fill: #fff; stroke: #d0d8e4; }
+    .legend-swatch-data { stroke: #005eb8; }
+    .legend-swatch-ctrl { stroke: #8898a8; }
+    .legend-swatch-k8s { fill: #f0f4f8; stroke: #c0d0e0; }
+    .legend-swatch-argo { fill: #e8f0fe; stroke: #b0c8e8; }
+    .legend-swatch-ext { fill: #fff; stroke: #a0b0c0; }
+    .legend-swatch-managed { fill: #fff; stroke: #005eb8; }
 
-    /* Dark mode */
+    /* Dark */
     @media (prefers-color-scheme: dark) {
-      .bg { fill: #131620; }
-      .title { fill: #e0e6ed; }
-      .sub { fill: #7a8a9a; }
-      .group { fill: #7eb8e0; }
-      .legend-text { fill: #7a8a9a; }
+      .bg { fill: #111318; }
+      .title { fill: #dce3eb; }
+      .sub { fill: #6a7a8a; }
+      .group { fill: #6aace0; }
       .flow-label { fill: #5ab4f0; }
-      .flow-label-gray { fill: #7a8a9a; }
-      .lane-label { fill: #5a6a7a; }
-      .cluster-bg { fill: #1a2030; stroke: #2a3a50; }
-      .argo-zone { fill: #162038; stroke: #2a4060; }
+      .flow-label-gray { fill: #6a7a8a; }
+      .lane-title { fill: #dce3eb; }
+      .lane-num { fill: #5ab4f0; opacity: 0.2; }
+      .legend-title { fill: #6aace0; }
+      .legend-text { fill: #6a7a8a; }
+      .cluster-bg { fill: #181d28; stroke: #283040; }
+      .argo-zone { fill: #141e30; stroke: #243858; }
       .argo-label { fill: #5a9ad0; }
-      .box { fill: #1e2535; stroke: #2a3a50; }
-      .box-accent { fill: #162038; stroke: #3080c0; }
-      .box-external { fill: #1e2535; stroke: #3a4a5a; }
-      .box-target { fill: #162038; stroke: #3080c0; }
-      .box-storage { fill: #1e2535; stroke: #3a4a5a; }
-      .arrow-gray { stroke: #4a5a6a; }
-      .arrow-blue { stroke: #5ab4f0; }
-      .ah-gray { fill: #4a5a6a; }
-      .ah-blue { fill: #5ab4f0; }
-      .divider { stroke: #2a3040; }
+      .box { fill: #1c2230; stroke: #283040; }
+      .box-accent { fill: #141e30; stroke: #2878b8; }
+      .box-ext { fill: #1c2230; stroke: #384858; }
+      .box-target { fill: #141e30; stroke: #2878b8; }
+      .arrow-ctrl { stroke: #485868; }
+      .arrow-data { stroke: #5ab4f0; }
+      .ah-ctrl { fill: #485868; }
+      .ah-data { fill: #5ab4f0; }
+      .divider { stroke: #222830; }
+      .legend-bg { fill: #1c2230; stroke: #283040; }
+      .legend-swatch-data { stroke: #5ab4f0; }
+      .legend-swatch-ctrl { stroke: #485868; }
+      .legend-swatch-k8s { fill: #181d28; stroke: #283040; }
+      .legend-swatch-argo { fill: #141e30; stroke: #243858; }
+      .legend-swatch-ext { fill: #1c2230; stroke: #384858; }
+      .legend-swatch-managed { fill: #141e30; stroke: #2878b8; }
     }
   </style>
 
   <defs>
-    <marker id="ag" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" class="ah-gray"/></marker>
-    <marker id="ab" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" class="ah-blue"/></marker>
+    <marker id="ac" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" class="ah-ctrl"/></marker>
+    <marker id="ad" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" class="ah-data"/></marker>
   </defs>
 
-  <!-- Background -->
-  <rect class="bg" width="880" height="520" rx="14"/>
+  <rect class="bg" width="900" height="540" rx="14"/>
 
-  <!-- ═══════════════════════════════════════════
-       LAYOUT: 3 horizontal swim lanes
-       Lane 1 (y=30-170):  Capture & Replay flow  (Clients → Proxy → Source, Proxy → Kafka → Replayer → Target)
-       Lane 2 (y=195-340): Backfill flow           (Source → Snapshot → Object Storage → RFS Workers → Target)
-       Lane 3 (y=365-480): Infrastructure          (Console, Argo, Monitoring)
-       ═══════════════════════════════════════════ -->
+  <!-- ── K8s Cluster ── -->
+  <rect class="cluster-bg" x="195" y="16" width="560" height="400" rx="14" stroke-width="1.5" stroke-dasharray="8 4"/>
+  <text x="218" y="37" class="group">Kubernetes Cluster · namespace: migration-assistant</text>
 
-  <!-- ── Kubernetes Cluster boundary ── -->
-  <rect class="cluster-bg" x="200" y="20" width="540" height="480" rx="14" stroke-width="1.5" stroke-dasharray="8 4"/>
-  <text x="224" y="42" class="group">Kubernetes Cluster</text>
+  <!-- ══════════════════════════════════════
+       LANE 1 — Capture & Replay (y 50–170)
+       ══════════════════════════════════════ -->
+  <text x="28" y="72" class="lane-num">1</text>
+  <text x="28" y="90" class="lane-title">Capture</text>
+  <text x="28" y="104" class="lane-title">&amp; Replay</text>
 
-  <!-- ════════════ LANE 1: Capture & Replay ════════════ -->
-  <text x="30" y="68" class="lane-label">capture</text>
-  <text x="30" y="80" class="lane-label">&amp; replay</text>
+  <!-- Argo zone spans proxy + kafka + replayer -->
+  <rect class="argo-zone" x="215" y="48" width="520" height="120" rx="10" stroke-width="1" stroke-dasharray="4 3"/>
+  <text x="234" y="66" class="group argo-label">Managed by Argo Workflows</text>
 
-  <!-- Clients (external left) -->
-  <rect class="box-external" x="68" y="58" width="100" height="44" rx="8" stroke-width="1.2"/>
-  <text x="118" y="80" class="title" text-anchor="middle">Clients</text>
+  <!-- Clients -->
+  <rect class="box-ext" x="62" y="76" width="100" height="44" rx="8" stroke-width="1.2"/>
+  <text x="112" y="102" class="title" text-anchor="middle">Clients</text>
 
   <!-- Capture Proxy -->
-  <rect class="box-accent" x="230" y="58" width="130" height="44" rx="8" stroke-width="1.5"/>
-  <text x="295" y="80" class="title" text-anchor="middle">Capture Proxy</text>
+  <rect class="box-accent" x="228" y="76" width="130" height="44" rx="8" stroke-width="1.5"/>
+  <text x="293" y="102" class="title" text-anchor="middle">Capture Proxy</text>
 
-  <!-- Source (external left, below clients) -->
-  <rect class="box-external" x="68" y="128" width="100" height="50" rx="8" stroke-width="1.2"/>
-  <text x="118" y="150" class="title" text-anchor="middle">Source</text>
-  <text x="118" y="164" class="sub" text-anchor="middle">ES / OpenSearch</text>
+  <!-- Source -->
+  <rect class="box-ext" x="62" y="140" width="100" height="48" rx="8" stroke-width="1.2"/>
+  <text x="112" y="162" class="title" text-anchor="middle">Source</text>
+  <text x="112" y="176" class="sub" text-anchor="middle">ES / OpenSearch</text>
 
   <!-- Kafka -->
-  <rect class="box" x="420" y="58" width="120" height="44" rx="8" stroke-width="1.2"/>
-  <text x="480" y="80" class="title" text-anchor="middle">Kafka</text>
+  <rect class="box" x="418" y="76" width="120" height="44" rx="8" stroke-width="1.2"/>
+  <text x="478" y="102" class="title" text-anchor="middle">Kafka</text>
 
-  <!-- Traffic Replayer -->
-  <rect class="box-accent" x="600" y="58" width="120" height="44" rx="8" stroke-width="1.5"/>
-  <text x="660" y="80" class="title" text-anchor="middle">Replayer</text>
+  <!-- Replayer -->
+  <rect class="box-accent" x="598" y="76" width="120" height="44" rx="8" stroke-width="1.5"/>
+  <text x="658" y="102" class="title" text-anchor="middle">Replayer</text>
 
-  <!-- Target (external right) -->
-  <rect class="box-target" x="780" y="100" width="80" height="130" rx="8" stroke-width="2"/>
-  <text x="820" y="160" class="title" text-anchor="middle">Target</text>
-  <text x="820" y="176" class="sub" text-anchor="middle">Open</text>
-  <text x="820" y="188" class="sub" text-anchor="middle">Search</text>
+  <!-- Target — spans both lanes -->
+  <rect class="box-target" x="790" y="76" width="90" height="200" rx="10" stroke-width="2"/>
+  <text x="835" y="168" class="title" text-anchor="middle">Target</text>
+  <text x="835" y="184" class="sub" text-anchor="middle">OpenSearch</text>
 
-  <!-- Lane 1 arrows — all horizontal, no crossings -->
-  <!-- Clients → Proxy -->
-  <line x1="168" y1="80" x2="228" y2="80" class="arrow-gray" stroke-width="1.5" marker-end="url(#ag)"/>
+  <!-- Lane 1 arrows -->
+  <line x1="162" y1="98" x2="226" y2="98" class="arrow-ctrl" stroke-width="1.5" marker-end="url(#ac)"/>
 
-  <!-- Proxy → Source (down-left) -->
-  <path d="M295,102 L295,153 L168,153" fill="none" class="arrow-gray" stroke-width="1.5" marker-end="url(#ag)"/>
-  <text x="220" y="146" class="flow-label-gray">forward</text>
+  <path d="M293,120 L293,164 L162,164" fill="none" class="arrow-ctrl" stroke-width="1.5" marker-end="url(#ac)"/>
+  <text x="215" y="157" class="flow-label-gray">forward</text>
 
-  <!-- Proxy → Kafka -->
-  <line x1="360" y1="80" x2="418" y2="80" class="arrow-gray" stroke-width="1.5" marker-end="url(#ag)"/>
-  <text x="376" y="73" class="flow-label-gray">record</text>
+  <line x1="358" y1="98" x2="416" y2="98" class="arrow-ctrl" stroke-width="1.5" marker-end="url(#ac)"/>
+  <text x="372" y="91" class="flow-label-gray">record</text>
 
-  <!-- Kafka → Replayer -->
-  <line x1="540" y1="80" x2="598" y2="80" class="arrow-gray" stroke-width="1.5" marker-end="url(#ag)"/>
+  <line x1="538" y1="98" x2="596" y2="98" class="arrow-ctrl" stroke-width="1.5" marker-end="url(#ac)"/>
 
-  <!-- Replayer → Target -->
-  <path d="M720,80 L760,80 L760,140 L778,140" fill="none" class="arrow-gray" stroke-width="1.5" marker-end="url(#ag)"/>
-  <text x="740" y="73" class="flow-label-gray">replay</text>
+  <path d="M718,98 L765,98 L765,120 L788,120" fill="none" class="arrow-ctrl" stroke-width="1.5" marker-end="url(#ac)"/>
+  <text x="730" y="91" class="flow-label-gray">replay</text>
 
   <!-- ── Divider ── -->
-  <line class="divider" x1="30" y1="195" x2="760" y2="195" stroke-width="1" stroke-dasharray="3 3"/>
+  <line class="divider" x1="28" y1="202" x2="770" y2="202" stroke-width="1" stroke-dasharray="3 3"/>
 
-  <!-- ════════════ LANE 2: Backfill ════════════ -->
-  <text x="30" y="230" class="lane-label">backfill</text>
+  <!-- ══════════════════════════════════════
+       LANE 2 — Backfill (y 210–350)
+       ══════════════════════════════════════ -->
+  <text x="28" y="240" class="lane-num">2</text>
+  <text x="28" y="258" class="lane-title">Backfill</text>
 
-  <!-- Argo-managed zone -->
-  <rect class="argo-zone" x="380" y="210" width="350" height="120" rx="8" stroke-width="1" stroke-dasharray="4 3"/>
-  <text x="400" y="228" class="group argo-label">Managed by Argo</text>
-
-  <!-- Object Storage (external) -->
-  <rect class="box-storage" x="210" y="240" width="130" height="50" rx="8" stroke-width="1.2"/>
-  <text x="275" y="262" class="title" text-anchor="middle">Object Storage</text>
-  <text x="275" y="278" class="sub" text-anchor="middle">S3 / GCS / MinIO</text>
+  <!-- Object Storage -->
+  <rect class="box-ext" x="210" y="230" width="140" height="50" rx="8" stroke-width="1.2"/>
+  <text x="280" y="252" class="title" text-anchor="middle">Object Storage</text>
+  <text x="280" y="268" class="sub" text-anchor="middle">S3 / GCS / MinIO</text>
 
   <!-- RFS Workers -->
-  <rect class="box-accent" x="400" y="245" width="140" height="52" rx="8" stroke-width="1.5"/>
-  <text x="470" y="268" class="title" text-anchor="middle">RFS Workers</text>
-  <text x="470" y="284" class="sub" text-anchor="middle">Jobs · 1 per shard</text>
+  <rect class="box-accent" x="420" y="230" width="150" height="52" rx="8" stroke-width="1.5"/>
+  <text x="495" y="253" class="title" text-anchor="middle">RFS Workers</text>
+  <text x="495" y="269" class="sub" text-anchor="middle">Jobs · 1 per shard</text>
 
-  <!-- Lane 2 arrows — clean left-to-right -->
-  <!-- Source → Object Storage (snapshot) -->
-  <path d="M118,178 L118,265 L208,265" fill="none" class="arrow-blue" stroke-width="2" stroke-dasharray="6 3" marker-end="url(#ab)"/>
-  <text x="130" y="230" class="flow-label">snapshot</text>
+  <!-- Lane 2 arrows -->
+  <path d="M112,188 L112,255 L208,255" fill="none" class="arrow-data" stroke-width="2" stroke-dasharray="6 3" marker-end="url(#ad)"/>
+  <text x="124" y="230" class="flow-label">snapshot</text>
 
-  <!-- Object Storage → RFS Workers -->
-  <line x1="340" y1="265" x2="398" y2="265" class="arrow-blue" stroke-width="2" stroke-dasharray="6 3" marker-end="url(#ab)"/>
-  <text x="350" y="258" class="flow-label">Lucene</text>
+  <line x1="350" y1="255" x2="418" y2="255" class="arrow-data" stroke-width="2" stroke-dasharray="6 3" marker-end="url(#ad)"/>
+  <text x="362" y="248" class="flow-label">Lucene</text>
 
-  <!-- RFS → Target -->
-  <path d="M540,270 L760,270 L760,195 L778,195" fill="none" class="arrow-blue" stroke-width="2" stroke-dasharray="6 3" marker-end="url(#ab)"/>
-  <text x="610" y="262" class="flow-label">bulk index</text>
+  <path d="M570,255 L765,255 L765,230 L788,230" fill="none" class="arrow-data" stroke-width="2" stroke-dasharray="6 3" marker-end="url(#ad)"/>
+  <text x="620" y="248" class="flow-label">bulk index</text>
 
   <!-- ── Divider ── -->
-  <line class="divider" x1="200" y1="355" x2="740" y2="355" stroke-width="1" stroke-dasharray="3 3"/>
+  <line class="divider" x1="195" y1="305" x2="755" y2="305" stroke-width="1" stroke-dasharray="3 3"/>
 
-  <!-- ════════════ LANE 3: Infrastructure ════════════ -->
-  <text x="30" y="400" class="lane-label">infra</text>
+  <!-- ══════════════════════════════════════
+       LANE 3 — Infrastructure (y 315–400)
+       ══════════════════════════════════════ -->
+  <text x="28" y="350" class="lane-num">3</text>
+  <text x="28" y="368" class="lane-title">Infra</text>
 
-  <rect class="box" x="230" y="375" width="140" height="50" rx="8" stroke-width="1.2"/>
-  <text x="300" y="397" class="title" text-anchor="middle">Migration Console</text>
-  <text x="300" y="413" class="sub" text-anchor="middle">StatefulSet</text>
+  <rect class="box" x="228" y="325" width="150" height="50" rx="8" stroke-width="1.2"/>
+  <text x="303" y="347" class="title" text-anchor="middle">Migration Console</text>
+  <text x="303" y="363" class="sub" text-anchor="middle">StatefulSet · CLI</text>
 
-  <rect class="box" x="420" y="375" width="140" height="50" rx="8" stroke-width="1.2"/>
-  <text x="490" y="397" class="title" text-anchor="middle">Argo Workflows</text>
-  <text x="490" y="413" class="sub" text-anchor="middle">Server + Controller</text>
+  <rect class="box" x="428" y="325" width="150" height="50" rx="8" stroke-width="1.2"/>
+  <text x="503" y="347" class="title" text-anchor="middle">Argo Workflows</text>
+  <text x="503" y="363" class="sub" text-anchor="middle">Server + Controller</text>
 
-  <rect class="box" x="610" y="375" width="120" height="50" rx="8" stroke-width="1.2"/>
-  <text x="670" y="397" class="title" text-anchor="middle">Monitoring</text>
-  <text x="670" y="413" class="sub" text-anchor="middle">OTel · Grafana</text>
+  <rect class="box" x="628" y="325" width="120" height="50" rx="8" stroke-width="1.2"/>
+  <text x="688" y="347" class="title" text-anchor="middle">Monitoring</text>
+  <text x="688" y="363" class="sub" text-anchor="middle">OTel · Grafana</text>
 
-  <!-- ════════════ LEGEND ════════════ -->
-  <line class="arrow-blue" x1="40" y1="475" x2="75" y2="475" stroke-width="2" stroke-dasharray="6 3"/>
-  <text x="82" y="479" class="legend-text">Data flow</text>
-  <line class="arrow-gray" x1="170" y1="475" x2="205" y2="475" stroke-width="1.5"/>
-  <text x="212" y="479" class="legend-text">Control flow</text>
-  <rect class="cluster-bg" x="310" y="468" width="16" height="16" rx="3" stroke-width="1" stroke-dasharray="3 2"/>
-  <text x="332" y="480" class="legend-text">Kubernetes boundary</text>
+  <!-- Console → Argo arrow -->
+  <line x1="378" y1="350" x2="426" y2="350" class="arrow-ctrl" stroke-width="1.5" marker-end="url(#ac)"/>
+
+  <!-- ══════════════════════════════════════
+       LEGEND — dedicated panel
+       ══════════════════════════════════════ -->
+  <rect class="legend-bg" x="28" y="432" width="852" height="90" rx="10" stroke-width="1"/>
+  <text x="52" y="454" class="legend-title">Legend</text>
+
+  <!-- Row 1: Line types -->
+  <line x1="52" y1="474" x2="88" y2="474" class="arrow-data" stroke-width="2" stroke-dasharray="6 3" marker-end="url(#ad)"/>
+  <text x="96" y="478" class="legend-text">Data flow (snapshot, Lucene, bulk index)</text>
+
+  <line x1="380" y1="474" x2="416" y2="474" class="arrow-ctrl" stroke-width="1.5" marker-end="url(#ac)"/>
+  <text x="424" y="478" class="legend-text">Control flow (traffic, orchestration)</text>
+
+  <!-- Row 2: Box types -->
+  <rect class="box-accent" x="52" y="492" width="28" height="18" rx="4" stroke-width="1.5"/>
+  <text x="88" y="505" class="legend-text">Argo-managed component</text>
+
+  <rect class="box-ext" x="270" y="492" width="28" height="18" rx="4" stroke-width="1.2"/>
+  <text x="306" y="505" class="legend-text">External system</text>
+
+  <rect class="legend-swatch-k8s" x="440" y="492" width="28" height="18" rx="4" stroke-width="1" stroke-dasharray="4 2"/>
+  <text x="476" y="505" class="legend-text">Kubernetes boundary</text>
+
+  <rect class="legend-swatch-argo" x="640" y="492" width="28" height="18" rx="4" stroke-width="1" stroke-dasharray="3 2"/>
+  <text x="676" y="505" class="legend-text">Argo-managed zone</text>
 </svg>
