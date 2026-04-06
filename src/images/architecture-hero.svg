@@ -31,8 +31,12 @@
     .box-target { fill: #e8f0fe; stroke: #005eb8; }
     .arrow-ctrl { stroke: #8898a8; }
     .arrow-data { stroke: #005eb8; }
+    .arrow-prod { stroke: #16a34a; }
     .ah-ctrl { fill: #8898a8; }
     .ah-data { fill: #005eb8; }
+    .ah-prod { fill: #16a34a; }
+    .flow-label-prod { font-size: 11.5px; font-weight: 600; fill: #16a34a; }
+    .legend-swatch-prod { stroke: #16a34a; }
     .divider { stroke: #d8e0e8; }
     .legend-bg { fill: #fff; stroke: #d0d8e4; }
     .legend-swatch-data { stroke: #005eb8; }
@@ -73,12 +77,17 @@
       .legend-swatch-argo { fill: #141e30; stroke: #243858; }
       .legend-swatch-ext { fill: #1c2230; stroke: #384858; }
       .legend-swatch-managed { fill: #141e30; stroke: #2878b8; }
+      .arrow-prod { stroke: #16a34a; }
+      .ah-prod { fill: #16a34a; }
+      .flow-label-prod { font-size: 11.5px; font-weight: 600; fill: #16a34a; }
+      .legend-swatch-prod { stroke: #16a34a; }
     }
   </style>
 
   <defs>
     <marker id="ac" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" class="ah-ctrl"/></marker>
     <marker id="ad" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" class="ah-data"/></marker>
+    <marker id="ap" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" class="ah-prod"/></marker>
   </defs>
 
   <rect class="bg" width="900" height="540" rx="14"/>
@@ -124,11 +133,11 @@
   <text x="835" y="168" class="title" text-anchor="middle">Target</text>
   <text x="835" y="184" class="sub" text-anchor="middle">OpenSearch</text>
 
-  <!-- Lane 1 arrows — all carry request/document data -->
-  <line x1="162" y1="98" x2="226" y2="98" class="arrow-data" stroke-width="2" stroke-dasharray="6 3" marker-end="url(#ad)"/>
+  <!-- Lane 1 arrows — production traffic (green solid) and migration data (blue dashed) -->
+  <line x1="162" y1="98" x2="226" y2="98" class="arrow-prod" stroke-width="2.5" marker-end="url(#ap)"/>
 
-  <path d="M293,120 L293,164 L162,164" fill="none" class="arrow-data" stroke-width="2" stroke-dasharray="6 3" marker-end="url(#ad)"/>
-  <text x="215" y="157" class="flow-label">forward</text>
+  <path d="M293,120 L293,164 L162,164" fill="none" class="arrow-prod" stroke-width="2.5" marker-end="url(#ap)"/>
+  <text x="215" y="157" class="flow-label-prod">forward</text>
 
   <line x1="358" y1="98" x2="416" y2="98" class="arrow-data" stroke-width="2" stroke-dasharray="6 3" marker-end="url(#ad)"/>
   <text x="372" y="91" class="flow-label">record</text>
@@ -198,11 +207,14 @@
   <text x="52" y="454" class="legend-title">Legend</text>
 
   <!-- Row 1: Line types -->
-  <line x1="52" y1="474" x2="88" y2="474" class="arrow-data" stroke-width="2" stroke-dasharray="6 3" marker-end="url(#ad)"/>
-  <text x="96" y="478" class="legend-text">Data flow (requests, snapshots, documents)</text>
+  <line x1="52" y1="474" x2="88" y2="474" class="arrow-prod" stroke-width="2.5" marker-end="url(#ap)"/>
+  <text x="96" y="478" class="legend-text">Production traffic</text>
 
-  <line x1="380" y1="474" x2="416" y2="474" class="arrow-ctrl" stroke-width="1.5" marker-end="url(#ac)"/>
-  <text x="424" y="478" class="legend-text">Control flow (orchestration)</text>
+  <line x1="260" y1="474" x2="296" y2="474" class="arrow-data" stroke-width="2" stroke-dasharray="6 3" marker-end="url(#ad)"/>
+  <text x="304" y="478" class="legend-text">Migration data flow</text>
+
+  <line x1="510" y1="474" x2="546" y2="474" class="arrow-ctrl" stroke-width="1.5" marker-end="url(#ac)"/>
+  <text x="554" y="478" class="legend-text">Control flow (orchestration)</text>
 
   <!-- Row 2: Box types -->
   <rect class="box-accent" x="52" y="492" width="28" height="18" rx="4" stroke-width="1.5"/>
