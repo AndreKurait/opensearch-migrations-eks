@@ -29,20 +29,23 @@ workflow status            # should show no active workflows
 
 ## Teardown Steps
 
-1. **Remove the Helm release** (deletes all migration pods, services, and workflows):
+1. **Remove the Helm release** (removes resources managed by that release):
 
    ```bash
    helm uninstall migration-assistant -n ma
    ```
 
-   Verify:
+   Inspect remaining workloads and storage before proceeding:
 
    ```bash
-   kubectl get pods -n ma    # should return "No resources found"
+   kubectl get pods,workflows,pvc -n ma
 
    ```
 
-2. **Delete the Kubernetes namespace:**
+   Runtime-created workflows, retained volumes, and resources owned by other releases
+   may remain. Back up required logs, state, and data before deletion.
+
+2. **Delete the Kubernetes namespace** only after reviewing everything it contains:
 
    ```bash
    kubectl delete namespace ma
@@ -92,10 +95,14 @@ workloads:
 helm uninstall migration-assistant -n ma
 ```
 
-This removes all migration pods, services, and CRDs while preserving the EKS cluster,
-node groups, and networking.
+This removes release-managed resources while preserving the EKS cluster, node groups,
+and networking. It does not guarantee removal of runtime-created workflows, retained
+volumes, or CRDs. Helm does not delete CRDs installed through a chart's `crds/`
+directory; see the [Helm CRD lifecycle guidance](https://helm.sh/docs/chart_best_practices/custom_resource_definitions/).
+CRDs are cluster-scoped and may be shared by other releases, so inventory their users
+before considering manual removal.
 
 :::tip
-After a partial teardown, you can redeploy later with
-`helm install migration-assistant ./chart -n ma` without recreating the cluster.
+A later installation can reuse the cluster, but first review retained resources,
+credentials, chart compatibility, and the values required by your release.
 :::

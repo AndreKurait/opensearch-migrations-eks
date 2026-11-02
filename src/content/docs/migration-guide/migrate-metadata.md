@@ -30,8 +30,10 @@ transformed automatically (see [Automatic Field Type Transformations](#automatic
    ```
 
 :::tip
-You can re-run `metadata migrate` safely. It is idempotent — indices that already
-exist on the target are skipped.
+Before rerunning, inspect existing target indexes, templates, aliases, and the evaluation
+output. Conflict handling and transformations depend on the installed release; do not
+assume every metadata write is skipped or safe to repeat. See the
+[upstream metadata guide](https://docs.opensearch.org/latest/migration-assistant/migration-phases/migrate-metadata/).
 :::
 
 ## What Gets Migrated

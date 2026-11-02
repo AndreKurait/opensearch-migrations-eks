@@ -17,11 +17,16 @@ Use the version string format expected by Migration Assistant: `ES 7.10`, `ES 6.
 
 ## Supported Source and Target Versions
 
-| Source Platform | Source Versions | Target Versions |
-|-----------------|-----------------|-----------------|
-| Elasticsearch | 1.x – 8.x | OpenSearch 1.x, 2.x, 3.x |
-| OpenSearch | 1.x | OpenSearch 1.x, 2.x, 3.x |
-| OpenSearch | 2.x | OpenSearch 2.x, 3.x |
+The following summarizes the [upstream compatibility matrix](https://docs.opensearch.org/latest/migration-assistant/is-migration-assistant-right-for-you/) reviewed in November 2026. Check the documentation for your installed release before selecting a path.
+
+| Source Platform | Source Versions | Target Versions | Phase limitation |
+|-----------------|-----------------|-----------------|------------------|
+| Elasticsearch | 1.x – 2.x | OpenSearch 1.x, 2.x, 3.x | Backfill only |
+| Elasticsearch | 5.x – 7.x | OpenSearch 1.x, 2.x, 3.x | Check release-specific capabilities |
+| Elasticsearch | 8.x | OpenSearch 2.x, 3.x | OpenSearch 1.x is not supported |
+| OpenSearch | 1.x – 2.x | OpenSearch 2.x, 3.x | Check release-specific capabilities |
+
+Version numbers alone are insufficient. For example, the upstream guide excludes snapshots using `zstd` and `zstd_no_dict` codecs; index features and shard sizes also require review.
 
 ### Version-Specific Guidance
 
@@ -31,8 +36,8 @@ Use the version string format expected by Migration Assistant: `ES 7.10`, `ES 6.
 - Some index settings may not be compatible and will be skipped
 
 **Elasticsearch 6.x:**
-- Requires handling for multiple mapping types per index
-- Configure `multiTypeBehavior` in your migration config (merge types, split to separate indexes, or fail)
+- Generally uses single-type indexes; upgraded or legacy datasets may need type-handling decisions
+- Run metadata evaluation first and configure `multiTypeBehavior` only when multi-type issues are reported
 
 **Elasticsearch 7.x:**
 - Most compatible path due to shared codebase with OpenSearch 1.0
@@ -54,17 +59,18 @@ Use the version string format expected by Migration Assistant: `ES 7.10`, `ES 6.
 | Self-managed (on-premises) | ✓ | ✓ |
 | Self-managed (cloud-hosted) | ✓ | ✓ |
 | Amazon OpenSearch Service | ✓ | ✓ |
-| Amazon OpenSearch Serverless | ✗ | ✓ |
-| Elastic Cloud | ✓ | ✓ |
+| Amazon OpenSearch Serverless | ✗ | Release/collection-dependent |
 | AWS EC2 | ✓ | ✓ |
 
 :::note
-Amazon OpenSearch Serverless is supported as a target for document backfill and index metadata migration. Serverless collections must be pre-created via the AWS API. TIMESERIES and VECTOR collection types use server-generated document IDs; SEARCH collections preserve source IDs.
+Check the upstream compatibility guide for supported Serverless collection generations, document-ID behavior, and migration phases. Do not assume all collection types preserve IDs or support the same metadata operations.
 :::
 
 ## Component Support
 
-### Fully Supported
+### Objects to Evaluate
+
+Migration Assistant handles these object categories, subject to source/target features and release-specific transformations. Evaluate the actual metadata before migration.
 
 | Component | Description |
 |-----------|-------------|
@@ -91,7 +97,7 @@ Amazon OpenSearch Serverless is supported as a target for document backfill and 
 
 ## Pre-Migration Checklist
 
-- [ ] **Verify versions**: Confirm source and target versions are in the compatibility matrix above
+- [ ] **Verify versions and codecs**: Confirm the path and snapshot format against the upstream documentation for your installed release
 - [ ] **Determine source version**: Run `curl <source-endpoint>/` and note the version string
 - [ ] **Identify unsupported components**: Review the "Not Supported" table and plan manual migration
 - [ ] **Plan index scope**: Decide which indexes to migrate; use index allowlists to exclude system indexes

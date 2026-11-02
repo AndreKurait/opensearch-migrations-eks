@@ -34,7 +34,7 @@ Monitor via CloudWatch dashboards or the Argo Workflows UI for detailed progress
 
 ## Scaling Workers
 
-RFS workers read from S3, not the source cluster. Scaling up workers has **zero impact on the source cluster**.
+RFS workers read document data from S3, so increasing workers does not add RFS read-API load to the source. It does increase target write pressure. Snapshot creation, metadata operations, and validation can still use source resources. See the [upstream backfill guide](https://docs.opensearch.org/latest/migration-assistant/migration-phases/backfill/) for release-specific configuration.
 
 ```yaml
 # In workflow configuration
@@ -58,7 +58,7 @@ console backfill pause
 console backfill resume
 ```
 
-Backfill is resumable — workers track progress per shard and resume from where they left off.
+Workers track shard progress, but recovery depends on the installed release and retained coordination state. Inspect the failure and document-level errors before resuming; some work may be repeated. Enable the release's failed-document logging before starting if you need those records for remediation.
 
 ## Stopping Backfill
 
@@ -88,14 +88,14 @@ console clusters cat-indices --target
 | `maxShardSizeGb` | 80 | Maximum shard size to process |
 | K8s resource limits | 2 vCPU / 4 GB | Per-worker resource allocation |
 
-Peak throughput: **590,000 docs/min** per 2 vCPU worker.
+Measure throughput with a representative pilot. Document size, transformations, shard distribution, target indexing capacity, and network bandwidth all affect the result. This site does not provide a reproducible benchmark establishing a per-worker throughput guarantee.
 
 ## Next Steps
 
 Before moving on, confirm your backfill is healthy:
 
 1. **Document counts match** — run `console clusters cat-indices --source` and `console clusters cat-indices --target` and compare totals
-2. **No failed shards** — check `console backfill status` shows all shards completed
+2. **No unhandled failures** — check shard status and document-level indexing errors; completed shards alone do not prove every document was indexed
 3. **Spot-check queries** — run 3–5 representative queries against both clusters and compare results
 
 Then continue:

@@ -126,7 +126,7 @@ console backfill stop                      # Stop and remove all backfill worker
 |-----------------|---------|-------------|
 | `<COUNT>` | `scale` | Number of workers (integer, max = shard count) |
 
-**Example output for `backfill status`:**
+**Illustrative output for `backfill status` (not a throughput benchmark):**
 
 ```
 
@@ -258,7 +258,7 @@ Steps:
 ```
 
 :::caution
-`workflow cancel` stops all running steps immediately. In-progress backfill workers will terminate. The workflow can be re-submitted and will resume where it left off due to idempotent step design.
+Cancellation is a request, not proof that every worker or write has stopped. Verify workflow and pod status before retrying or deleting resources. Inspect completed target writes, failed documents, and retained coordination state; resubmitting does not guarantee that every step resumes safely. Use the cancellation and recovery procedure for your installed CLI version.
 :::
 
 ## Quick Reference

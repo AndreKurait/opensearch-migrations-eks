@@ -42,8 +42,8 @@ Reads captured traffic from Kafka and replays it against the target cluster.
 Document migration engine that reads raw Lucene segment files from S3 snapshots.
 
 - **K8s resource:** Jobs managed by Argo Workflows
-- **Scaling:** Up to 1 worker per shard, reads from S3 (zero source cluster impact)
-- **Performance:** 590,000 docs/min per 2 vCPU worker
+- **Scaling:** Workers read bulk document data from S3; shard count and target write capacity limit useful concurrency
+- **Performance:** Workload-dependent; measure a representative pilot using the [backfill guidance](/opensearch-migrations-eks/migration-guide/backfill/)
 
 ## Metadata Migration Tool
 

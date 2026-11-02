@@ -6,17 +6,22 @@ description: IAM roles, security groups, and authentication configuration for EK
 This page covers AWS-specific IAM and security configuration for EKS deployments. For generic Kubernetes deployments, authentication is handled through Kubernetes secrets — see [Deploying to Kubernetes](/opensearch-migrations-eks/deployment/deploying-to-kubernetes/#3-configure-authentication-secrets).
 :::
 
-This guide covers IAM roles, IRSA configuration, security groups, and authentication setup for Migration Assistant on EKS.
+This page contains IAM and IRSA configuration examples for Migration Assistant on EKS.
+The current upstream EKS path uses Pod Identity; older or custom installations may use
+IRSA. Match the setup to your installed release and verify credentials separately in
+the console and workflow executor pods. These examples are not evidence that bootstrap
+has configured every workload automatically.
 
 ## IAM Roles
 
-The bootstrap script creates the following IAM roles:
+The following are role categories used by the examples. Exact roles and associations
+depend on the deployment version and configuration:
 
 | Role | Purpose | Used by |
 |------|---------|---------|
 | **EKS Node Role** | Base permissions for EKS managed node group instances | EC2 instances in the node group |
 | **Snapshot Role** | S3 access for snapshot creation and RFS reading | Passed to OpenSearch snapshot repository registration |
-| **Migration Console Role** | Permissions for migration operations, S3 access, and OpenSearch API calls | Migration Console pod (via IRSA) |
+| **Migration Console Role** | Permissions for migration operations, S3 access, and OpenSearch API calls | Migration Console pod; executor pods also need their own configured credentials |
 
 ### Snapshot Role Policy
 
@@ -89,10 +94,10 @@ Scope the `OpenSearchAccess` statement to specific domain ARNs in production rat
 
 ## IRSA (IAM Roles for Service Accounts)
 
-The bootstrap script configures [IAM Roles for Service Accounts (IRSA)](https://docs.aws.amazon.com/eks/latest/userguide/iam-roles-for-service-accounts.html) so that pods authenticate to AWS using scoped IAM roles instead of node-level credentials. This is the EKS best practice for least-privilege access.
+For an installation that uses [IAM Roles for Service Accounts (IRSA)](https://docs.aws.amazon.com/eks/latest/userguide/iam-roles-for-service-accounts.html), pods authenticate through a service-account-bound role. The following is an IRSA example, not a description of every bootstrap release.
 
 The setup involves:
-1. **OIDC provider** — The bootstrap script creates an IAM OIDC identity provider for the EKS cluster.
+1. **OIDC provider** — The EKS cluster needs a corresponding IAM OIDC identity provider.
 
 2. **IAM role trust policy** — Each role includes a trust policy that allows the Kubernetes service account to assume it:
 
@@ -126,7 +131,9 @@ The setup involves:
    ```
 
 :::note
-If you deployed with the bootstrap script, IRSA is configured automatically. You only need to set this up manually if you created the EKS cluster independently.
+A successful console connection check does not prove workflow executor pods have
+credentials. Verify the identity mechanism and permissions for each workload using the
+[upstream workflow setup guide](https://docs.opensearch.org/latest/migration-assistant/workflow-cli/getting-started/).
 :::
 
 ## Security Groups
@@ -217,7 +224,9 @@ kubectl create secret generic source-auth -n ma \
 
 #### SigV4
 
-For EKS deployments using SigV4 with Amazon OpenSearch Service, authentication is handled through IRSA — no secret is needed. Configure the Helm values:
+For EKS deployments using SigV4 with Amazon OpenSearch Service, configure a credential
+source such as Pod Identity or IRSA for every workload making signed requests.
+The following is an IRSA-oriented values example; confirm the schema for your release:
 
 ```yaml
 sourceCluster:
@@ -230,7 +239,8 @@ targetCluster:
     type: sigv4
 ```
 
-Verify the service account is annotated correctly:
+For IRSA, verify the service account annotation. Pod Identity uses role associations
+instead and is not validated by this annotation check:
 
 ```bash
 kubectl get serviceaccount migration-console -n ma \
@@ -251,7 +261,7 @@ Only use `none` for development or testing. Production clusters should always re
 ### SigV4 Authentication Flow (EKS)
 
 When using SigV4 authentication with Amazon OpenSearch Service:
-1. The Migration Console pod's service account is annotated with the Migration Console IAM Role ARN (configured by the bootstrap script or manually via IRSA).
+1. The console and workflow executor pods obtain credentials from their configured Pod Identity associations or IRSA roles.
 
 2. The IAM role must be mapped to an OpenSearch backend role in the target domain's security configuration (see [OpenSearch Service Configuration](#opensearch-service-configuration) above).
 

@@ -13,14 +13,14 @@ Every migration involves up to three independent concerns. You may need all thre
 |--------|-------------|-----------------|
 | **Metadata migration** | Copies index settings, mappings, templates, component templates, and aliases | Always — the target needs to know how your data is structured before documents arrive |
 | **Backfill (historical data)** | Moves existing documents from source to target | Always — unless starting fresh with an empty target |
-| **Capture and Replay (live traffic)** | Records ongoing writes and replays them on the target | When you need zero-downtime migration and can't pause writes during backfill |
+| **Capture and Replay (live traffic)** | Records routed traffic and replays it on the target | When writes continue during backfill and you need to reduce the cutover pause |
 
 ## Why Not Just Snapshot/Restore or the Reindex API?
 
 ### Native snapshot/restore
 
-- **Major version gap**: Only works within the same major version or one major version up (e.g., ES 7.x → OS 1.x). Jumping further requires multiple intermediate upgrades.
-- **Downtime**: Restore requires the target to be offline or empty. No built-in way to keep the target in sync with ongoing writes.
+- **Version compatibility**: Restore compatibility depends on the engine and the version that created each index. Check the [upstream snapshot/restore requirements](https://docs.opensearch.org/latest/tuning-your-cluster/availability-and-recovery/snapshots/snapshot-restore/) for your source and target.
+- **Target conflicts and ongoing writes**: Restore can run on a running cluster, but conflicting index names need to be handled, for example by renaming restored indexes. Restore alone does not synchronize writes made after the snapshot.
 - **No transformation**: If field types or mappings need to change between versions, snapshot/restore can't help.
 
 ### The `_reindex` API
@@ -35,27 +35,27 @@ Every migration involves up to three independent concerns. You may need all thre
 
 **Reindex-from-Snapshot (RFS)** takes a fundamentally different approach:
 
-1. Takes a **one-time snapshot** of the source cluster (the only time the source is touched)
+1. Creates or reuses a **snapshot** of the source cluster
 2. Reads the **raw Lucene segment files** directly from the snapshot in S3
 3. Extracts documents, applies transformations, and **bulk-indexes them on the target**
 
-This means: **zero ongoing source load**, **no version compatibility limit** (e.g., ES 1.x → OS 3.x), **massive parallelism** (one worker per shard), and **full resumability** (failed shards are retried without restarting).
+RFS reads bulk document data from the snapshot rather than the source's live search APIs. Supported version paths, snapshot codecs, shard sizes, and retry behavior still impose limits. Check the [upstream compatibility guidance](https://docs.opensearch.org/latest/migration-assistant/is-migration-assistant-right-for-you/) and validate a representative subset first.
 
 ## How RFS Works
 
 ### The Process
 
-1. **Snapshot** — A point-in-time snapshot of the source cluster is created and stored in S3
+1. **Snapshot** — A snapshot of the source cluster is created and stored in S3; shards can represent different moments during snapshot creation
 2. **Shard splitting** — The snapshot is split into its component shards. Each shard is an independent unit of work.
 3. **Parallel processing** — A fleet of RFS workers each pick up a shard, extract documents from the raw Lucene files, apply transformations, and bulk-index them on the target
-4. **Coordination** — Progress is tracked automatically so completed shards are not reprocessed on retry
+4. **Coordination** — Workers track shard progress; recovery depends on the installed version and retained coordination state
 
 ### Why This Matters
 
-- **Parallelism**: Each shard is independent. More workers = faster migration. Maximum useful worker count equals your primary shard count.
-- **Resumability**: If a worker dies, its shard lease expires and another worker picks it up. Work is never lost.
-- **No source impact**: After the initial snapshot, the source cluster is not touched.
-- **Version independence**: Works across any supported version gap.
+- **Parallelism**: Workers can process different shards concurrently. Target indexing capacity, shard count, and network throughput limit useful concurrency.
+- **Recovery**: Failed shard work may be retried. Check workflow status, retained checkpoints, and document-level failures before resuming.
+- **Reduced source read load**: Bulk reads come from the snapshot. Snapshot creation, metadata queries, and validation can still use the source.
+- **Version migration**: RFS supports the paths listed for your Migration Assistant release, subject to codec and feature limitations.
 
 ### Performance Characteristics
 
@@ -69,7 +69,7 @@ This means: **zero ongoing source load**, **no version compatibility limit** (e.
 
 ## How Capture and Replay Works
 
-1. **Capture Proxy** — An isolated fleet deployed alongside the source cluster. Forwards every request to the source while recording to Kafka. The source cluster is never modified.
+1. **Capture Proxy** — A fleet deployed in front of the source cluster. It forwards traffic routed through it while recording to Kafka. Clients that bypass the proxy are not captured.
 2. **Kafka** — Durable message queue buffering captured traffic. Per-connection ordering is preserved.
 3. **Traffic Replayer** — Reads from Kafka, reconstructs HTTP requests, applies transformations, and replays against the target. Can compare source and target responses.
 4. **Switchover** — Once the target is caught up and validated, client traffic is redirected.
@@ -91,16 +91,16 @@ Snapshot source → Migrate metadata → Backfill documents → Verify → Switc
 
 ### Scenario 2: Capture and Replay Only
 
-Best when data is small enough that live replay alone can synchronize the target, or when you only need to validate target behavior.
+Useful when the target already has the required historical baseline, or when captured traffic is sufficient for a behavior-validation experiment. Replay does not recover existing documents that are never present in captured writes; a small source dataset alone does not remove the need for backfill.
 
 ```
 
 Start capturing → Migrate metadata → Replay traffic → Verify → Switch traffic
 ```
 
-### Scenario 3: Backfill + Capture and Replay (Zero-Downtime)
+### Scenario 3: Backfill + Capture and Replay
 
-The most comprehensive approach. Capture begins first so no writes are lost.
+Start and verify capture before creating the snapshot. Before cutover, verify capture coverage, retention, replay lag, failed writes, and target data. This approach can reduce the write pause; the workflow alone does not guarantee a lossless or uninterrupted cutover.
 
 ```
 
@@ -133,7 +133,7 @@ Configure → Submit → Monitor → Validate → Adjust → Repeat
 
 ### When to Start Over vs. Resume
 
-- **RFS backfill failed mid-shard**: Resubmit the workflow. RFS tracks completed shards automatically — only incomplete shards are reprocessed.
+- **RFS backfill failed mid-shard**: Inspect the failure, retained coordination state, and failed-document records. Use the recovery procedure for your installed version; resubmitting is not a universal guarantee that only incomplete work runs.
 - **Metadata migration had errors**: Fix the configuration, clear the problematic indexes on the target, and resubmit.
 - **Wrong indexes migrated**: Clear the target indexes and resubmit with corrected allowlists.
 - **Re-run with fresh data**: Delete the target indexes first, then resubmit. RFS only performs puts — it does not delete documents removed from the source.
@@ -143,6 +143,6 @@ Configure → Submit → Monitor → Validate → Adjust → Repeat
 | Question | If yes... |
 |----------|-----------|
 | Can you pause writes during migration? | Scenario 1 (Backfill only) is simplest |
-| Do you need zero downtime? | Scenario 3 (Backfill + Capture and Replay) |
-| Is your data small and write-heavy? | Scenario 2 (Capture and Replay only) may suffice |
+| Do writes need to continue during backfill? | Evaluate Scenario 3 and validate the cutover procedure |
+| Does the target already have the required historical baseline? | Scenario 2 may suffice for subsequent captured writes |
 | Just upgrading versions with the same data? | Scenario 1 with a fresh snapshot |

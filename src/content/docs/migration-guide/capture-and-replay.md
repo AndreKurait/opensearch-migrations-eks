@@ -1,10 +1,9 @@
 ---
 title: Capture & Replay
-description: Capture live traffic and replay it against the target cluster for zero-downtime migration validation.
+description: Capture routed traffic, validate replay against the target, and plan cutover.
 ---
-Capture and Replay records every request that hits the source cluster and replays it
-against the target — giving you a side-by-side comparison before you cut over
-production traffic.
+Capture and Replay records traffic routed through the capture proxy and replays it
+against the target for comparison before cutover. Traffic that bypasses the proxy is not captured.
 
 ## Architecture
 
@@ -47,8 +46,9 @@ Clients → Capture Proxy Fleet → Source Cluster
 
    You should see a non-zero message count on the `logging-traffic-topic`.
 :::tip
-Start capture **before** backfill completes. This ensures that any writes that arrive
-after the snapshot was taken are also delivered to the target.
+Start and verify capture **before creating the snapshot**. Check that all relevant
+clients use the proxy and that Kafka retention covers the migration. Replay failures
+and capture gaps must be resolved before cutover.
 :::
 
 ## Replaying Traffic
@@ -170,8 +170,9 @@ console capture stop    # Stop the proxy fleet (after traffic is routed away)
 ```
 
 :::note
-Stop the **replayer** first to let it drain the Kafka topic. Then stop capture
-after you have routed traffic directly to the target
+Stopping the replayer does not drain Kafka. Verify that the required captured writes
+have been replayed and the target is validated before stopping replay. Stop capture
+only after traffic no longer uses the proxy
 (see [Traffic Routing](/opensearch-migrations-eks/migration-guide/traffic-routing/)).
 :::
 
