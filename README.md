@@ -1,49 +1,68 @@
-# Starlight Starter Kit: Basics
+# OpenSearch Migration Assistant documentation prototype
 
-[![Built with Starlight](https://astro.badg.es/v2/built-with-starlight/tiny.svg)](https://starlight.astro.build)
+A personal documentation site exploring how to explain Migration Assistant
+deployment and migration workflows on Kubernetes, including Amazon EKS.
+The site uses Astro and Starlight.
 
+The public implementation and releases are maintained in
+[opensearch-project/opensearch-migrations](https://github.com/opensearch-project/opensearch-migrations).
+This repository contains the documentation site, illustrations, styling, and site
+checks. It is an independent documentation prototype, not an official release
+or support channel for the upstream project.
+
+## Scope and status
+
+Content covers deployment, IAM, snapshots, metadata migration, document backfill,
+traffic capture/replay, and the workflow CLI. Pages are draft guidance:
+compatibility tables, performance figures, recovery claims, and commands need
+verification against the exact upstream release and deployment environment.
+Site checks do not test a migration or establish production safety.
+
+The configured GitHub Pages location is
+<https://andrekurait.github.io/opensearch-migrations-eks/>.
+The `/opensearch-migrations-eks/` base path also applies during local development.
+
+## Develop locally
+
+Use Node.js 22, matching the PR workflow, and npm:
+
+```sh
+npm ci
+npm run dev
 ```
-npm create astro@latest -- --template starlight
-```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+Open `http://localhost:4321/opensearch-migrations-eks/`.
 
-## 🚀 Project Structure
+| Command | Purpose |
+| --- | --- |
+| `npm run build` | Generate the static site in `dist/` |
+| `npm run preview` | Serve the built site locally |
+| `npm run lint` | Lint Markdown content and the Astro configuration |
+| `npm run check` | Build, lint generated HTML, and check local links |
+| `npm run check:a11y` | Run the accessibility checker against a local server |
+| `npm test` | Run Playwright checks for mobile overflow and browser console errors |
 
-Inside of your Astro + Starlight project, you'll see the following folders and files:
+Playwright starts a build and preview server through `playwright.config.ts`.
+Install its Chromium browser first with `npx playwright install chromium`.
+The accessibility command expects a separately running server on port 4321.
 
-```
-.
-├── public/
-├── src/
-│   ├── assets/
-│   ├── content/
-│   │   └── docs/
-│   └── content.config.ts
-├── astro.config.mjs
-├── package.json
-└── tsconfig.json
-```
+## Repository layout
 
-Starlight looks for `.md` or `.mdx` files in the `src/content/docs/` directory. Each file is exposed as a route based on its file name.
+- `src/content/docs/` — Markdown and MDX pages.
+- `src/styles/`, `src/images/`, and `public/` — styling, illustrations, and static files.
+- `astro.config.mjs` — navigation, metadata, and the site/base-path configuration.
+- `tests/` — browser checks.
+- `scripts/` — accessibility checks and separate analysis experiments.
 
-Images can be added to `src/assets/` and embedded in Markdown with a relative link.
+Normal site development requires no AWS credentials. Some analysis scripts call
+Amazon Bedrock; review their behavior and configuration before running them.
 
-Static assets, like favicons, can be placed in the `public/` directory.
+## Publishing and contributions
 
-## 🧞 Commands
+The existing Pages workflow builds and deploys on pushes to `main` or manual
+dispatch. Local build and test commands do not publish the site.
 
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Check out [Starlight’s docs](https://starlight.astro.build/), read [the Astro documentation](https://docs.astro.build), or jump into the [Astro Discord server](https://astro.build/chat).
+Keep documentation changes tied to a specific upstream release or source.
+Include reproduction details for command examples and measured conditions for
+performance claims. Verify rendering and links under the configured base path
+before opening a pull request.

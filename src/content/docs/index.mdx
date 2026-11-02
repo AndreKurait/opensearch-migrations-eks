@@ -1,13 +1,13 @@
 ---
 title: OpenSearch Migration Assistant
-description: Migrate from Elasticsearch to OpenSearch — zero downtime, zero source impact, zero intermediate upgrades.
+description: Plan Elasticsearch and OpenSearch migrations with snapshot backfill, traffic replay, and validation.
 template: splash
 hero:
-  tagline: "Stop dreading your Elasticsearch migration. Start it today — safely."
+  tagline: "Plan, test, and validate your migration to OpenSearch."
   image:
     file: ../../images/architecture-hero.svg
   actions:
-    - text: Deploy in 5 Minutes
+    - text: Deployment Guide
       link: /opensearch-migrations-eks/deployment/deploying-to-eks/
       icon: right-arrow
       variant: primary
@@ -22,154 +22,149 @@ hero:
 
 import { Card, CardGrid, LinkCard, Aside, Steps, Tabs, TabItem, Badge } from '@astrojs/starlight/components';
 
-## Your Elasticsearch migration doesn't have to be terrifying.
+## Plan a migration around your data and workload
 
-Every team puts it off. The version gap is too wide. The cluster is in production. Nobody wants to be the one who takes search down for a week. And the official upgrade path says you need to hop through three intermediate versions just to get current.
+Migration Assistant provides workflows for snapshot-based backfill and traffic capture/replay. Choose a workflow after checking the source and target versions, required transformations, and application requirements.
 
-**Migration Assistant was built for exactly this situation.**
-
-It reads raw Lucene segment files directly from a snapshot in S3. Your source cluster is never queried, never loaded, never touched after the initial snapshot. If something goes wrong, your production cluster doesn't even know a migration was happening.
+This site is an independent documentation prototype. Confirm commands and compatibility against the selected [upstream release](https://github.com/opensearch-project/opensearch-migrations/releases) before using them.
 
 <Aside type="tip" title="The key insight">
-  Traditional migrations reindex through the source cluster — hammering it with read load during the most critical moment. Migration Assistant bypasses this entirely. It reads the snapshot files at the storage layer, transforms them, and writes directly to your new OpenSearch cluster. **Zero source impact. Zero production risk.**
+  Snapshot backfill reads snapshot data rather than performing the bulk document read through the source cluster. Snapshot creation, traffic capture, validation, and cutover can still affect a running system. Test those operations and their permissions before production use.
 </Aside>
 
 ## How Big Is Your Migration?
 
-Pick the scenario that matches your cluster. These are real-world estimates using default worker counts on Kubernetes.
+Use a representative pilot to estimate duration and capacity. Data volume alone does not determine migration time.
 
 <Tabs>
   <TabItem label="Small (under 100 GB)">
     **Typical clusters:** Dev/staging environments, internal search, small product catalogs
 
-    | What you'll need | Estimate |
+    | Planning step | What to establish |
     |---|---|
-    | Deploy Migration Assistant | ~10 minutes |
-    | Snapshot + metadata migration | ~15 minutes |
-    | Document backfill | **Under 30 minutes** |
-    | Validation + switchover | ~15 minutes |
-    | **Total wall-clock time** | **~1 hour** |
+    | Deploy Migration Assistant | A tested deployment for the chosen release |
+    | Snapshot + metadata migration | Snapshot access and required transformations |
+    | Document backfill | Measured throughput on representative data |
+    | Validation + switchover | Application checks and a cutover plan |
 
-    Workers needed: **2–4** (default)
+    Start with the selected release's worker configuration and measure target write capacity.
 
     <LinkCard title="Start here → Backfill-Only Guide" description="The simplest path. Snapshot, migrate, verify, switch." href="/opensearch-migrations-eks/migration-guide/backfill/" />
   </TabItem>
   <TabItem label="Medium (100 GB – 1 TB)">
     **Typical clusters:** E-commerce search, log aggregation, mid-size SaaS products
 
-    | What you'll need | Estimate |
+    | Planning step | What to establish |
     |---|---|
-    | Deploy Migration Assistant | ~10 minutes |
-    | Snapshot + metadata migration | ~20 minutes |
-    | Document backfill | **1–3 hours** |
-    | Validation + switchover | ~30 minutes |
-    | **Total wall-clock time** | **~2–4 hours** |
+    | Deployment | Resource and network requirements |
+    | Snapshot + metadata migration | Snapshot duration and schema changes |
+    | Document backfill | Throughput, shard distribution, and target limits |
+    | Validation + switchover | Time for reconciliation and application testing |
 
-    Workers needed: **8–16** (scale up for speed — each worker processes one shard at ~590K docs/min)
+    Benchmark worker counts with your mappings, document sizes, and target cluster.
 
-    <LinkCard title="Start here → Choose your migration path" description="Backfill-only if you can pause writes briefly. Zero-downtime if you can't." href="/opensearch-migrations-eks/migration-guide/backfill/" />
+    <LinkCard title="Start here → Choose your migration path" description="Compare snapshot backfill with workflows that also capture and replay writes." href="/opensearch-migrations-eks/migration-guide/backfill/" />
   </TabItem>
   <TabItem label="Large (1 TB+)">
     **Typical clusters:** Observability platforms, large-scale analytics, multi-tenant search
 
-    | What you'll need | Estimate |
+    | Planning step | What to establish |
     |---|---|
-    | Deploy Migration Assistant | ~10 minutes |
-    | Snapshot + metadata migration | ~30 minutes |
-    | Document backfill | **4–12+ hours** (scales linearly with workers) |
-    | Validation + switchover | ~1 hour |
-    | **Total wall-clock time** | **Half a day to overnight** |
+    | Deployment | Capacity, quotas, and operational monitoring |
+    | Snapshot + metadata migration | Access, retention, and transformation requirements |
+    | Document backfill | Sustained throughput and recovery behavior |
+    | Validation + switchover | A rehearsed cutover and rollback procedure |
 
-    Workers needed: **20+** (each worker is independent — add more to go faster, no coordination overhead)
+    Increasing workers can encounter shared storage, network, or target-cluster bottlenecks. Measure before scaling.
 
-    <LinkCard title="Start here → Zero-Downtime Migration" description="Capture live traffic while backfilling, then replay to catch up. No write pause needed." href="/opensearch-migrations-eks/migration-guide/capture-and-replay/" />
+    <LinkCard title="Start here → Capture and Replay" description="Plan traffic capture, backfill, replay, and cutover validation." href="/opensearch-migrations-eks/migration-guide/capture-and-replay/" />
   </TabItem>
 </Tabs>
 
 ## What Scares You Most?
 
-We built Migration Assistant to address the exact fears that keep teams stuck on aging Elasticsearch clusters.
+These are migration planning concerns to evaluate in a staging environment.
 
 <CardGrid>
   <Card title="We can't afford downtime" icon="approve-check-circle">
-    The **zero-downtime path** captures live traffic while backfilling from the snapshot. Once the backfill completes, it replays captured writes to close the gap. You switch traffic only when counts and queries match. Your users never see an interruption.
+    Capture/replay workflows aim to reduce the write pause during migration. Availability still depends on capture coverage, replay correctness, traffic routing, and the cutover procedure. Validate those conditions before promising uninterrupted service.
   </Card>
   <Card title="Our version gap is too wide" icon="random">
-    Go directly from **Elasticsearch 1.x to OpenSearch 3.x**. No stepping through 5.x → 6.x → 7.x → OS 1.x. Migration Assistant transforms index mappings and settings at the Lucene level. One migration. Any gap.
+    Check the exact source/target pair against the selected release. Mapping transformations, plugins, index formats, and application behavior can impose additional requirements; a broad version range does not establish compatibility for your data.
   </Card>
   <Card title="What if it corrupts our source?" icon="warning">
-    It **physically cannot**. After the initial snapshot, Migration Assistant reads only from S3. It never sends a single request back to your source cluster. No reindex API calls, no scroll queries, no load. Your source cluster doesn't know the migration is happening.
+    Snapshot backfill reads a snapshot copy. The overall migration can still involve source snapshot operations, traffic capture, and validation requests. Review permissions, test operational impact, and retain backups.
   </Card>
   <Card title="What if it fails halfway through?" icon="rocket">
-    Every shard is an independent unit of work. If a shard fails, it retries automatically. If the whole workflow fails, resume from the last checkpoint — it won't re-migrate shards that already succeeded. Argo Workflows tracks every step with approval gates before destructive actions.
+    Inspect the workflow state and the selected release's retry/resume behavior before restarting. Test failure recovery on representative data; do not assume every operation is idempotent or every destructive step has an approval gate.
   </Card>
 </CardGrid>
 
 ## What Happens If Something Goes Wrong?
 
-This is the question everyone asks first. Here's the honest answer:
+Prepare a recovery procedure before starting the migration:
 
 <Steps>
-1. **Your source cluster is untouched.** Always. Migration Assistant reads from a snapshot in S3, not from the live cluster. If the entire migration fails catastrophically, your production Elasticsearch cluster is exactly as it was before.
+1. **Understand source impact.** Snapshot backfill and traffic capture have different operational effects. Test snapshot creation, capture, and validation separately.
 
-2. **Backfill is resumable.** Each shard is tracked independently. If a worker crashes or a network blip interrupts processing, only the affected shards retry. Completed shards are never re-processed.
+2. **Check recovery behavior.** Confirm which workflow steps can retry or resume for your release and inspect their recorded state before rerunning them.
 
-3. **Approval gates protect you.** The Argo workflow pauses before metadata migration, before backfill, and before switchover. You inspect the state and explicitly approve each phase. Nothing happens automatically that you haven't reviewed.
+3. **Review workflow controls.** Inspect the actual workflow for approval gates and destructive actions. Add operational review where your migration requires it.
 
-4. **Validation runs before switchover.** Document count comparison and query result comparison run against both clusters. You see discrepancies before you redirect any traffic. If the numbers don't match, don't switch — investigate first.
+4. **Validate before switching.** Compare document contents, counts, mappings, and representative queries. Confirm application behavior and investigate discrepancies before redirecting traffic.
 
-5. **Rollback is instant.** Until you redirect traffic, your source cluster is still serving all requests. Rollback means simply not switching. If you've already switched, your source still has all its data — point traffic back.
+5. **Rehearse rollback.** After cutover, new writes may exist only on the target. Redirecting traffic back can lose access to those updates unless your recovery plan reconciles them. Define rollback criteria, data handling, and routing steps in advance.
 </Steps>
 
 <Aside type="caution" title="The one thing you should plan for">
-  If you're using the **zero-downtime path**, the traffic capture proxy sits in the request path. Test it in staging first to validate latency overhead. The proxy adds single-digit millisecond latency in typical deployments, but your SLAs are yours to validate.
+  The traffic capture proxy sits in the request path. Measure latency, failure behavior, and capture coverage with representative traffic before production use.
 </Aside>
 
-## Why Now?
+## Choose and test an upstream release
 
 <CardGrid>
-  <Card title="Elasticsearch licensing has changed" icon="warning">
-    Since Elasticsearch 7.11, new releases are no longer Apache 2.0. If you're running 7.x or 8.x and care about open-source licensing, the window to migrate on your own terms is now — before your next major upgrade forces the decision.
+  <Card title="Check source requirements" icon="warning">
+    Record the source version, plugins, index formats, mappings, and snapshot repository configuration.
   </Card>
-  <Card title="EOL versions are a security risk" icon="error">
-    Elasticsearch 6.x reached end-of-life in February 2022. Elasticsearch 7.x mainstream support has ended. Every month without security patches is a month of accumulating risk. Migration Assistant lets you jump directly to a supported OpenSearch version.
+  <Card title="Check target requirements" icon="error">
+    Confirm the chosen release supports your target version and required migration features. Plan any manual transformations.
   </Card>
-  <Card title="OpenSearch 3.x is here" icon="star">
-    OpenSearch 3.x brings significant performance improvements, better storage efficiency, and new features. Migration Assistant is the fastest path from any Elasticsearch version to the latest OpenSearch — skip every intermediate version.
+  <Card title="Run a representative pilot" icon="star">
+    Use a disposable target to test correctness, throughput, failure recovery, and application behavior before committing to a production schedule.
   </Card>
 </CardGrid>
 
-## The Migration in 60 Seconds
+## Migration workflow
 
 <Steps>
-1. **Deploy** (~10 min) — Run the bootstrap script or Helm chart. It deploys Migration Assistant to your Kubernetes cluster and drops you into the Migration Console.
+1. **Deploy** — Follow the bootstrap or Helm instructions for the selected release and connect to the Migration Console.
 
-2. **Configure** (~5 min) — Define your source snapshot location, target OpenSearch endpoint, and migration options in a single YAML file.
+2. **Configure** — Define your source snapshot location, target OpenSearch endpoint, and migration options using that release's configuration schema.
 
-3. **Migrate** (varies) — Submit the workflow. It migrates metadata, backfills documents in parallel across workers, and pauses at approval gates for your sign-off.
+3. **Migrate** — Review and submit the workflow, then monitor metadata migration, backfill, and any capture/replay operations.
 
-4. **Validate & Switch** (~15 min) — Compare document counts and query results. When you're satisfied, redirect traffic to the target.
+4. **Validate & Switch** — Complete data and application checks, then follow the rehearsed cutover procedure.
 </Steps>
 
 ## Which Path Is Right for You?
 
 <Tabs>
   <TabItem label="Backfill Only">
-    **Best when:** You can briefly pause writes to the source cluster (maintenance window, off-peak hours, dev/staging).
+    **Consider when:** You can plan a write pause or otherwise reconcile changes made after the snapshot.
 
     **How it works:**
     1. Take a snapshot of the source cluster
     2. Migrate index metadata to the target
-    3. Backfill all documents from the snapshot
+    3. Backfill the selected snapshot data
     4. Verify document counts and queries
     5. Switch traffic to the target
 
-    **Trade-off:** Writes during the backfill window won't appear on the target. You'll need a brief write pause or accept that gap.
+    **Trade-off:** Writes made after the snapshot are not included in that snapshot. Plan a write pause or a separate way to reconcile them before cutover.
 
-    <LinkCard title="Backfill-Only Guide →" description="Step-by-step walkthrough with CLI commands" href="/opensearch-migrations-eks/migration-guide/backfill/" />
+    <LinkCard title="Backfill-Only Guide →" description="Workflow overview and CLI examples to verify against your release" href="/opensearch-migrations-eks/migration-guide/backfill/" />
   </TabItem>
-  <TabItem label="Zero-Downtime Migration">
-    **Best when:** You cannot pause writes. Production must keep serving reads and accepting writes throughout.
+  <TabItem label="Capture and Replay">
+    **Consider when:** You need to reduce the write pause and can validate traffic capture, replay, and cutover behavior.
 
     **How it works:**
     1. Deploy the traffic capture proxy in front of your source
@@ -178,51 +173,46 @@ This is the question everyone asks first. Here's the honest answer:
     4. Replay captured traffic to close the gap
     5. Verify, then switch traffic to the target
 
-    **Trade-off:** More moving parts. The capture proxy adds minimal latency. Requires more careful planning and testing.
+    **Trade-off:** More moving parts and a proxy in the request path. Measure latency and validate capture coverage, replay behavior, and data consistency.
 
-    <LinkCard title="Zero-Downtime Guide →" description="Full walkthrough including traffic capture setup" href="/opensearch-migrations-eks/migration-guide/capture-and-replay/" />
+    <LinkCard title="Capture and Replay Guide →" description="Workflow overview including traffic capture setup" href="/opensearch-migrations-eks/migration-guide/capture-and-replay/" />
   </TabItem>
 </Tabs>
 
 ## Performance at Scale
 
-Migration speed scales linearly with workers. Each worker independently processes one shard from the S3 snapshot.
+Measure throughput with representative data and the intended target cluster. Worker count alone does not establish an end-to-end completion time.
 
-| Workers | Throughput | 100 GB estimate | 500 GB estimate | 1 TB estimate |
-|---------|-----------|-----------------|-----------------|---------------|
-| 4 | ~2.4M docs/min | ~25 min | ~2 hrs | ~4 hrs |
-| 8 | ~4.7M docs/min | ~13 min | ~1 hr | ~2 hrs |
-| 16 | ~9.4M docs/min | ~7 min | ~30 min | ~1 hr |
-| 32 | ~18.9M docs/min | ~4 min | ~15 min | ~30 min |
+| Factor | What to measure |
+| --- | --- |
+| Documents and mappings | Sizes, transformations, and indexing cost |
+| Snapshot and network | Read throughput and transfer limits |
+| Target cluster | Sustained write capacity and rejected requests |
+| Workers and shards | Utilization, concurrency, and uneven shard sizes |
 
 <Aside type="note">
-  Based on **~590K docs/min per worker** with average document sizes. Your throughput depends on document size, mapping complexity, and target cluster write capacity. Failed shards retry automatically — no manual intervention needed.
+  Record the release, dataset, hardware, worker count, target configuration, and validation results when sharing a benchmark. This page does not provide a reproducible throughput benchmark.
 </Aside>
 
 ## Version Compatibility
 
-Migration Assistant handles the version transformation for you. No intermediate upgrades required.
+Check the selected upstream release's compatibility documentation and test your exact source/target pair. This prototype does not establish a universal compatibility matrix.
 
-| Source | → OpenSearch 1.x | → OpenSearch 2.x | → OpenSearch 3.x |
-|--------|:-:|:-:|:-:|
-| **Elasticsearch 1.x–7.x** | ✓ | ✓ | ✓ |
-| **Elasticsearch 8.x** | — | ✓ | ✓ |
-| **OpenSearch 1.x** | ✓ | ✓ | ✓ |
-| **OpenSearch 2.x** | — | ✓ | ✓ |
+Include index creation versions, plugins, mappings, and required migration features in that check. A successful document backfill alone does not establish application compatibility.
 
-Runs on: **Amazon EKS** · GKE · AKS · OpenShift · any Kubernetes 1.24+
+Check Kubernetes, Helm, storage, networking, and IAM prerequisites for the chosen deployment environment and chart version.
 
 ## What Gets Migrated
 
 <Tabs>
-  <TabItem label="Fully Automated">
-    These components are migrated automatically by the workflow:
+  <TabItem label="Migration Scope">
+    Check which of these components your selected release and workflow handle, and validate the results:
 
-    - ✅ **Documents** — All documents from all indices, backfilled from the snapshot
-    - ✅ **Index settings & mappings** — Transformed to be compatible with the target version
-    - ✅ **Index templates** — Both legacy and composable templates
-    - ✅ **Component templates** — Shared template building blocks
-    - ✅ **Aliases** — Index aliases preserved as-is
+    - **Documents** — Snapshot data selected for backfill
+    - **Index settings & mappings** — Required target-version transformations
+    - **Index templates** — Legacy and composable template handling
+    - **Component templates** — Shared template building blocks
+    - **Aliases** — Alias definitions and intended routing behavior
   </TabItem>
   <TabItem label="Manual Setup Required">
     These components need to be recreated manually on the target cluster:
@@ -234,7 +224,7 @@ Runs on: **Amazon EKS** · GKE · AKS · OpenShift · any Kubernetes 1.24+
     - ⚠️ **Data streams** — Require manual recreation on the target
 
     <Aside type="tip">
-      Plan 1–2 hours for manual setup depending on your security and pipeline complexity. See the [pre-migration checklist](/opensearch-migrations-eks/overview/migration-paths/) for details.
+      Estimate manual work from your configuration and application dependencies. See the [pre-migration checklist](/opensearch-migrations-eks/overview/migration-paths/) for topics to review.
     </Aside>
   </TabItem>
 </Tabs>
@@ -242,9 +232,9 @@ Runs on: **Amazon EKS** · GKE · AKS · OpenShift · any Kubernetes 1.24+
 ## Prerequisites
 
 :::note[Before you deploy]
-- **Kubernetes cluster** (EKS, GKE, AKS, OpenShift, or self-managed) with permissions to deploy Helm charts
+- **Kubernetes cluster** meeting the selected chart's requirements, with permissions to deploy it
 - **kubectl** and **Helm 3** installed locally
-- **Source cluster** accessible from your VPC (Elasticsearch 1.x–8.x or OpenSearch 1.x–2.x)
+- **Source and target clusters** supported by the selected release, with the connectivity required by your workflow
 - A **snapshot in S3** — or the ability to create one ([snapshot guide](/opensearch-migrations-eks/deployment/deploying-to-eks/))
 :::
 
@@ -255,7 +245,7 @@ Runs on: **Amazon EKS** · GKE · AKS · OpenShift · any Kubernetes 1.24+
 ## Ready?
 
 <CardGrid>
-  <LinkCard title="Deploy in 5 Minutes" description="Helm chart works on any Kubernetes cluster. EKS bootstrap script available for AWS." href="/opensearch-migrations-eks/deployment/deploying-to-eks/" />
+  <LinkCard title="Deployment Guide" description="Review Kubernetes and EKS deployment requirements for your release." href="/opensearch-migrations-eks/deployment/deploying-to-eks/" />
   <LinkCard title="Architecture Deep Dive" description="Components, data flow, how RFS works, and Argo orchestration." href="/opensearch-migrations-eks/overview/architecture/" />
   <LinkCard title="Migration Paths" description="Version matrix, platform support, and the pre-migration checklist." href="/opensearch-migrations-eks/overview/migration-paths/" />
   <LinkCard title="Troubleshooting" description="Connectivity, auth, workflow failures, and debugging." href="/opensearch-migrations-eks/reference/troubleshooting/" />
