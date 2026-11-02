@@ -1,3 +1,5 @@
+> **Frozen documentation prototype — November 2026. Existing pages remain available as a historical snapshot and will not track future releases. For current implementation and release guidance, start with [OpenSearch Migrations](https://github.com/opensearch-project/opensearch-migrations).**
+
 # OpenSearch Migration Assistant documentation prototype
 
 A personal documentation site exploring how to explain Migration Assistant
