@@ -1,4 +1,6 @@
 ---
+banner:
+  content: 'Frozen documentation prototype — November 2026. For current releases, see <a href="https://github.com/opensearch-project/opensearch-migrations">OpenSearch Migrations</a>.'
 title: Overview
 description: Introduction to Migration Assistant for OpenSearch — capabilities, architecture, performance, and getting started.
 ---

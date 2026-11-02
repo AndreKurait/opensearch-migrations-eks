@@ -1,4 +1,6 @@
 ---
+banner:
+  content: 'Frozen documentation prototype — November 2026. For current releases, see <a href="https://github.com/opensearch-project/opensearch-migrations">OpenSearch Migrations</a>.'
 title: Architecture
 description: Kubernetes architecture, component overview, and Argo Workflows orchestration.
 ---

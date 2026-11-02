@@ -1,4 +1,6 @@
 ---
+banner:
+  content: 'Frozen documentation prototype — November 2026. For current releases, see <a href="https://github.com/opensearch-project/opensearch-migrations">OpenSearch Migrations</a>.'
 title: Capture & Replay
 description: Capture routed traffic, validate replay against the target, and plan cutover.
 ---

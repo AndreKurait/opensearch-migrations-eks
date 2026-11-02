@@ -1,4 +1,6 @@
 ---
+banner:
+  content: 'Frozen documentation prototype — November 2026. For current releases, see <a href="https://github.com/opensearch-project/opensearch-migrations">OpenSearch Migrations</a>.'
 title: Teardown
 description: Remove migration infrastructure after a successful migration.
 ---

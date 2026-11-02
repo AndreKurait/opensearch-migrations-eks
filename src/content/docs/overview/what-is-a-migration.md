@@ -1,4 +1,6 @@
 ---
+banner:
+  content: 'Frozen documentation prototype — November 2026. For current releases, see <a href="https://github.com/opensearch-project/opensearch-migrations">OpenSearch Migrations</a>.'
 title: What Is a Migration
 description: The three aspects of migration, why RFS over reindex API, how RFS works, and choosing your scenario.
 ---

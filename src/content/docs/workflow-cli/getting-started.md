@@ -1,4 +1,6 @@
 ---
+banner:
+  content: 'Frozen documentation prototype — November 2026. For current releases, see <a href="https://github.com/opensearch-project/opensearch-migrations">OpenSearch Migrations</a>.'
 title: Workflow CLI Getting Started
 description: Step-by-step tutorial for configuring and running your first migration workflow.
 ---
