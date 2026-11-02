@@ -55,7 +55,7 @@ For Elasticsearch 7.x, use `ES_7_10` regardless of the exact minor version. Migr
 | `mtls` | Mutual TLS | `tls.crt`, `tls.key`, `ca.crt` |
 | `sigv4` | AWS Signature V4 | `region`, `service` |
 
-See [Deploying to Kubernetes](/opensearch-migrations-eks/deployment/deploying-to-kubernetes/#3-configure-authentication-secrets) for examples of creating each secret type. For EKS deployments using SigV4, see [IAM & Security](/opensearch-migrations-eks/deployment/iam-security/).
+See [Deploying to Kubernetes](/opensearch-migrations-eks/deployment/deploying-to-kubernetes/#3-configure-authentication-secrets) for examples of creating each secret type. For EKS deployments using SigV4, see [IAM & Security](/opensearch-migrations-eks/deployment/iam-and-security/).
 #### Basic Auth
 
 ```yaml

@@ -4,9 +4,13 @@ on:
   pull_request:
     branches: [main]
 
+permissions:
+  contents: read
+
 jobs:
   lint-and-check:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
 
@@ -32,9 +36,23 @@ jobs:
       - name: Link check
         run: npm run check:links
 
-      - name: Accessibility check (pa11y)
+      - name: Install accessibility-test browser
+        run: npx playwright install --with-deps --only-shell chromium
+
+      - name: Accessibility check
         run: |
-          npx serve dist -l 4321 -s &
-          sleep 3
+          ./node_modules/.bin/astro preview --host 127.0.0.1 --port 4321 &
+          preview_pid=$!
+          trap 'kill "$preview_pid" 2>/dev/null || true' EXIT
+          for _attempt in {1..30}; do
+            if curl --fail --silent http://127.0.0.1:4321/opensearch-migrations-eks/ >/dev/null; then
+              break
+            fi
+            kill -0 "$preview_pid"
+            sleep 1
+          done
+          curl --fail --silent http://127.0.0.1:4321/opensearch-migrations-eks/ >/dev/null
           npm run check:a11y
-          kill %1
+
+      - name: Browser regression tests
+        run: npm test -- --workers=2

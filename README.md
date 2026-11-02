@@ -43,8 +43,13 @@ Open `http://localhost:4321/opensearch-migrations-eks/`.
 | `npm test` | Run Playwright checks for mobile overflow and browser console errors |
 
 Playwright starts a build and preview server through `playwright.config.ts`.
-Install its Chromium browser first with `npx playwright install chromium`.
-The accessibility command expects a separately running server on port 4321.
+Install its headless Chromium browser first with
+`npx playwright install --only-shell chromium`.
+The accessibility command expects `npm run preview -- --host 127.0.0.1` on port
+4321 after a build. It loads its pinned axe dependency locally and scans eight
+representative pages; an automated scan does not establish full WCAG conformance.
+PR checks run the linters, local link checker, accessibility scan, and existing
+browser regression tests against the built site.
 
 ## Repository layout
 
