@@ -15,12 +15,12 @@ The configuration schema changes between Migration Assistant versions. Do not co
 |------------|-------------|
 | **Metadata migration** | Migrate index templates, component templates, index settings, and aliases |
 | **Document backfill** | Migrate existing documents using snapshot-based reindexing (RFS) |
-| **Version compatibility** | Elasticsearch 1.x–8.x and OpenSearch 1.x–2.x → OpenSearch 1.x–3.x |
-| **Amazon OpenSearch Serverless** | Supported as a target for document backfill and index metadata |
+| **Version compatibility** | Selected Elasticsearch/OpenSearch paths; see [Migration Paths](/opensearch-migrations-eks/overview/migration-paths/) and the installed release's limits |
+| **Amazon OpenSearch Serverless** | Target support depends on the Migration Assistant release, collection type, and migration phase |
 
 ## Architecture Overview
 
-Migration Assistant runs on Kubernetes and uses Argo Workflows for orchestration. It works on AWS EKS, GKE, AKS, OpenShift, and self-managed Kubernetes clusters.
+Migration Assistant runs on Kubernetes and uses Argo Workflows for orchestration. Upstream documents EKS and generic Kubernetes deployment paths. This independent documentation site has not validated deployments across GKE, AKS, OpenShift, or other distributions.
 
 ### Core Components
 
@@ -48,14 +48,9 @@ Connect with:
 kubectl exec -it migration-console-0 -n ma -- bash
 ```
 
-## Performance
+## Performance Planning
 
-| Service | vCPU | Memory | Peak Docs/min | Primary Shard Rate (MBps) |
-|---------|------|--------|---------------|---------------------------|
-| RFS | 2 | 4 GB | 590,000 | 15.1 |
-| RFS (w/ type mapping) | 2 | 4 GB | 546,000 | 14.0 |
-| Traffic Replay | 8 | 48 GB | 1,694,000 | 43.5 |
-| Traffic Replay (w/ type mapping) | 8 | 48 GB | 1,645,000 | 42.2 |
+This site does not include a reproducible benchmark for fixed throughput figures. Run a representative pilot and record document sizes, transformations, shard distribution, worker resources, target capacity, errors, and observed throughput. Use those measurements to estimate duration and select concurrency; increasing worker count can saturate the target.
 
 ## Getting Started
 

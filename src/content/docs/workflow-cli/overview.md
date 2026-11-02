@@ -9,8 +9,10 @@ The Workflow CLI provides a declarative, YAML-based approach to configuring and 
 
 - **Declarative configuration** — define your migration as YAML
 - **Argo Workflows** — K8s-native workflow engine handles execution
-- **Approval gates** — workflows pause for user confirmation at critical steps
-- **Idempotent operations** — safe to re-run workflows
+- **Approval gates** — configured gates pause for user confirmation
+- **Recorded progress** — inspect completed work and retained state before retrying; Argo orchestration does not make every operation idempotent
+
+Use the [upstream Workflow CLI guide](https://docs.opensearch.org/latest/migration-assistant/workflow-cli/) and generated sample for your installed release. Review each failed step before rerunning operations that create resources or write target data.
 
 ## Commands
 
